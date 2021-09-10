@@ -3762,7 +3762,10 @@ var import_dotenv = __toModule(require_main());
 
 // functions/get-project/app-config.json
 var appConfig = {
-  publicTag: 1200951928317368
+  customFields: {
+    visibleToClient: 200954383416360,
+    internal: 1200954383416361
+  }
 };
 
 // node_modules/node-fetch/src/index.js
@@ -4820,25 +4823,47 @@ var TOKEN = process.env.ASANA_TOKEN;
 var BASEURL = `https://app.asana.com/api/1.0`;
 async function handler(event) {
   const projId = event.queryStringParameters.project;
-  const { data } = await fetch(`${getAsanaProj(projId)}`, {
+  const { data: taskData } = await fetch(`${getProjectTasks(projId)}`, {
     headers: {
       Authorization: `Bearer ${TOKEN}`
     }
   }).then((res) => res.json());
-  const publicTasks = getPublicTasks(data);
+  const { data: projectInfo } = await fetch(`${getProjectInfo(projId)}`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`
+    }
+  }).then((res) => res.json());
+  const publicTasks = getPublicTasks(taskData);
   const tasksByDate = groupByDate(publicTasks);
   const datesSorted = getDatesAndSort(tasksByDate);
   return {
     statusCode: 200,
-    body: JSON.stringify({ tasksByDate, datesSorted })
+    body: JSON.stringify({
+      project: projectInfo,
+      tasks: tasksByDate,
+      dates: datesSorted
+    })
   };
 }
-var fields = `opt_fields=gid,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,notes,num_subtasks,tags`;
-function getAsanaProj(id) {
-  return `${BASEURL}/projects/${id}/tasks?${fields}`;
+var taskFields = `opt_fields=gid,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,notes,num_subtasks,tags`;
+var projectFields = `opt_fields=gid,name,created_at`;
+function getProjectTasks(id) {
+  return `${BASEURL}/projects/${id}/tasks?${taskFields}`;
+}
+function getProjectInfo(id) {
+  return `${BASEURL}/projects/${id}?${projectFields}`;
 }
 function getPublicTasks(allTasks) {
-  return allTasks.filter((task) => task.tags.some((tag) => tag.gid === String(appConfig.publicTag)));
+  const publicId = appConfig.customFields.visibleToClient;
+  return allTasks.filter((task) => {
+    var _a2;
+    const customFields = task.custom_fields;
+    const visibilityField = customFields.find((field) => field.name === "Visiblity");
+    if (!visibilityField)
+      return false;
+    console.log(visibilityField.enum_value);
+    return ((_a2 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a2.gid) == "1200954383416360";
+  });
 }
 function groupByDate(taskArray) {
   return taskArray.reduce((acc, task) => {

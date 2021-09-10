@@ -1,5 +1,8 @@
 {
   "appConfig": {
-    "publicTag": 1200951928317368
+    "customFields": {
+      "visibleToClient": 200954383416360,
+      "internal": 1200954383416361
+    }
   }
 }

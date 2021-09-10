@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { format } from "date-fns";
 
 function App({ className }) {
   const [projectData, setProjectData] = useState(null);

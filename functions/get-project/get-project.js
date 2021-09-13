@@ -49,7 +49,6 @@ function getProjectInfo(id) {
 }
 
 function getPublicTasks(allTasks) {
-  const publicId = appConfig.customFields.visibleToClient;
   return allTasks.filter((task) => {
     const customFields = task.custom_fields;
     const visibilityField = customFields.find(
@@ -59,7 +58,7 @@ function getPublicTasks(allTasks) {
     if (!visibilityField) return false;
     console.log(visibilityField.enum_value);
 
-    return visibilityField?.enum_value?.gid == "1200954383416360"; // will only show if the enum_value has the id that is the Visible to Client gid
+    return visibilityField?.enum_value?.gid === "1200954383416360"; // will only show if the enum_value has the id that is the Visible to Client gid
   });
 }
 

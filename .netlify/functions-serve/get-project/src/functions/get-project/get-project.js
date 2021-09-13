@@ -3760,14 +3760,6 @@ __export(exports, {
 });
 var import_dotenv = __toModule(require_main());
 
-// functions/get-project/app-config.json
-var appConfig = {
-  customFields: {
-    visibleToClient: 200954383416360,
-    internal: 1200954383416361
-  }
-};
-
 // node_modules/node-fetch/src/index.js
 var import_http2 = __toModule(require("http"));
 var import_https = __toModule(require("https"));
@@ -4854,7 +4846,6 @@ function getProjectInfo(id) {
   return `${BASEURL}/projects/${id}?${projectFields}`;
 }
 function getPublicTasks(allTasks) {
-  const publicId = appConfig.customFields.visibleToClient;
   return allTasks.filter((task) => {
     var _a2;
     const customFields = task.custom_fields;
@@ -4862,7 +4853,7 @@ function getPublicTasks(allTasks) {
     if (!visibilityField)
       return false;
     console.log(visibilityField.enum_value);
-    return ((_a2 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a2.gid) == "1200954383416360";
+    return ((_a2 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a2.gid) === "1200954383416360";
   });
 }
 function groupByDate(taskArray) {

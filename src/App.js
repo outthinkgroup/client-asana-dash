@@ -162,7 +162,7 @@ function getProjId() {
 
 function getMonth(dateString) {
   const dateArr = parseDateString(dateString);
-  const date = new Date(dateString); // 2009-11-10
+  const date = new Date(dateArr); // 2009-11-10
   const month = date.toLocaleString("default", { month: "long" });
   return month;
 }

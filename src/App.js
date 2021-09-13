@@ -1,16 +1,27 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
+import ShowError from "./ShowError.js";
 
 function App({ className }) {
   const [projectData, setProjectData] = useState(null);
+  const [appError, setAppError] = useState(false);
   useEffect(() => {
-    getData().then(setProjectData);
+    getData()
+      .then(setProjectData)
+      .catch((e) => {
+        console.log("caught", e);
+        setAppError(e.toString());
+      });
   }, []);
   if (!projectData)
     return (
       <LoaderFrame>
-        <DotLoader color={"#1E3A8A"} />
+        {appError ? (
+          <ShowError message={appError} />
+        ) : (
+          <DotLoader color={"#1E3A8A"} />
+        )}
       </LoaderFrame>
     );
   const { project, tasks, dates } = projectData;
@@ -142,6 +153,10 @@ const DateGroups = styled.ul`
     display: flex;
     border-bottom: 1px solid var(--border-color);
     padding: 20px;
+    gap: 40px;
+    @media (max-width: 762px) {
+      flex-direction: column;
+    }
   }
 
   li:last-of-type .date-group {
@@ -163,9 +178,11 @@ const DateGroups = styled.ul`
     }
   }
   .tasks {
+    margin-inline: 0;
+    padding-inline: 0;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
     h4 {
       margin-block: 0;
     }
@@ -178,6 +195,12 @@ const DateGroups = styled.ul`
 
 const Task = styled.li`
   list-style: none;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  > * {
+    margin: 0;
+  }
 `;
 
 const LoaderFrame = styled.div`

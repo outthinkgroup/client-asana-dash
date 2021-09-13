@@ -8,7 +8,6 @@ function App({ className }) {
   }, []);
   if (!projectData) return null;
   const { project, tasks, dates } = projectData;
-  console.log(project, tasks);
   return (
     <div className={`App ${className}`}>
       <header>
@@ -40,7 +39,6 @@ function App({ className }) {
 }
 
 function TaskGroup({ tasks, date }) {
-  console.log(date);
   const month = getMonth(date);
   const day = getDay(date);
 
@@ -163,12 +161,17 @@ function getProjId() {
 }
 
 function getMonth(dateString) {
+  const dateArr = parseDateString(dateString);
   const date = new Date(dateString); // 2009-11-10
   const month = date.toLocaleString("default", { month: "long" });
   return month;
 }
 function getDay(dateString) {
-  const date = new Date(dateString);
+  const dateArr = parseDateString(dateString);
+  const date = new Date(dateArr);
   const day = date.getDate();
   return day;
+}
+function parseDateString(dateString) {
+  return dateString.split("-");
 }

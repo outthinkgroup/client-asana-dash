@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-import { appConfig } from "./app-config.json";
 import fetch from "node-fetch";
 
 //LOADS the SECRETS
@@ -39,7 +38,7 @@ export async function handler(event) {
 }
 
 const taskFields = `opt_fields=gid,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,notes,num_subtasks,tags`;
-const projectFields = `opt_fields=gid,name,created_at`;
+const projectFields = `opt_fields=gid,name,created_at,current_status`;
 
 function getProjectTasks(id) {
   return `${BASEURL}/projects/${id}/tasks?${taskFields}`;

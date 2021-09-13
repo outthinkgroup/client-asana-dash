@@ -14,21 +14,27 @@ function App({ className }) {
       </LoaderFrame>
     );
   const { project, tasks, dates } = projectData;
+  console.log(project);
   return (
     <div className={`App ${className}`}>
       <header>
         <h1>Outthink Asana Client Dashboard</h1>
-        <h2>{project.name}</h2>
-        <p>
-          Created on:{" "}
-          {new Date(project.created_at).toLocaleString("default", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </p>
+        <div>
+          <h2>{project.name}</h2>
+          <p>
+            Created on:{" "}
+            {new Date(project.created_at).toLocaleString("default", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </p>
+        </div>
       </header>
+
       <div className="wrapper">
+        <p className="heading-label">Status</p>
+        <h2>{project.current_status.title}</h2>
         <DateGroups>
           {dates.map((date) => {
             return (
@@ -94,6 +100,24 @@ export default styled(App)`
   }
   .wrapper {
     padding: 20px;
+  }
+  .heading-label {
+    font-size: 13px;
+    margin-bottom: 0.4em;
+    font-weight: bold;
+    color: #1e3a8a;
+    display: inline-block;
+    background: #eff6ff;
+    padding: 5px;
+    border-radius: 6px;
+    & + {
+      h2,
+      h3,
+      h4,
+      h5 {
+        margin-top: 0px;
+      }
+    }
   }
 `;
 

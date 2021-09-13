@@ -59,13 +59,15 @@ function App({ className }) {
 
 function TaskGroup({ tasks, date }) {
   const month = getMonth(date);
-  const day = getDay(date);
-
+  const { day, dayOfWeek } = getDay(date);
   return (
     <div className="date-group">
       <h3>
         {date ? (
           <>
+            <span>
+              <div className="dayofweek">{dayOfWeek}</div>
+            </span>
             <div className="day">{day}</div>
             <span className="month">{month}</span>
           </>
@@ -161,12 +163,22 @@ const DateGroups = styled.ul`
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: px;
+    .dayofweek {
+      font-size: 10px;
+      font-weight: bold;
+      color: #1e3a8a;
+      width: auto;
+      display: inline-block;
+      border: 1px solid currentColor;
+      padding: 3px 5px;
+      border-radius: 6px;
+    }
     .month {
       color: #444;
     }
     .day {
-      font-size: 30px;
+      font-size: 38px;
       font-weight: 300;
       color: #1e3a8a;
     }
@@ -232,7 +244,8 @@ function getDay(dateString) {
   const dateArr = parseDateString(dateString);
   const date = new Date(dateArr);
   const day = date.getDate();
-  return day;
+  const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
+  return { day, dayOfWeek };
 }
 function parseDateString(dateString) {
   return dateString.split("-");

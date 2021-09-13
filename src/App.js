@@ -29,17 +29,9 @@ function App({ className }) {
   return (
     <div className={`App ${className}`}>
       <header>
-        <h1>Outthink Asana Client Dashboard</h1>
-        <div>
+        <div className="wrapper">
+          <h1>Outthink Asana Client Dashboard</h1>
           <h2>{project?.name}</h2>
-          <p>
-            Created on:{" "}
-            {new Date(project.created_at).toLocaleString("default", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </p>
         </div>
       </header>
 
@@ -98,8 +90,8 @@ function TaskGroup({ tasks, date }) {
 
 export default styled(App)`
   header {
-    padding: 20px;
     background: #eff6ff;
+
     h1 {
       color: #1e3a8a;
       font-size: 20px;
@@ -115,6 +107,8 @@ export default styled(App)`
   }
   .wrapper {
     padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
   }
   .heading-label {
     font-size: 13px;

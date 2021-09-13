@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import DotLoader from "react-spinners/DotLoader";
 
 function App({ className }) {
   const [projectData, setProjectData] = useState(null);
   useEffect(() => {
     getData().then(setProjectData);
   }, []);
-  if (!projectData) return null;
+  if (!projectData)
+    return (
+      <LoaderFrame>
+        <DotLoader color={"#1E3A8A"} />
+      </LoaderFrame>
+    );
   const { project, tasks, dates } = projectData;
   return (
     <div className={`App ${className}`}>
@@ -144,6 +150,17 @@ const DateGroups = styled.ul`
 
 const Task = styled.li`
   list-style: none;
+`;
+
+const LoaderFrame = styled.div`
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #eff6ff;
+  height: 100vh;
+  display: grid;
+  place-items: center;
 `;
 
 async function getData() {

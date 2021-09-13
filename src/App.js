@@ -20,7 +20,7 @@ function App({ className }) {
       <header>
         <h1>Outthink Asana Client Dashboard</h1>
         <div>
-          <h2>{project.name}</h2>
+          <h2>{project?.name}</h2>
           <p>
             Created on:{" "}
             {new Date(project.created_at).toLocaleString("default", {
@@ -33,8 +33,12 @@ function App({ className }) {
       </header>
 
       <div className="wrapper">
-        <p className="heading-label">Status</p>
-        <h2>{project.current_status.title}</h2>
+        {project.current_status && (
+          <>
+            <p className="heading-label">Status</p>
+            <h2>{project.current_status?.title}</h2>
+          </>
+        )}
         <DateGroups>
           {dates.map((date) => {
             return (

@@ -14,7 +14,7 @@ function App({ className }) {
         setAppError(e.toString());
       });
   }, []);
-  if (!projectData)
+  if (!projectData) {
     return (
       <LoaderFrame>
         {appError ? (
@@ -24,6 +24,7 @@ function App({ className }) {
         )}
       </LoaderFrame>
     );
+  }
   const { project, tasks, dates } = projectData;
   console.log(project);
   return (
@@ -234,19 +235,22 @@ function getProjId() {
   throw new Error("No project found");
 }
 
-function getMonth(dateString) {
+export function getMonth(dateString) {
   const dateArr = parseDateString(dateString);
-  const date = new Date(dateArr); // 2009-11-10
+  const date = new Date(...dateArr); // 2009-11-10
   const month = date.toLocaleString("default", { month: "long" });
   return month;
 }
-function getDay(dateString) {
+export function getDay(dateString) {
   const dateArr = parseDateString(dateString);
-  const date = new Date(dateArr);
+  console.log(dateArr);
+  const date = new Date(...dateArr);
+  console.log(date);
   const day = date.getDate();
   const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
   return { day, dayOfWeek };
 }
-function parseDateString(dateString) {
-  return dateString.split("-");
+export function parseDateString(dateString) {
+  const [year, day, month] = dateString.split("-");
+  return [Number(year), Number(day) - 1, Number(month)];
 }

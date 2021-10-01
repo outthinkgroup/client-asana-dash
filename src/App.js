@@ -82,6 +82,9 @@ function TaskGroup({ tasks, date }) {
             return (
               <Task key={task.gid}>
                 <h4>{task.name}</h4>
+                <div>
+                  <DateRange task={task} />
+                </div>
                 <p>{task.notes}</p>
               </Task>
             );
@@ -89,6 +92,20 @@ function TaskGroup({ tasks, date }) {
       </ul>
     </div>
   );
+}
+function DateRange({ task }) {
+  return task.start_on ? (
+    <div className="date-range">
+      <span>
+        {getMonth(task.start_on, false)} {getDay(task.start_on).day}
+      </span>{" "}
+      -
+      <span>
+        {" "}
+        {getMonth(task.due_on, false)} {getDay(task.due_on).day}
+      </span>
+    </div>
+  ) : null;
 }
 
 export default styled(App)`
@@ -208,6 +225,16 @@ const Task = styled.li`
   > * {
     margin: 0;
   }
+  .date-range {
+    background: #aac0de33;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 6px;
+    color: #1e3a8a;
+    display: inline-block;
+  }
 `;
 
 const LoaderFrame = styled.div`
@@ -235,19 +262,23 @@ function getProjId() {
   throw new Error("No project found");
 }
 
-export function getMonth(dateString) {
+export function getMonth(dateString, isLong = true) {
   const dateArr = parseDateString(dateString);
   const date = new Date(...dateArr); // 2009-11-10
-  const month = date.toLocaleString("default", { month: "long" });
+  const month = date.toLocaleString("default", {
+    month: isLong ? "long" : "short",
+  });
   return month;
 }
-export function getDay(dateString) {
+export function getDay(dateString, isLong = true) {
   const dateArr = parseDateString(dateString);
   console.log(dateArr);
   const date = new Date(...dateArr);
   console.log(date);
   const day = date.getDate();
-  const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
+  const dayOfWeek = date.toLocaleString("default", {
+    weekday: isLong ? "long" : "short",
+  });
   return { day, dayOfWeek };
 }
 export function parseDateString(dateString) {

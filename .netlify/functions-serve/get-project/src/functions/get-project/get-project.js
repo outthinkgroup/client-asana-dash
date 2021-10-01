@@ -4837,7 +4837,7 @@ async function handler(event) {
     })
   };
 }
-var taskFields = `opt_fields=gid,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,notes,num_subtasks,tags`;
+var taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,notes,num_subtasks,tags`;
 var projectFields = `opt_fields=gid,name,created_at,current_status`;
 function getProjectTasks(id) {
   return `${BASEURL}/projects/${id}/tasks?${taskFields}`;
@@ -4858,7 +4858,7 @@ function getPublicTasks(allTasks) {
 }
 function groupByDate(taskArray) {
   return taskArray.reduce((acc, task) => {
-    const { due_on } = task;
+    const { due_on, start_on } = task;
     const dueDate = due_on == null ? 0 : due_on;
     if (!acc[dueDate]) {
       acc[dueDate] = [];

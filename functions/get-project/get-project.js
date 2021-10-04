@@ -23,7 +23,7 @@ export async function handler(event) {
     },
   }).then((res) => res.json());
 
-  const publicTasks = getPublicTasks(taskData);
+  const publicTasks = getValidTasks(taskData);
   const tasksByDate = groupByDate(publicTasks);
   const datesSorted = getDatesAndSort(tasksByDate);
 
@@ -47,8 +47,12 @@ function getProjectInfo(id) {
   return `${BASEURL}/projects/${id}?${projectFields}`;
 }
 
-function getPublicTasks(allTasks) {
+function getValidTasks(allTasks) {
   return allTasks.filter((task) => {
+    // only show uncompleted tasks
+    if (task.completed) return false;
+
+    // only show tasks that have the correct custom field `Visibility` value
     const customFields = task.custom_fields;
     const visibilityField = customFields.find(
       (field) => field.name === "Visiblity"

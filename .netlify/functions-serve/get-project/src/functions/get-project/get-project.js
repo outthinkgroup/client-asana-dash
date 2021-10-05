@@ -4825,7 +4825,7 @@ async function handler(event) {
       Authorization: `Bearer ${TOKEN}`
     }
   }).then((res) => res.json());
-  const publicTasks = getPublicTasks(taskData);
+  const publicTasks = getValidTasks(taskData);
   const tasksByDate = groupByDate(publicTasks);
   const datesSorted = getDatesAndSort(tasksByDate);
   return {
@@ -4837,7 +4837,7 @@ async function handler(event) {
     })
   };
 }
-var taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,notes,num_subtasks,tags`;
+var taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,html_notes,num_subtasks,tags`;
 var projectFields = `opt_fields=gid,name,created_at,current_status`;
 function getProjectTasks(id) {
   return `${BASEURL}/projects/${id}/tasks?${taskFields}`;
@@ -4845,9 +4845,11 @@ function getProjectTasks(id) {
 function getProjectInfo(id) {
   return `${BASEURL}/projects/${id}?${projectFields}`;
 }
-function getPublicTasks(allTasks) {
+function getValidTasks(allTasks) {
   return allTasks.filter((task) => {
     var _a2;
+    if (task.completed)
+      return false;
     const customFields = task.custom_fields;
     const visibilityField = customFields.find((field) => field.name === "Visiblity");
     if (!visibilityField)
@@ -4858,7 +4860,7 @@ function getPublicTasks(allTasks) {
 }
 function groupByDate(taskArray) {
   return taskArray.reduce((acc, task) => {
-    const { due_on, start_on } = task;
+    const { due_on } = task;
     const dueDate = due_on == null ? 0 : due_on;
     if (!acc[dueDate]) {
       acc[dueDate] = [];

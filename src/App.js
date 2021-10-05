@@ -157,7 +157,8 @@ function TaskGroup({ tasks, date }) {
                   : null}
                 <h4>{task.name}</h4>
                 <DateRange task={task} />
-                {task.notes && <p>{task.notes}</p>}
+                {task.html_notes &&
+                  <p dangerouslySetInnerHTML={{ __html: task.html_notes }} />}
               </Task>
             );
           })}
@@ -358,7 +359,7 @@ const LoaderFrame = styled.div`
 `;
 const TopBar = styled.div`
   display: flex;
-	align-items:center;
+  align-items: center;
   justify-content: space-between;
   ul {
     padding: 0;
@@ -378,7 +379,7 @@ const TopBar = styled.div`
   label {
     font-weight: bold;
     display: flex;
-		align-items:center;
+    align-items: center;
     gap: 8px;
   }
   select {

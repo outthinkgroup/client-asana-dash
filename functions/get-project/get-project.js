@@ -37,7 +37,7 @@ export async function handler(event) {
   };
 }
 
-const taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,notes,num_subtasks,tags`;
+const taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,html_notes,num_subtasks,tags`;
 const projectFields = `opt_fields=gid,name,created_at,current_status`;
 
 function getProjectTasks(id) {

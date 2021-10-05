@@ -1,11 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
+
 import ShowError from "./ShowError.js";
+import ClientTaskIcon from "./ClientTaskIcon.js";
+
+const CLIENT_TASK = {
+  name: "Client Task",
+  trueId: "1200972896299432",
+};
+
+const filterFunctions = {
+  all: () => true,
+  client: (task) => isClientTask(task.custom_fields),
+  agency: (task) => !isClientTask(task.custom_fields),
+};
 
 function App({ className }) {
   const [projectData, setProjectData] = useState(null);
   const [appError, setAppError] = useState(false);
+
+  const [filter, setFilter] = useState("all");
+
   useEffect(() => {
     getData()
       .then(setProjectData)
@@ -14,19 +30,39 @@ function App({ className }) {
         setAppError(e.toString());
       });
   }, []);
-  if (!projectData) {
+
+  const { project, tasks } = projectData ? projectData : {};
+
+  // filter tasks and dates based on the filter state
+  const [filteredDates, filteredTasks] = useMemo(() => {
+    if (!tasks) return [];
+    const tasksByDate = Object.keys(tasks).reduce((tasksObj, date) => {
+      const filteredTasks = tasks[date].filter(filterFunctions[filter]);
+      if (filteredTasks.length) {
+        tasksObj[date] = filteredTasks;
+      }
+      return tasksObj;
+    }, {});
+
+    const dates = Object.keys(tasksByDate);
+
+    return [dates, tasksByDate];
+  }, [tasks, filter]);
+
+  if (!filteredTasks) {
     return (
       <LoaderFrame>
-        {appError ? (
-          <ShowError message={appError} />
-        ) : (
-          <DotLoader color={"#1E3A8A"} />
-        )}
+        {appError
+          ? (
+            <ShowError message={appError} />
+          )
+          : (
+            <DotLoader color={"#1E3A8A"} />
+          )}
       </LoaderFrame>
     );
   }
-  const { project, tasks, dates } = projectData;
-  console.log(project);
+
   return (
     <div className={`App ${className}`}>
       <header>
@@ -36,6 +72,30 @@ function App({ className }) {
         </div>
       </header>
 
+      <TopBar className=" wrapper">
+        <div className="filters">
+          <label>
+            <span>Show</span>
+            <select onChange={(e) => setFilter(e.target.value)} value={filter}>
+              {Object.keys(filterFunctions).map((filterName) => (
+                <option key={filterName} value={filterName}>
+                  {filterName} tasks
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <ul className="key">
+          <li>
+            <ClientTaskIcon
+              color="#FF8F69"
+              className="special-identifier-icon"
+            />
+            Client Task
+          </li>
+        </ul>
+      </TopBar>
+
       <div className="wrapper">
         {project.current_status && (
           <>
@@ -44,14 +104,14 @@ function App({ className }) {
           </>
         )}
         <DateGroups>
-          {dates.map((date) => {
+          {filteredDates.map((date) => {
             return (
               <li key={date}>
-                <TaskGroup date={date} tasks={tasks[date]} />
+                <TaskGroup date={date} tasks={filteredTasks[date]} />
               </li>
             );
           })}
-          <li>{tasks[0] && <TaskGroup tasks={tasks[0]} />}</li>
+          <li>{tasks[0] && <TaskGroup tasks={filteredTasks[0]} />}</li>
         </DateGroups>
       </div>
     </div>
@@ -64,28 +124,40 @@ function TaskGroup({ tasks, date }) {
   return (
     <div className="date-group">
       <h3>
-        {date ? (
-          <>
-            <span>
-              <div className="dayofweek">{dayOfWeek}</div>
-            </span>
-            <div className="day">{day}</div>
-            <span className="month">{month}</span>
-          </>
-        ) : (
-          "No Date Given"
-        )}
+        {date
+          ? (
+            <>
+              <span>
+                <div className="dayofweek">{dayOfWeek}</div>
+              </span>
+              <div className="day">{day}</div>
+              <span className="month">{month}</span>
+            </>
+          )
+          : (
+            "No Date Given"
+          )}
       </h3>
       <ul className="tasks">
         {tasks &&
           tasks.map((task) => {
             return (
-              <Task key={task.gid}>
+              <Task
+                key={task.gid}
+                clientTask={isClientTask(task.custom_fields)}
+              >
+                {isClientTask(task.custom_fields)
+                  ? (
+                    <ClientTaskIcon
+                      title="Client Task"
+                      className="special-identifier-icon "
+                      color={`#FF8F69`}
+                    />
+                  )
+                  : null}
                 <h4>{task.name}</h4>
-                <div>
-                  <DateRange task={task} />
-                </div>
-                <p>{task.notes}</p>
+                <DateRange task={task} />
+                {task.notes && <p>{task.notes}</p>}
               </Task>
             );
           })}
@@ -94,18 +166,22 @@ function TaskGroup({ tasks, date }) {
   );
 }
 function DateRange({ task }) {
-  return task.start_on ? (
-    <div className="date-range">
-      <span>
-        {getMonth(task.start_on, false)} {getDay(task.start_on).day}
-      </span>{" "}
-      -
-      <span>
-        {" "}
-        {getMonth(task.due_on, false)} {getDay(task.due_on).day}
-      </span>
-    </div>
-  ) : null;
+  return task.start_on
+    ? (
+      <div>
+        <div className="date-range">
+          <span>
+            {getMonth(task.start_on, false)} {getDay(task.start_on).day}
+          </span>{" "}
+          -
+          <span>
+            {" "}
+            {getMonth(task.due_on, false)} {getDay(task.due_on).day}
+          </span>
+        </div>
+      </div>
+    )
+    : null;
 }
 
 export default styled(App)`
@@ -123,7 +199,7 @@ export default styled(App)`
       font-size: 30px;
       font-weight: 300;
     }
-    margin-bottom: 60px;
+    margin-bottom: 40px;
   }
   .wrapper {
     padding: 20px;
@@ -148,6 +224,34 @@ export default styled(App)`
       }
     }
   }
+
+  .special-identifier-icon {
+    height: 1em;
+    color: var(--special-color);
+    @media (min-width: 762px) {
+      position: absolute;
+      right: calc(100% + 8px);
+      top: 4px;
+    }
+    @media (max-width: 760px) {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      &::after {
+        content: attr(title);
+        font-weight: bold;
+      }
+    }
+
+    svg {
+      width: 1em;
+    }
+  }
+  .key .special-identifier-icon {
+    position: relative;
+    right: unset;
+    top: unset;
+  }
 `;
 
 const DateGroups = styled.ul`
@@ -159,9 +263,6 @@ const DateGroups = styled.ul`
   border: 1px solid var(--border-color);
   margin: 0;
   padding: 0;
-  li {
-    padding: 0;
-  }
 
   .date-group {
     display: flex;
@@ -203,6 +304,7 @@ const DateGroups = styled.ul`
   }
   .tasks {
     margin-inline: 0;
+    width: 100%;
     padding-inline: 0;
     display: flex;
     flex-direction: column;
@@ -220,11 +322,18 @@ const DateGroups = styled.ul`
 const Task = styled.li`
   list-style: none;
   display: flex;
+  width: 100%;
   gap: 8px;
   flex-direction: column;
+  padding: 4px;
+  border-radius: 6px;
+  position: relative;
   > * {
     margin: 0;
   }
+  ${({ clientTask }) => {
+  console.log(clientTask);
+}}
   .date-range {
     background: #aac0de33;
     font-size: 12px;
@@ -247,11 +356,51 @@ const LoaderFrame = styled.div`
   display: grid;
   place-items: center;
 `;
+const TopBar = styled.div`
+  display: flex;
+	align-items:center;
+  justify-content: space-between;
+  ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+  }
+  li {
+    display: flex;
+    gap: 4px;
+    font-weight: bold;
+  }
+  &.wrapper {
+    padding-bottom: 0;
+  }
+  label {
+    font-weight: bold;
+    display: flex;
+		align-items:center;
+    gap: 8px;
+  }
+  select {
+    padding-inline: 0.64rem;
+    border-radius: 6px;
+    padding-block: 0.5rem;
+    font-size: 16px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23333333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exac;
+    appearance: none;
+  }
+`;
 
 async function getData() {
   const projId = getProjId();
   return fetch(
-    `${window.location.origin}/api/get-project?project=${projId}`
+    `${window.location.origin}/api/get-project?project=${projId}`,
   ).then((res) => res.json());
 }
 function getProjId() {
@@ -270,18 +419,30 @@ export function getMonth(dateString, isLong = true) {
   });
   return month;
 }
+
 export function getDay(dateString, isLong = true) {
   const dateArr = parseDateString(dateString);
-  console.log(dateArr);
   const date = new Date(...dateArr);
-  console.log(date);
   const day = date.getDate();
   const dayOfWeek = date.toLocaleString("default", {
     weekday: isLong ? "long" : "short",
   });
   return { day, dayOfWeek };
 }
+
 export function parseDateString(dateString) {
   const [year, day, month] = dateString.split("-");
   return [Number(year), Number(day) - 1, Number(month)];
+}
+
+function isClientTask(customFields) {
+  console.log(customFields);
+  const clientTaskField = customFields.find(
+    (field) => field.name === CLIENT_TASK.name,
+  );
+  if (!clientTaskField) return false;
+  return (
+    Boolean(clientTaskField.enum_value) &&
+    clientTaskField.enum_value.gid === CLIENT_TASK.trueId
+  ); //if the id of fields value matches the yes enum id
 }

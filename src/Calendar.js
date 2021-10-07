@@ -107,37 +107,13 @@ export const CalendarWrapper = styled.div`
 	}
 `;
 
-function getMonthDays(rangeStart, rangeEnd) {
-  const monthStart = getMonthStart(rangeStart);
-  const monthStartDay = monthStart.getDay();
-
-  const getMonthEndDate = getMonthEnd(rangeStart).getDate();
-
-  return Array.from(Array(getMonthEndDate + monthStartDay), (_, index) => {
-    if (index < monthStartDay) return <span className="day">{""}</span>;
-
-    const dayNumber = index - monthStartDay;
-    const date = new Date(monthStart.getTime());
-    date.setDate(monthStart.getDate() + dayNumber);
-
-    const isInRange =
-      date.getTime() >= rangeStart.getTime() &&
-      date.getTime() <= rangeEnd.getTime();
-
-    return (
-      <span className={`day ${isInRange ? `in-range` : ""}`} key={index}>
-        {index - monthStartDay + 1}/{date.getDate()}
-      </span>
-    );
-  });
-}
-
 function getDays(rangeStart, rangeEnd) {
   const start = {
     date: rangeStart,
     monthStart: getMonthStart(rangeStart),
     monthEnd: getMonthEnd(rangeStart),
   };
+
   const end = {
     date: rangeEnd,
     monthStart: getMonthStart(rangeEnd),
@@ -150,7 +126,9 @@ function getDays(rangeStart, rangeEnd) {
     ? new Date(end.date.getTime() - (monthInMili(end.date) - dayInMili))
     : start.monthStart;
   calcStartDate.setHours(0, 0, 0, 0);
+
   const calcStartDay = calcStartDate.getDay();
+
   const totalDays = isMultiMonth
     ? start.monthEnd.getDate() -
       calcStartDate.getDate() +
@@ -173,13 +151,7 @@ function getDays(rangeStart, rangeEnd) {
     const isInRange =
       date.getTime() >= rangeStart.getTime() &&
       date.getTime() <= rangeEnd.getTime();
-    console.log(
-      date.getDate(),
-      isInRange,
-      rangeStart.getTime(),
-      date.getTime(),
-      rangeEnd.getTime()
-    );
+
     return (
       <span className={`day ${isInRange ? `in-range` : ""}`} key={index}>
         {date.getDate()}

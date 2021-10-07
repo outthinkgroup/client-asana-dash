@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
 
+import TaskDateRangeCalendar from "./TaskRangeCalendar";
 import ShowError from "./ShowError.js";
 import ClientTaskIcon from "./ClientTaskIcon.js";
 
@@ -26,7 +27,6 @@ function App({ className }) {
     getData()
       .then(setProjectData)
       .catch((e) => {
-        console.log("caught", e);
         setAppError(e.toString());
       });
   }, []);
@@ -52,13 +52,11 @@ function App({ className }) {
   if (!filteredTasks) {
     return (
       <LoaderFrame>
-        {appError
-          ? (
-            <ShowError message={appError} />
-          )
-          : (
-            <DotLoader color={"#1E3A8A"} />
-          )}
+        {appError ? (
+          <ShowError message={appError} />
+        ) : (
+          <DotLoader color={"#1E3A8A"} />
+        )}
       </LoaderFrame>
     );
   }
@@ -124,19 +122,17 @@ function TaskGroup({ tasks, date }) {
   return (
     <div className="date-group">
       <h3>
-        {date
-          ? (
-            <>
-              <span>
-                <div className="dayofweek">{dayOfWeek}</div>
-              </span>
-              <div className="day">{day}</div>
-              <span className="month">{month}</span>
-            </>
-          )
-          : (
-            "No Date Given"
-          )}
+        {date ? (
+          <>
+            <span>
+              <div className="dayofweek">{dayOfWeek}</div>
+            </span>
+            <div className="day">{day}</div>
+            <span className="month">{month}</span>
+          </>
+        ) : (
+          "No Date Given"
+        )}
       </h3>
       <ul className="tasks">
         {tasks &&
@@ -146,19 +142,18 @@ function TaskGroup({ tasks, date }) {
                 key={task.gid}
                 clientTask={isClientTask(task.custom_fields)}
               >
-                {isClientTask(task.custom_fields)
-                  ? (
-                    <ClientTaskIcon
-                      title="Client Task"
-                      className="special-identifier-icon "
-                      color={`#FF8F69`}
-                    />
-                  )
-                  : null}
+                {isClientTask(task.custom_fields) ? (
+                  <ClientTaskIcon
+                    title="Client Task"
+                    className="special-identifier-icon "
+                    color={`#FF8F69`}
+                  />
+                ) : null}
                 <h4>{task.name}</h4>
                 <DateRange task={task} />
-                {task.html_notes &&
-                  <p dangerouslySetInnerHTML={{ __html: task.html_notes }} />}
+                {task.html_notes && (
+                  <p dangerouslySetInnerHTML={{ __html: task.html_notes }} />
+                )}
               </Task>
             );
           })}
@@ -167,8 +162,8 @@ function TaskGroup({ tasks, date }) {
   );
 }
 function DateRange({ task }) {
-  return task.start_on
-    ? (
+  return task.start_on ? (
+    <DateRangeWrapper>
       <div>
         <div className="date-range">
           <span>
@@ -181,8 +176,13 @@ function DateRange({ task }) {
           </span>
         </div>
       </div>
-    )
-    : null;
+
+      <TaskDateRangeCalendar
+        startOn={new Date(...parseDateString(task.start_on))}
+        dueOn={new Date(...parseDateString(task.due_on))}
+      />
+    </DateRangeWrapper>
+  ) : null;
 }
 
 export default styled(App)`
@@ -332,9 +332,7 @@ const Task = styled.li`
   > * {
     margin: 0;
   }
-  ${({ clientTask }) => {
-  console.log(clientTask);
-}}
+  ${({ clientTask }) => {}}
   .date-range {
     background: #aac0de33;
     font-size: 12px;
@@ -345,6 +343,12 @@ const Task = styled.li`
     color: #1e3a8a;
     display: inline-block;
   }
+`;
+
+const DateRangeWrapper = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
 `;
 
 const LoaderFrame = styled.div`
@@ -401,7 +405,7 @@ const TopBar = styled.div`
 async function getData() {
   const projId = getProjId();
   return fetch(
-    `${window.location.origin}/api/get-project?project=${projId}`,
+    `${window.location.origin}/api/get-project?project=${projId}`
   ).then((res) => res.json());
 }
 function getProjId() {
@@ -437,9 +441,8 @@ export function parseDateString(dateString) {
 }
 
 function isClientTask(customFields) {
-  console.log(customFields);
   const clientTaskField = customFields.find(
-    (field) => field.name === CLIENT_TASK.name,
+    (field) => field.name === CLIENT_TASK.name
   );
   if (!clientTaskField) return false;
   return (

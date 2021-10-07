@@ -59,6 +59,8 @@ export const CalendarWrapper = styled.div`
     text-align: center;
     padding: 0.25em 0;
     font-size: 1em;
+	  color:#1E3A8A;
+		font-weight:bold;
   }
   width: 12.5em;
   .day-labels {
@@ -89,11 +91,22 @@ export const CalendarWrapper = styled.div`
     align-items: center;
     text-align: center;
     aspect-ratio: 1/1;
+		height:100%;
   }
 	.day.in-range{
 		background:#EEF3F8;
 		color:#1E3A8A;
 		font-weight:900;
+	}
+	.day.start-range{
+		border-top-left-radius:4px;
+		border-bottom-left-radius:4px;
+		background:hsl(210, 42%, 85%);
+	}
+	.day.end-range{
+		border-top-right-radius:4px;
+		border-bottom-right-radius:4px;
+		background:hsl(210, 42%, 85%);
 	}
 `;
 
@@ -142,8 +155,16 @@ function getDays(rangeStart, rangeEnd) {
       date.getTime() >= rangeStart.getTime() &&
       date.getTime() <= rangeEnd.getTime();
 
+    const isStart = date.getTime() === rangeStart.getTime();
+    const isEnd = date.getTime() === rangeEnd.getTime();
+
     return (
-      <span className={`day ${isInRange ? `in-range` : ""}`} key={index}>
+      <span
+        className={`day ${isInRange ? `in-range` : ""} ${
+          isStart ? `start-range` : ""
+        } ${isEnd ? `end-range` : ""}`}
+        key={index}
+      >
         {date.getDate()}
       </span>
     );

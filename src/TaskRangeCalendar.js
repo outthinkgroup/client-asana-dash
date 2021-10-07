@@ -25,7 +25,7 @@ export default function TaskDateRangeCalendar({ startOn, dueOn }) {
   }, [ref]);
 
   return (
-    <TaskDateRangeWrapper ref={ref}>
+    <TaskDateRangeWrapper ref={ref} style={{ "--isOpen": `${isOpen ? 2 : 0}` }}>
       <button onClick={() => setIsOpen((s) => !s)}>
         <CalendarIcon />
       </button>
@@ -35,7 +35,8 @@ export default function TaskDateRangeCalendar({ startOn, dueOn }) {
 }
 
 const TaskDateRangeWrapper = styled.div`
-	
+	position:relative;
+	z-index:var(--isOpen, 0);
 	${CalendarWrapper}{
     position: absolute;
 		top:0;

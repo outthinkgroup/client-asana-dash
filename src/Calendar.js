@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { dayInMili, getMonthEnd, getMonthStart } from "./dateUtils.js";
+import {
+  dayInMili,
+  getMonthEnd,
+  getMonthStart,
+  monthInMili,
+} from "./dateUtils.js";
 
 const columnCount = 7;
 const rowCount = 6;
@@ -30,64 +35,14 @@ function closestSunday(date) {
   return date;
 }
 export default function Calendar({ dateRange }) {
-  const aDate = new Date(dateRange.start);
-  let start, end, lastDay, firstDayOfWeek, days;
-  if (dateRange.start.getMonth() === dateRange.end.getMonth()) {
-    start = getMonthStart(aDate);
-    end = getMonthEnd(aDate);
-    lastDay = end.getDate();
-    firstDayOfWeek = start.getDay();
-    days = Array.from(Array(firstDayOfWeek), (d, i) => (
-      <span className="day" key={"e" + i}>
-        {""}
-      </span>
-    ));
+  const startOfWork = dateRange.start;
+  const endOfWork = dateRange.end;
 
-    for (let day = 1; day <= lastDay; day++) {
-      days.push(
-        <span
-          className="day"
-          key={day}
-          style={
-            day >= dateRange.start.getDate() && day <= dateRange.end.getDate()
-              ? {
-                  color: "white",
-                  background: "blue",
-                  fontWeight: "bold",
-                }
-              : {}
-          }
-        >
-          {day}
-        </span>
-      );
-    }
-  } else {
-    const twoWeeks = 15 * dayInMili;
-    const sunday = closestSunday(dateRange.start);
-    start = new Date(sunday.getTime() - twoWeeks);
-    end = new Date(sunday.getTime() + twoWeeks);
-    const firstLastDay = getMonthEnd(start).getDate();
-    const secondLastDay = end.getDate();
-
-    //Two weeks before start date - start date
-    days = Array.from(Array(firstLastDay - start.getDate()), (_, day) => {
-      const value = start.getDay() + day;
-      return <span className="day">{value}</span>;
-    });
-
-    //One day after Start Date = two weeks after
-    days.push(
-      ...Array.from(Array(secondLastDay), (_, day) => {
-        const value = +day % firstLastDay;
-        return <span className="day">{value}</span>;
-      })
-    );
-  }
+  const days = getDays(startOfWork, endOfWork);
 
   return (
     <CalendarWrapper style={{ fontSize: 16 }}>
-      <header className="month">{getMonthName(start, true)}</header>
+      <header className="month">{getMonthName(startOfWork, true)}</header>
 
       <div className="days">
         <div className="day-labels">
@@ -145,13 +100,90 @@ export const CalendarWrapper = styled.div`
     text-align: center;
     aspect-ratio: 1/1;
   }
+	.day.in-range{
+		background:#EEF3F8;
+		color:#1E3A8A;
+		font-weight:900;
+	}
 `;
 
-function createGrid(width, height) {
-  const grid = [];
-  const total = width * height;
-  for (let i = 0; i < total; i++) {
-    grid.push(i + 1);
-  }
-  return grid;
+function getMonthDays(rangeStart, rangeEnd) {
+  const monthStart = getMonthStart(rangeStart);
+  const monthStartDay = monthStart.getDay();
+
+  const getMonthEndDate = getMonthEnd(rangeStart).getDate();
+
+  return Array.from(Array(getMonthEndDate + monthStartDay), (_, index) => {
+    if (index < monthStartDay) return <span className="day">{""}</span>;
+
+    const dayNumber = index - monthStartDay;
+    const date = new Date(monthStart.getTime());
+    date.setDate(monthStart.getDate() + dayNumber);
+
+    const isInRange =
+      date.getTime() >= rangeStart.getTime() &&
+      date.getTime() <= rangeEnd.getTime();
+
+    return (
+      <span className={`day ${isInRange ? `in-range` : ""}`} key={index}>
+        {index - monthStartDay + 1}/{date.getDate()}
+      </span>
+    );
+  });
+}
+
+function getDays(rangeStart, rangeEnd) {
+  const start = {
+    date: rangeStart,
+    monthStart: getMonthStart(rangeStart),
+    monthEnd: getMonthEnd(rangeStart),
+  };
+  const end = {
+    date: rangeEnd,
+    monthStart: getMonthStart(rangeEnd),
+    monthEnd: getMonthEnd(rangeEnd),
+  };
+
+  const isMultiMonth = start.date.getMonth() !== end.date.getMonth();
+
+  const calcStartDate = isMultiMonth
+    ? new Date(end.date.getTime() - (monthInMili(end.date) - dayInMili))
+    : start.monthStart;
+  calcStartDate.setHours(0, 0, 0, 0);
+  const calcStartDay = calcStartDate.getDay();
+  const totalDays = isMultiMonth
+    ? start.monthEnd.getDate() -
+      calcStartDate.getDate() +
+      end.date.getDate() +
+      1
+    : end.monthEnd.getDate();
+
+  return Array.from(Array(totalDays + calcStartDay), (_, index) => {
+    if (index < calcStartDay) {
+      return (
+        <span key={index} className="day">
+          {""}
+        </span>
+      );
+    }
+
+    const date = new Date(calcStartDate.getTime());
+    date.setDate(calcStartDate.getDate() + index - calcStartDay);
+
+    const isInRange =
+      date.getTime() >= rangeStart.getTime() &&
+      date.getTime() <= rangeEnd.getTime();
+    console.log(
+      date.getDate(),
+      isInRange,
+      rangeStart.getTime(),
+      date.getTime(),
+      rangeEnd.getTime()
+    );
+    return (
+      <span className={`day ${isInRange ? `in-range` : ""}`} key={index}>
+        {date.getDate()}
+      </span>
+    );
+  });
 }

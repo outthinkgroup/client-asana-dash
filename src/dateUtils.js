@@ -8,6 +8,7 @@ export function getMonthStart(date) {
 }
 
 export const dayInMili = 1000 * 60 * 60 * 24;
+export const monthInMili = (date) => getMonthEnd(date).getDate() * dayInMili;
 
 export function getMonthEnd(date) {
   const monthStart = getMonthStart(date);

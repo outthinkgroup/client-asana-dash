@@ -9,40 +9,30 @@ import {
 } from "./dateUtils.js";
 
 const columnCount = 7;
-const rowCount = 6;
-
-const daysOfWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thurseday",
-  "Friday",
-  "Saturday",
-];
-const OFFSETS = daysOfWeek.reduce((offsets, day, index) => {
-  offsets[day] = index;
-  return offsets;
-}, {});
 
 function getMonthName(date, isLong) {
   return date.toLocaleDateString("default", {
     month: isLong ? "long" : "short",
   });
 }
-
-function closestSunday(date) {
-  return date;
+function getMonthRange(start, end) {
+  return `${getMonthName(start, false)} - ${getMonthName(end, false)}`;
 }
+
 export default function Calendar({ dateRange }) {
   const startOfWork = dateRange.start;
   const endOfWork = dateRange.end;
+  const isMultiMonthRange = startOfWork.getMonth() !== endOfWork.getMonth();
 
   const days = getDays(startOfWork, endOfWork);
 
   return (
     <CalendarWrapper style={{ fontSize: 16 }}>
-      <header className="month">{getMonthName(startOfWork, true)}</header>
+      <header className="month">
+        {isMultiMonthRange
+          ? getMonthRange(startOfWork, endOfWork)
+          : getMonthName(startOfWork, true)}
+      </header>
 
       <div className="days">
         <div className="day-labels">

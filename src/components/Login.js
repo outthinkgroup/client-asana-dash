@@ -7,7 +7,12 @@ export default function Login() {
     <div>
       {isShowForm ? (
         <div style={{ display: `flex` }}>
-          <button onClick={() => setIsShowForm(false)}>&times;</button>
+          <button
+            style={{ height: `2em` }}
+            onClick={() => setIsShowForm(false)}
+          >
+            &times;
+          </button>
           <LoginForm onSubmitAction={() => setIsShowForm(false)} />
         </div>
       ) : (

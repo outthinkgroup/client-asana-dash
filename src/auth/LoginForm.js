@@ -25,19 +25,30 @@ export default function LoginForm({ onSubmitAction }) {
   }
   return (
     <form onSubmit={loginUser}>
-      <input
-        type="email"
-        name="email"
-        value={form.email}
-        onChange={updateForm}
-      />
-      <input
-        type="password"
-        name="password"
-        value={form.password}
-        onChange={updateForm}
-      />
-      <button>{loading ? "logging in..." : "login"}</button>
+      <label htmlFor="email">
+        <p>Email</p>
+        <input
+          type="email"
+          placeholder="email"
+          name="email"
+          value={form.email}
+          onChange={updateForm}
+          id="email"
+        />
+      </label>
+      <label htmlFor="password">
+        <p>password</p>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={form.password}
+          onChange={updateForm}
+        />
+      </label>
+      <div>
+        <button>{loading ? "logging in..." : "login"}</button>
+      </div>
     </form>
   );
 }

@@ -6,7 +6,7 @@ import {
   getMonthEnd,
   getMonthStart,
   monthInMili,
-} from "./dateUtils.js";
+} from "../dateUtils.js";
 
 const columnCount = 7;
 

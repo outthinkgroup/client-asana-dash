@@ -58,7 +58,7 @@ const TaskDateRangeWrapper = styled.div`
     justify-content: center;
     align-items: center;
     background: #EEF3F8;
-		> * {
+		 * {
 			width:100%;
 			height:100%;
 			display:flex;

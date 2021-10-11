@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import ProjectStatus from "./ProjectStatus.js";
+
 function ProjectList({ className }) {
   const [projects, setProjects] = React.useState([]);
   const [search, setSearch] = React.useState("");
@@ -37,7 +39,8 @@ function ProjectList({ className }) {
                   </Link>
                   <button
                     onClick={(e) => {
-                      const url = `${window.location.origin}/project/?id=${project.gid}`;
+                      const url =
+                        `${window.location.origin}/project/?id=${project.gid}`;
                       e.stopPropagation();
                       copyToClipboard(url);
                     }}
@@ -45,12 +48,10 @@ function ProjectList({ className }) {
                     copy link
                   </button>
                 </header>
-                {project.current_status?.title && (
-                  <>
-                    <h4>{project.current_status.title}</h4>
-                    <p>{project.current_status?.text}</p>
-                  </>
-                )}
+                <ProjectStatus
+                  status={project.current_status}
+                  id={project.gid}
+                />
               </li>
             );
           })}

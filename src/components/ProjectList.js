@@ -26,20 +26,31 @@ function ProjectList({ className }) {
           .map((project) => {
             return (
               <li key={project.gid}>
-                <Link
-                  to={{
-                    pathname: "/project",
-                    search: `?id=${project.gid}`,
-                  }}
-                >
-                  <h3>{project.name}</h3>
-                  {project.current_status?.title && (
-                    <>
-                      <h4>{project.current_status.title}</h4>
-                      <p>{project.current_status?.text}</p>
-                    </>
-                  )}
-                </Link>
+                <header>
+                  <Link
+                    to={{
+                      pathname: "/project",
+                      search: `?id=${project.gid}`,
+                    }}
+                  >
+                    <h3>{project.name}</h3>
+                  </Link>
+                  <button
+                    onClick={(e) => {
+                      const url = `${window.location.origin}/project/?id=${project.gid}`;
+                      e.stopPropagation();
+                      copyToClipboard(url);
+                    }}
+                  >
+                    copy link
+                  </button>
+                </header>
+                {project.current_status?.title && (
+                  <>
+                    <h4>{project.current_status.title}</h4>
+                    <p>{project.current_status?.text}</p>
+                  </>
+                )}
               </li>
             );
           })}
@@ -60,6 +71,13 @@ export default styled(ProjectList)`
   margin: 0;
   padding: 0;
   list-style: none;
+  li header {
+    background: none;
+    margin: 0;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+  }
   h3 {
     margin: 0;
     margin-bottom: 1em;
@@ -73,22 +91,53 @@ export default styled(ProjectList)`
     font-size: 14px;
   }
   a {
-    padding: 20px 10px;
-    color: inherit;
+    color: #1e3a8a;
     text-decoration: none;
     &:hover {
-      background: #eff6ff;
+      color: black;
     }
   }
-  li > a {
+  button {
+    cursor: pointer;
+    background: #1e3a8a;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    appearance: none;
+    border: 1px solid transparent;
+    height: calc(1.2em + 10px);
+    white-space: nowrap;
+    &:hover {
+      background: #2e468a;
+    }
+    &:focus {
+      box-shadow: 0 0 0 4px #1e3a8a44;
+    }
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+  li {
+    padding: 20px 10px;
     border: 1px solid #ccc;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    &:hover {
+      background: #eff6ff;
+    }
   }
 `;
 
 function matchSearch(project, search) {
   if (search.length <= 3) return true;
   return project.name.toLowerCase().includes(search.toLowerCase());
+}
+function copyToClipboard(str) {
+  const el = document.createElement("textarea");
+  el.value = str;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
 }

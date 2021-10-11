@@ -27,14 +27,14 @@ function useQuery() {
 }
 
 function Project({ className }) {
-  const query = useQuery();
   const [projectData, setProjectData] = useState(null);
   const [appError, setAppError] = useState(false);
 
   const [filter, setFilter] = useState("all");
 
   useLayoutEffect(() => {
-    getData(query)
+    const params = new URLSearchParams(window.location.search);
+    getData(params)
       .then(setProjectData)
       .catch((e) => {
         setAppError(e.toString());

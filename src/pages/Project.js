@@ -1,6 +1,5 @@
 import { useLayoutEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
 
 import TaskDateRangeCalendar from "../components/TaskRangeCalendar";
@@ -18,13 +17,6 @@ const filterFunctions = {
   client: (task) => isClientTask(task.custom_fields),
   agency: (task) => !isClientTask(task.custom_fields),
 };
-function useQuery() {
-  const params = new URLSearchParams(useLocation().search);
-  if (params) {
-    console.log(params.get("id"));
-  }
-  return params;
-}
 
 function Project({ className }) {
   const [projectData, setProjectData] = useState(null);

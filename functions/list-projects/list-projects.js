@@ -15,12 +15,13 @@ export async function handler(event) {
     },
   }).then((res) => res.json());
 
+  console.log(projects);
   return {
     statusCode: 200,
-    body: JSON.stringify(projects),
+    body: JSON.stringify(projects.filter((p) => !p.archived)),
   };
 }
 
 function getProjects() {
-  return `${BASEURL}/projects?opt_fields=name,current_status,created_at&workspace=23156169120585`;
+  return `${BASEURL}/projects/?opt_fields=archived,name,created_at,current_status&workspace=23156169120585`;
 }

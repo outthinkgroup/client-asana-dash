@@ -58,12 +58,11 @@ const TaskDateRangeWrapper = styled.div`
     justify-content: center;
     align-items: center;
     background: #EEF3F8;
-		 * {
-			width:100%;
-			height:100%;
-			display:flex;
-			justify-content:center;
-			align-items:center;
+		svg{
+			position:absolute;
+			top:50%;
+			left:50%;
+			transform:translate(-50%,-50%);
 		}
     &:hover {
       background: #1E3A8A;

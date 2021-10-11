@@ -85,14 +85,23 @@ export const CalendarWrapper = styled.div`
     justify-content: space-between;
   }
   .day {
-    display: flex;
     font-size: 0.6em;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    aspect-ratio: 1/1;
-		height:100%;
+		width:100%;
+		height:0;
+		padding-top:100%;
+		position:relative;
   }
+	.day .inner-day{
+    text-align: center;
+		position:absolute;
+		top:0;
+		left:0;
+		display: flex;
+    align-items: center;
+    justify-content: center;
+		width:100%;
+		height:100%;
+	}
 	.day.in-range{
 		background:#EEF3F8;
 		color:#1E3A8A;
@@ -143,7 +152,7 @@ function getDays(rangeStart, rangeEnd) {
     if (index < calcStartDay) {
       return (
         <span key={index} className="day">
-          {""}
+          <span class="inner-day">{""}</span>
         </span>
       );
     }
@@ -165,7 +174,7 @@ function getDays(rangeStart, rangeEnd) {
         } ${isEnd ? `end-range` : ""}`}
         key={index}
       >
-        {date.getDate()}
+        <span className="inner-day">{date.getDate()}</span>
       </span>
     );
   });

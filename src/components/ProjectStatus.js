@@ -1,8 +1,9 @@
 import React from "react";
+import styled from "styled-components";
 
-export default function ProjectStatus({ status, id }) {
+export default function ProjectStatus({ initialStatus, id }) {
   const [isEditing, setIsEditing] = React.useState(false);
-
+  const [status, setStatus] = React.useState(initialStatus);
   return (
     <div>
       {status?.title ? (
@@ -12,8 +13,12 @@ export default function ProjectStatus({ status, id }) {
         </>
       ) : null}
       {isEditing ? (
-        <Modal size="medium" close={() => setIsEditing(false)}>
-          <EditProjectStatus status={status} id={id} />
+        <Modal
+          size="medium"
+          title="Edit Project Status"
+          close={() => setIsEditing(false)}
+        >
+          <EditProjectStatus status={status} id={id} setStatus={setStatus} />
         </Modal>
       ) : (
         <button onClick={() => setIsEditing(true)}>edit</button>
@@ -22,7 +27,7 @@ export default function ProjectStatus({ status, id }) {
   );
 }
 
-function EditProjectStatus({ status, id }) {
+function EditProjectStatus({ status, id, setStatus }) {
   const [form, setForm] = React.useState({
     title: status?.title || "",
     text: status?.text || "",
@@ -44,7 +49,8 @@ function EditProjectStatus({ status, id }) {
               }),
             }
           ).then((res) => res.json());
-          console.log(data);
+          const { text, title } = data;
+          setStatus({ text, title });
         }}
       >
         <input
@@ -72,12 +78,17 @@ function EditProjectStatus({ status, id }) {
   );
 }
 
-function Modal({ children, close }) {
+function Modal({ title, children, close }) {
   return (
-    <div className="">
-      <button onClick={close}>&times;</button>
-      {children}
-    </div>
+    <ModalWrapper className="">
+      <div className="inner-modal">
+        <header>
+          <h2>{title}</h2>
+          <button onClick={close}>&times;</button>
+        </header>
+        {children}
+      </div>
+    </ModalWrapper>
   );
 }
 
@@ -86,3 +97,18 @@ function getUserId() {
   const { id } = identity && identity.user;
   return id;
 }
+
+const ModalWrapper = styled.div`
+  position: fixed;
+  inset: 20px;
+  display: grid;
+  place-content: center;
+  .inner-modal {
+    background: white;
+    box-shadow: 0 50px 100px rgba(50, 50, 93, 0.1),
+      0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 75%;
+    min-width: 300px;
+  }
+`;

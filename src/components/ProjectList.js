@@ -22,6 +22,7 @@ function ProjectList({ className }) {
           id="search"
         />
       </label>
+
       <ul className={className}>
         {projects
           .filter((proj) => matchSearch(proj, search))
@@ -39,8 +40,7 @@ function ProjectList({ className }) {
                   </Link>
                   <button
                     onClick={(e) => {
-                      const url =
-                        `${window.location.origin}/project/?id=${project.gid}`;
+                      const url = `${window.location.origin}/project/?id=${project.gid}`;
                       e.stopPropagation();
                       copyToClipboard(url);
                     }}
@@ -49,7 +49,7 @@ function ProjectList({ className }) {
                   </button>
                 </header>
                 <ProjectStatus
-                  status={project.current_status}
+                  initialStatus={project.current_status}
                   id={project.gid}
                 />
               </li>

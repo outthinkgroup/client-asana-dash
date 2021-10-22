@@ -10,7 +10,7 @@ export default function ProjectStatus({ initialStatus, id }) {
     if (titleRef?.current) {
       setButtonAnchor(positionEnd(titleRef.current));
     }
-  }, []);
+  }, [status]);
   return (
     <StatusWrapper>
       {status?.title ? (
@@ -50,8 +50,8 @@ export default function ProjectStatus({ initialStatus, id }) {
 
 function EditProjectStatus({ status, id, setStatus }) {
   const [form, setForm] = React.useState({
-    title: status?.title || "",
-    text: status?.text || "",
+    title: status?.title || "  ",
+    text: status?.text || "  ",
   });
 
   return (
@@ -90,12 +90,14 @@ function EditProjectStatus({ status, id, setStatus }) {
             }
             id="title"
             name="title"
+            required
           />
         </label>
 
         <label htmlFor="text">
           <span className="label">Details</span>
           <textarea
+            required
             value={form.text}
             id="text"
             onChange={(e) =>
@@ -132,7 +134,7 @@ const StackedForm = styled.form`
   }
   button {
     padding: 8px 16px;
-    height: auto;
+    height: auto !important;
   }
 `;
 

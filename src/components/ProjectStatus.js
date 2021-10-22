@@ -186,7 +186,7 @@ const StatusWrapper = styled.div`
     font-size: 12px;
     display: grid;
     place-content: center;
-    background: transparent;
+    background: transparent !important;
     color: #c3d2e6;
     width: 2em;
     height: 2em;

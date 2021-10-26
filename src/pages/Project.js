@@ -54,13 +54,11 @@ function Project({ className }) {
   if (!filteredTasks) {
     return (
       <LoaderFrame>
-        {appError
-          ? (
-            <ShowError message={appError} />
-          )
-          : (
-            <DotLoader color={"#1E3A8A"} />
-          )}
+        {appError ? (
+          <ShowError message={appError} />
+        ) : (
+          <DotLoader color={"#1E3A8A"} />
+        )}
       </LoaderFrame>
     );
   }
@@ -111,6 +109,7 @@ function Project({ className }) {
               // Bugs out without
               return a !== "0";
             })
+            .sort()
             .map((date) => {
               return (
                 <li key={date}>
@@ -131,19 +130,17 @@ function TaskGroup({ tasks, date }) {
   return (
     <div className="date-group">
       <h3>
-        {typeof date == "string"
-          ? (
-            <>
-              <span>
-                <div className="dayofweek">{dayOfWeek}</div>
-              </span>
-              <div className="day">{day}</div>
-              <span className="month">{month}</span>
-            </>
-          )
-          : (
-            "No Date Given"
-          )}
+        {typeof date == "string" ? (
+          <>
+            <span>
+              <div className="dayofweek">{dayOfWeek}</div>
+            </span>
+            <div className="day">{day}</div>
+            <span className="month">{month}</span>
+          </>
+        ) : (
+          "No Date Given"
+        )}
       </h3>
       <ul className="tasks">
         {tasks &&
@@ -153,15 +150,13 @@ function TaskGroup({ tasks, date }) {
                 key={task.gid}
                 clientTask={isClientTask(task.custom_fields)}
               >
-                {isClientTask(task.custom_fields)
-                  ? (
-                    <ClientTaskIcon
-                      title="Client Task"
-                      className="special-identifier-icon "
-                      color={`#FF8F69`}
-                    />
-                  )
-                  : null}
+                {isClientTask(task.custom_fields) ? (
+                  <ClientTaskIcon
+                    title="Client Task"
+                    className="special-identifier-icon "
+                    color={`#FF8F69`}
+                  />
+                ) : null}
                 <h4>{task.name}</h4>
                 <DateRange task={task} />
                 {task.html_notes && (
@@ -175,29 +170,27 @@ function TaskGroup({ tasks, date }) {
   );
 }
 function DateRange({ task }) {
-  return task.start_on && task.due_on
-    ? (
-      <DateRangeWrapper>
-        <div>
-          <div className="date-range">
-            <span>
-              {getMonth(task.start_on, false)} {getDay(task.start_on).day}
-            </span>{" "}
-            -
-            <span>
-              {" "}
-              {getMonth(task.due_on, false)} {getDay(task.due_on).day}
-            </span>
-          </div>
+  return task.start_on && task.due_on ? (
+    <DateRangeWrapper>
+      <div>
+        <div className="date-range">
+          <span>
+            {getMonth(task.start_on, false)} {getDay(task.start_on).day}
+          </span>{" "}
+          -
+          <span>
+            {" "}
+            {getMonth(task.due_on, false)} {getDay(task.due_on).day}
+          </span>
         </div>
+      </div>
 
-        <TaskDateRangeCalendar
-          startOn={new Date(...parseDateString(task.start_on))}
-          dueOn={new Date(...parseDateString(task.due_on))}
-        />
-      </DateRangeWrapper>
-    )
-    : null;
+      <TaskDateRangeCalendar
+        startOn={new Date(...parseDateString(task.start_on))}
+        dueOn={new Date(...parseDateString(task.due_on))}
+      />
+    </DateRangeWrapper>
+  ) : null;
 }
 
 export default styled(Project)`
@@ -421,7 +414,7 @@ async function getData(query) {
   if (query && query.has("id") && query.get("id")) {
     const projId = query.get("id");
     return fetch(
-      `${window.location.origin}/api/get-project?project=${projId}`,
+      `${window.location.origin}/api/get-project?project=${projId}`
     ).then((res) => res.json());
   } else {
     throw new Error("No Project found");
@@ -454,7 +447,7 @@ export function parseDateString(dateString) {
 
 function isClientTask(customFields) {
   const clientTaskField = customFields.find(
-    (field) => field.name === CLIENT_TASK.name,
+    (field) => field.name === CLIENT_TASK.name
   );
   if (!clientTaskField) return false;
   return (

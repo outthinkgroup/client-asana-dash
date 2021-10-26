@@ -35,6 +35,7 @@ export default function ProjectStatus({ initialStatus, id }) {
         </Modal>
       ) : (
         <button
+          className="edit-button"
           style={{
             "--anchor": buttonAnchor,
           }}
@@ -182,11 +183,11 @@ const PenIcon = () => (
 
 const StatusWrapper = styled.div`
   position: relative;
-  & > button {
+  & > .edit-button {
     font-size: 12px;
     display: grid;
     place-content: center;
-    background: transparent !important;
+    background: transparent;
     color: #c3d2e6;
     width: 2em;
     height: 2em;

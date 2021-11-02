@@ -96,6 +96,7 @@ function Project({ className }) {
         </ul>
       </TopBar>
 
+      {/*main loop of all the tasks*/}
       <div className="wrapper">
         {project.current_status && (
           <>
@@ -173,6 +174,7 @@ function TaskGroup({ tasks, date }) {
     </div>
   );
 }
+
 function DateRange({ task }) {
   return task.start_on && task.due_on ? (
     <DateRangeWrapper>

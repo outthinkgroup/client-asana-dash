@@ -20,13 +20,3 @@ button svg {
   fill: currentColor;
   width: 1em;
 }
-
-input,
-textarea {
-  background: #eff6ff;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px 0 hsl(0 0% 0% / 10%);
-  border: 1px solid #c3d2e6;
-  font-size: 16px;
-  padding: 4px 8px;
-}

@@ -1,6 +1,23 @@
 import { useLayoutEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
+import {
+  FormControl,
+  VStack,
+  Box,
+  Icon,
+  ListItem,
+  UnorderedList,
+  Badge,
+  Flex,
+  HStack,
+  Heading,
+  Text,
+  FormLabel,
+  Select,
+  FormErrorMessage,
+  FormHelperText,
+} from "@chakra-ui/react";
 
 import TaskDateRangeCalendar from "../components/TaskRangeCalendar";
 import ShowError from "../components/ShowError.js";
@@ -64,47 +81,74 @@ function Project({ className }) {
   }
 
   return (
-    <div className={`App ${className}`}>
-      <header>
-        <div className="wrapper">
-          <h1>Outthink Asana Client Dashboard</h1>
-          <h2>{project?.name}</h2>
-        </div>
-      </header>
+    <Box className={`App ${className}`}>
+      <Box bg="blue.50" as="header">
+        <Box className="" maxW={900} p={6} mx="auto">
+          <Heading as="h1" size="md" color="blue.700">
+            Outthink Asana Client Dashboard
+          </Heading>
+          <Heading as="h2" fontWeight="300">
+            {project?.name}
+          </Heading>
+        </Box>
+      </Box>
 
-      <TopBar className=" wrapper">
-        <div className="filters">
-          <label>
+      <Box
+        className=""
+        maxW={960}
+        alignItems="center"
+        p={6}
+        mx="auto"
+        justifyContent="space-between"
+      >
+        {project.current_status && (
+          <>
+            <Badge className="heading-label">Status</Badge>
+            <h2>{project.current_status?.title}</h2>
+          </>
+        )}
+      </Box>
+
+      <Flex
+        className=""
+        maxW={960}
+        alignItems="center"
+        p={6}
+        mx="auto"
+        justifyContent="space-between"
+      >
+        <Flex className="filters">
+          <HStack as={FormLabel} alignItems="center" spacing={4} m={0}>
             <span>Show</span>
-            <select onChange={(e) => setFilter(e.target.value)} value={filter}>
+            <Select onChange={(e) => setFilter(e.target.value)} value={filter}>
               {Object.keys(filterFunctions).map((filterName) => (
                 <option key={filterName} value={filterName}>
                   {filterName} tasks
                 </option>
               ))}
-            </select>
-          </label>
-        </div>
+            </Select>
+          </HStack>
+        </Flex>
+
         <ul className="key">
-          <li>
-            <ClientTaskIcon
-              color="#FF8F69"
+          <HStack as="li" gap={10} alignItems="center">
+            <Icon
+              as={ClientTaskIcon}
+              color="orange.300"
               className="special-identifier-icon"
             />
-            Client Task
-          </li>
+            <Text>Client Task</Text>
+          </HStack>
         </ul>
-      </TopBar>
+      </Flex>
 
       {/*main loop of all the tasks*/}
-      <div className="wrapper">
-        {project.current_status && (
-          <>
-            <p className="heading-label">Status</p>
-            <h2>{project.current_status?.title}</h2>
-          </>
-        )}
-        <DateGroups>
+      <Box mx="auto" maxW={960} className="">
+        <UnorderedList
+          border={`1px solid `}
+          borderColor="gray.200"
+          listStyleType="none"
+        >
           {filteredDates
             .filter((a) => {
               // Bugs out without
@@ -113,15 +157,30 @@ function Project({ className }) {
             .sort()
             .map((date) => {
               return (
-                <li key={date}>
+                <ListItem
+                  key={date}
+                  borderBottom={`1px solid `}
+                  borderColor="gray.200"
+                  sx={{
+                    "&:last-child": {
+                      border: "none",
+                    },
+
+                    "&:nth-child(even)": {
+                      background: "blue.50",
+                    },
+                  }}
+                >
                   <TaskGroup date={date} tasks={filteredTasks[date]} />
-                </li>
+                </ListItem>
               );
             })}
-          <li>{tasks[0] && <TaskGroup tasks={filteredTasks[0]} />}</li>
-        </DateGroups>
-      </div>
-    </div>
+          <ListItem>
+            {tasks[0] && <TaskGroup tasks={filteredTasks[0]} />}
+          </ListItem>
+        </UnorderedList>
+      </Box>
+    </Box>
   );
 }
 
@@ -129,33 +188,63 @@ function TaskGroup({ tasks, date }) {
   const month = date ? getMonth(date) : null;
   const { day, dayOfWeek } = date ? getDay(date) : {};
   return (
-    <div className="date-group">
-      <h3>
+    <Flex
+      p={4}
+      sx={{ gap: "40px" }}
+      flexDirection={{ base: "column", md: "row" }}
+      className="date-group"
+    >
+      <VStack align="start">
         {typeof date == "string" ? (
           <>
-            <span>
-              <div className="dayofweek">{dayOfWeek}</div>
-            </span>
-            <div className="day">{day}</div>
-            <span className="month">{month}</span>
+            <Box minW={200}>
+              <Badge variant="outline" className="dayofweek" fontSize="xs">
+                {dayOfWeek}
+              </Badge>
+            </Box>
+            <Heading as="h3" fontWeight="300" color="blue.700" className="day">
+              {day}
+            </Heading>
+            <Box className="month" color="gray.600">
+              {month}
+            </Box>
           </>
         ) : (
           "No Date Given"
         )}
-      </h3>
-      <ul className="tasks">
+      </VStack>
+      <UnorderedList spacing={4} p={0} m={0} className="tasks" styleType="none">
         {tasks &&
           tasks.map((task) => {
             return (
-              <Task
+              <ListItem
                 key={task.gid}
                 clientTask={isClientTask(task.custom_fields)}
+                position="relative"
               >
                 {isClientTask(task.custom_fields) ? (
-                  <ClientTaskIcon
+                  <Icon
+                    color="orange.300"
+                    className="special-identifier-icon"
+                    as={ClientTaskIcon}
                     title="Client Task"
-                    className="special-identifier-icon "
-                    color={`#FF8F69`}
+                    sx={{
+                      height: "1em",
+                      "@media (min-width: 762px)": {
+                        position: "absolute",
+                        right: "calc(100% + 8px)",
+                        top: "4px",
+                      },
+                      "@media (max-width: 760px)": {
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        "&::after": {
+                          content: "attr(title)",
+                          fontWeight: "bold",
+                        },
+                      },
+                    }}
                   />
                 ) : null}
                 <h4>{task.name}</h4>
@@ -167,19 +256,19 @@ function TaskGroup({ tasks, date }) {
                     }}
                   />
                 )}
-              </Task>
+              </ListItem>
             );
           })}
-      </ul>
-    </div>
+      </UnorderedList>
+    </Flex>
   );
 }
 
 function DateRange({ task }) {
   return task.start_on && task.due_on ? (
-    <DateRangeWrapper>
+    <HStack spacing={2} alignItems="center">
       <div>
-        <div className="date-range">
+        <Badge className="date-range">
           <span>
             {getMonth(task.start_on, false)} {getDay(task.start_on).day}
           </span>{" "}
@@ -188,18 +277,19 @@ function DateRange({ task }) {
             {" "}
             {getMonth(task.due_on, false)} {getDay(task.due_on).day}
           </span>
-        </div>
+        </Badge>
       </div>
 
       <TaskDateRangeCalendar
         startOn={new Date(...parseDateString(task.start_on))}
         dueOn={new Date(...parseDateString(task.due_on))}
       />
-    </DateRangeWrapper>
+    </HStack>
   ) : null;
 }
 
-export default styled(Project)`
+export default Project;
+styled(Project)`
   header {
     background: #eff6ff;
 
@@ -241,21 +331,6 @@ export default styled(Project)`
   }
 
   .special-identifier-icon {
-    height: 1em;
-    color: var(--special-color);
-    @media (min-width: 762px) {
-      position: absolute;
-      right: calc(100% + 8px);
-      top: 4px;
-    }
-    @media (max-width: 760px) {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      &::after {
-        content: attr(title);
-        font-weight: bold;
-      }
     }
 
     svg {
@@ -269,7 +344,7 @@ export default styled(Project)`
   }
 `;
 
-const DateGroups = styled.ul`
+const Date_Groups = styled.ul`
   --border-color: #ddd;
   > li:nth-child(even) {
     background: #f8fbff;

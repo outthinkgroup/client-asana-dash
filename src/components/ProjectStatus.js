@@ -4,6 +4,8 @@ import styled from "styled-components";
 export default function ProjectStatus({ initialStatus, id }) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [status, setStatus] = React.useState(initialStatus);
+
+  //this is for positioning the pen icon at the end of status title
   const [buttonAnchor, setButtonAnchor] = React.useState(0);
   const titleRef = React.useRef();
   React.useLayoutEffect(() => {
@@ -11,6 +13,7 @@ export default function ProjectStatus({ initialStatus, id }) {
       setButtonAnchor(positionEnd(titleRef.current));
     }
   }, [status]);
+
   return (
     <StatusWrapper>
       {status?.title ? (
@@ -25,6 +28,7 @@ export default function ProjectStatus({ initialStatus, id }) {
           Add a status
         </span>
       )}
+
       {isEditing ? (
         <Modal
           size="medium"
@@ -113,32 +117,6 @@ function EditProjectStatus({ status, id, setStatus }) {
   );
 }
 
-const StackedForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  input,
-  textarea {
-    width: 100%;
-  }
-  label {
-    .label {
-      font-weight: bold;
-      font-size: 14px;
-      display: block;
-      margin-bottom: 4px;
-    }
-  }
-  textarea {
-    height: 200px;
-    resize: none;
-  }
-  button {
-    padding: 8px 16px;
-    height: auto !important;
-  }
-`;
-
 function Modal({ title, children, close }) {
   return (
     <ModalWrapper className="">
@@ -180,6 +158,32 @@ const PenIcon = () => (
     ></path>
   </svg>
 );
+
+const StackedForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  input,
+  textarea {
+    width: 100%;
+  }
+  label {
+    .label {
+      font-weight: bold;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 4px;
+    }
+  }
+  textarea {
+    height: 200px;
+    resize: none;
+  }
+  button {
+    padding: 8px 16px;
+    height: auto !important;
+  }
+`;
 
 const StatusWrapper = styled.div`
   position: relative;

@@ -15,6 +15,7 @@ function getMonthName(date, isLong) {
     month: isLong ? "long" : "short",
   });
 }
+
 function getMonthRange(start, end) {
   return `${getMonthName(start, false)} - ${getMonthName(end, false)}`;
 }

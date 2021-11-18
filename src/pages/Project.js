@@ -1,24 +1,23 @@
 import { useLayoutEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
+
 import {
-  FormControl,
   VStack,
   Box,
   Icon,
   ListItem,
   UnorderedList,
-  Badge,
   Flex,
   HStack,
   Heading,
   Text,
   FormLabel,
+  Badge,
   Select,
-  FormErrorMessage,
-  FormHelperText,
 } from "@chakra-ui/react";
 
+// import { Badge } from "../elements";
 import TaskDateRangeCalendar from "../components/TaskRangeCalendar";
 import ShowError from "../components/ShowError.js";
 import ClientTaskIcon from "../components/ClientTaskIcon.js";
@@ -83,7 +82,7 @@ function Project({ className }) {
   return (
     <Box className={`App ${className}`}>
       <Box bg="blue.50" as="header">
-        <Box className="" maxW={900} p={6} mx="auto">
+        <Box className="" maxW={960} p={6} mx="auto">
           <Heading as="h1" size="md" color="blue.700">
             Outthink Asana Client Dashboard
           </Heading>
@@ -131,7 +130,7 @@ function Project({ className }) {
         </Flex>
 
         <ul className="key">
-          <HStack as="li" gap={10} alignItems="center">
+          <HStack as="li" spacing={10} alignItems="center">
             <Icon
               as={ClientTaskIcon}
               color="orange.300"
@@ -166,7 +165,7 @@ function Project({ className }) {
                       border: "none",
                     },
 
-                    "&:nth-child(even)": {
+                    "&:nth-of-type(even)": {
                       background: "blue.50",
                     },
                   }}
@@ -213,7 +212,13 @@ function TaskGroup({ tasks, date }) {
           "No Date Given"
         )}
       </VStack>
-      <UnorderedList spacing={4} p={0} m={0} className="tasks" styleType="none">
+      <UnorderedList
+        spacing={[10, 4, 4]}
+        p={0}
+        m={0}
+        className="tasks"
+        styleType="none"
+      >
         {tasks &&
           tasks.map((task) => {
             return (
@@ -229,19 +234,23 @@ function TaskGroup({ tasks, date }) {
                     as={ClientTaskIcon}
                     title="Client Task"
                     sx={{
-                      height: "1em",
-                      "@media (min-width: 762px)": {
+                      "@media (min-width: 48em)": {
                         position: "absolute",
                         right: "calc(100% + 8px)",
                         top: "4px",
                       },
-                      "@media (max-width: 760px)": {
+                      "@media (max-width: 48em)": {
                         display: "flex",
                         alignItems: "center",
                         gap: "4px",
+                        "& svg": {
+                          minWidth: "1em",
+                        },
                         "&::after": {
                           content: "attr(title)",
                           fontWeight: "bold",
+                          display: "block",
+                          whiteSpace: "nowrap",
                         },
                       },
                     }}

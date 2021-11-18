@@ -160,7 +160,11 @@ function TaskGroup({ tasks, date }) {
                 <h4>{task.name}</h4>
                 <DateRange task={task} />
                 {task.html_notes && (
-                  <p dangerouslySetInnerHTML={{ __html: task.html_notes }} />
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: task.html_notes.replace("\n", "</br>"),
+                    }}
+                  />
                 )}
               </Task>
             );

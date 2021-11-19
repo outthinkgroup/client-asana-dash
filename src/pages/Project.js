@@ -21,6 +21,7 @@ import {
 import TaskDateRangeCalendar from "../components/TaskRangeCalendar";
 import ShowError from "../components/ShowError.js";
 import ClientTaskIcon from "../components/ClientTaskIcon.js";
+import ProjectHeader from "../components/ProjectHeader.js";
 
 const CLIENT_TASK = {
   name: "Client Task",
@@ -81,32 +82,7 @@ function Project({ className }) {
 
   return (
     <Box className={`App ${className}`}>
-      <Box bg="blue.50" as="header">
-        <Box className="" maxW={960} p={6} mx="auto">
-          <Heading as="h1" size="md" color="blue.700">
-            Outthink Asana Client Dashboard
-          </Heading>
-          <Heading as="h2" fontWeight="300">
-            {project?.name}
-          </Heading>
-        </Box>
-      </Box>
-
-      <Box
-        className=""
-        maxW={960}
-        alignItems="center"
-        p={6}
-        mx="auto"
-        justifyContent="space-between"
-      >
-        {project.current_status && (
-          <>
-            <Badge className="heading-label">Status</Badge>
-            <h2>{project.current_status?.title}</h2>
-          </>
-        )}
-      </Box>
+      <ProjectHeader project={project} />
 
       <Flex
         className=""
@@ -142,48 +118,54 @@ function Project({ className }) {
       </Flex>
 
       {/*main loop of all the tasks*/}
-      <Box mx="auto" maxW={960} className="">
-        <UnorderedList
-          border={`1px solid `}
-          borderColor="gray.200"
-          listStyleType="none"
-        >
-          {filteredDates
-            .filter((a) => {
-              // Bugs out without
-              return a !== "0";
-            })
-            .sort()
-            .map((date) => {
-              return (
-                <ListItem
-                  key={date}
-                  borderBottom={`1px solid `}
-                  borderColor="gray.200"
-                  sx={{
-                    "&:last-child": {
-                      border: "none",
-                    },
-
-                    "&:nth-of-type(even)": {
-                      background: "blue.50",
-                    },
-                  }}
-                >
-                  <TaskGroup date={date} tasks={filteredTasks[date]} />
-                </ListItem>
-              );
-            })}
-          <ListItem>
-            {tasks[0] && <TaskGroup tasks={filteredTasks[0]} />}
-          </ListItem>
-        </UnorderedList>
-      </Box>
+      <TasksByDate dates={filteredDates} tasks={tasks && filteredTasks} />
     </Box>
   );
 }
 
-function TaskGroup({ tasks, date }) {
+export function TasksByDate({ dates, tasks }) {
+  return (
+    <Box mx="auto" maxW={960} className="">
+      <UnorderedList
+        border={`1px solid `}
+        borderColor="gray.200"
+        listStyleType="none"
+      >
+        {dates
+          .filter((a) => {
+            // Bugs out without
+            return a !== "0";
+          })
+          .sort()
+          .map((date) => {
+            return (
+              <ListItem
+                key={date}
+                borderBottom={`1px solid `}
+                borderColor="gray.200"
+                sx={{
+                  "&:last-child": {
+                    border: "none",
+                  },
+
+                  "&:nth-of-type(even)": {
+                    background: "blue.50",
+                  },
+                }}
+              >
+                <TaskDateGroup date={date} tasks={tasks ? tasks[date] : []} />
+              </ListItem>
+            );
+          })}
+        <ListItem>
+          <TaskDateGroup tasks={tasks && tasks[0]} />
+        </ListItem>
+      </UnorderedList>
+    </Box>
+  );
+}
+
+function TaskDateGroup({ tasks, date }) {
   const month = date ? getMonth(date) : null;
   const { day, dayOfWeek } = date ? getDay(date) : {};
   return (
@@ -220,60 +202,64 @@ function TaskGroup({ tasks, date }) {
         styleType="none"
       >
         {tasks &&
-          tasks.map((task) => {
-            return (
-              <ListItem
-                key={task.gid}
-                clientTask={isClientTask(task.custom_fields)}
-                position="relative"
-              >
-                {isClientTask(task.custom_fields) ? (
-                  <Icon
-                    color="orange.300"
-                    className="special-identifier-icon"
-                    as={ClientTaskIcon}
-                    title="Client Task"
-                    sx={{
-                      "@media (min-width: 48em)": {
-                        position: "absolute",
-                        right: "calc(100% + 8px)",
-                        top: "4px",
-                      },
-                      "@media (max-width: 48em)": {
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "4px",
-                        "& svg": {
-                          minWidth: "1em",
-                        },
-                        "&::after": {
-                          content: "attr(title)",
-                          fontWeight: "bold",
-                          display: "block",
-                          whiteSpace: "nowrap",
-                        },
-                      },
-                    }}
-                  />
-                ) : null}
-                <h4>{task.name}</h4>
-                <DateRange task={task} />
-                {task.html_notes && (
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: task.html_notes.replace("\n", "</br>"),
-                    }}
-                  />
-                )}
-              </ListItem>
-            );
+          tasks.map((task, i) => {
+            return <Task task={task} key={i} />;
           })}
       </UnorderedList>
     </Flex>
   );
 }
 
-function DateRange({ task }) {
+export function Task({ task }) {
+  return (
+    <ListItem
+      key={task.gid}
+      clientTask={isClientTask(task.custom_fields)}
+      position="relative"
+    >
+      {isClientTask(task.custom_fields) ? (
+        <Icon
+          color="orange.300"
+          className="special-identifier-icon"
+          as={ClientTaskIcon}
+          title="Client Task"
+          sx={{
+            "@media (min-width: 48em)": {
+              position: "absolute",
+              right: "calc(100% + 8px)",
+              top: "4px",
+            },
+            "@media (max-width: 48em)": {
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              "& svg": {
+                minWidth: "1em",
+              },
+              "&::after": {
+                content: "attr(title)",
+                fontWeight: "bold",
+                display: "block",
+                whiteSpace: "nowrap",
+              },
+            },
+          }}
+        />
+      ) : null}
+      <h4>{task.name}</h4>
+      <DateRange task={task} />
+      {task.html_notes && (
+        <p
+          dangerouslySetInnerHTML={{
+            __html: task.html_notes.replace("\n", "</br>"),
+          }}
+        />
+      )}
+    </ListItem>
+  );
+}
+
+export function DateRange({ task }) {
   return task.start_on && task.due_on ? (
     <HStack spacing={2} alignItems="center">
       <div>
@@ -299,7 +285,7 @@ function DateRange({ task }) {
 
 export default Project;
 
-const LoaderFrame = styled.div`
+export const LoaderFrame = styled.div`
   width: 100vw;
   position: fixed;
   top: 0;
@@ -310,7 +296,7 @@ const LoaderFrame = styled.div`
   place-items: center;
 `;
 
-async function getData(query) {
+async function getData(query, options) {
   if (query && query.has("id") && query.get("id")) {
     const projId = query.get("id");
     return fetch(
@@ -345,7 +331,7 @@ export function parseDateString(dateString) {
   return [Number(year), Number(day) - 1, Number(month)];
 }
 
-function isClientTask(customFields) {
+export function isClientTask(customFields) {
   const clientTaskField = customFields.find(
     (field) => field.name === CLIENT_TASK.name
   );

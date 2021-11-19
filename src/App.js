@@ -9,6 +9,7 @@ import AuthContextProvider from "./auth/Context.js";
 import Project from "./pages/Project.js";
 import Home from "./pages/Home.js";
 import NotFound from "./pages/NotFound.js";
+import ProjectSections from "./pages/ProjectSections.js";
 
 //Theme
 import theme from "./theme";
@@ -21,6 +22,9 @@ export default function App() {
           <Switch>
             <Route exact path="/">
               <Home />
+            </Route>
+            <Route path="/project-sections/">
+              <ProjectSections />
             </Route>
             <Route path="/project/">
               <Project />

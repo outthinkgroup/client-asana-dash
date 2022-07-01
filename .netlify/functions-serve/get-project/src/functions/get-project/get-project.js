@@ -5,25 +5,32 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __reExport = (target, module2, desc) => {
+var __reExport = (target, module2, copyDefault, desc) => {
   if (module2 && typeof module2 === "object" || typeof module2 === "function") {
     for (let key of __getOwnPropNames(module2))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
+      if (!__hasOwnProp.call(target, key) && (copyDefault || key !== "default"))
         __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
   }
   return target;
 };
-var __toModule = (module2) => {
-  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
+var __toESM = (module2, isNodeMode) => {
+  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", !isNodeMode && module2 && module2.__esModule ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
 };
+var __toCommonJS = /* @__PURE__ */ ((cache) => {
+  return (module2, temp) => {
+    return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
+  };
+})(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 var __accessCheck = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
@@ -46,7 +53,7 @@ var __privateSet = (obj, member, value, setter) => {
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
   "node_modules/dotenv/lib/main.js"(exports, module2) {
-    var fs = require("fs");
+    var fs2 = require("fs");
     var path = require("path");
     var os = require("os");
     function log(message) {
@@ -101,7 +108,7 @@ var require_main = __commonJS({
         }
       }
       try {
-        const parsed = parse(fs.readFileSync(dotenvPath, { encoding }), { debug });
+        const parsed = parse(fs2.readFileSync(dotenvPath, { encoding }), { debug });
         Object.keys(parsed).forEach(function(key) {
           if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
             process.env[key] = parsed[key];
@@ -110,56 +117,12 @@ var require_main = __commonJS({
           }
         });
         return { parsed };
-      } catch (e) {
-        return { error: e };
+      } catch (e2) {
+        return { error: e2 };
       }
     }
     module2.exports.config = config2;
     module2.exports.parse = parse;
-  }
-});
-
-// node_modules/data-uri-to-buffer/dist/src/index.js
-var require_src = __commonJS({
-  "node_modules/data-uri-to-buffer/dist/src/index.js"(exports, module2) {
-    "use strict";
-    function dataUriToBuffer2(uri) {
-      if (!/^data:/i.test(uri)) {
-        throw new TypeError('`uri` does not appear to be a Data URI (must begin with "data:")');
-      }
-      uri = uri.replace(/\r?\n/g, "");
-      const firstComma = uri.indexOf(",");
-      if (firstComma === -1 || firstComma <= 4) {
-        throw new TypeError("malformed data: URI");
-      }
-      const meta = uri.substring(5, firstComma).split(";");
-      let charset = "";
-      let base64 = false;
-      const type = meta[0] || "text/plain";
-      let typeFull = type;
-      for (let i = 1; i < meta.length; i++) {
-        if (meta[i] === "base64") {
-          base64 = true;
-        } else {
-          typeFull += `;${meta[i]}`;
-          if (meta[i].indexOf("charset=") === 0) {
-            charset = meta[i].substring(8);
-          }
-        }
-      }
-      if (!meta[0] && !charset.length) {
-        typeFull += ";charset=US-ASCII";
-        charset = "US-ASCII";
-      }
-      const encoding = base64 ? "base64" : "ascii";
-      const data = unescape(uri.substring(firstComma + 1));
-      const buffer = Buffer.from(data, encoding);
-      buffer.type = type;
-      buffer.typeFull = typeFull;
-      buffer.charset = charset;
-      return buffer;
-    }
-    module2.exports = dataUriToBuffer2;
   }
 });
 
@@ -171,7 +134,7 @@ var require_ponyfill_es2018 = __commonJS({
     })(exports, function(exports2) {
       "use strict";
       const SymbolPolyfill = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? Symbol : (description) => `Symbol(${description})`;
-      function noop() {
+      function noop2() {
         return void 0;
       }
       function getGlobals() {
@@ -185,10 +148,10 @@ var require_ponyfill_es2018 = __commonJS({
         return void 0;
       }
       const globals = getGlobals();
-      function typeIsObject(x) {
-        return typeof x === "object" && x !== null || typeof x === "function";
+      function typeIsObject(x2) {
+        return typeof x2 === "object" && x2 !== null || typeof x2 === "function";
       }
-      const rethrowAssertionErrorRejection = noop;
+      const rethrowAssertionErrorRejection = noop2;
       const originalPromise = Promise;
       const originalPromiseThen = Promise.prototype.then;
       const originalPromiseResolve = Promise.resolve.bind(originalPromise);
@@ -228,15 +191,15 @@ var require_ponyfill_es2018 = __commonJS({
         const resolvedPromise = promiseResolvedWith(void 0);
         return (fn) => PerformPromiseThen(resolvedPromise, fn);
       })();
-      function reflectCall(F, V, args) {
-        if (typeof F !== "function") {
+      function reflectCall(F2, V, args) {
+        if (typeof F2 !== "function") {
           throw new TypeError("Argument is not a function");
         }
-        return Function.prototype.apply.call(F, V, args);
+        return Function.prototype.apply.call(F2, V, args);
       }
-      function promiseCall(F, V, args) {
+      function promiseCall(F2, V, args) {
         try {
-          return promiseResolvedWith(reflectCall(F, V, args));
+          return promiseResolvedWith(reflectCall(F2, V, args));
         } catch (value) {
           return promiseRejectedWith(value);
         }
@@ -293,20 +256,20 @@ var require_ponyfill_es2018 = __commonJS({
           return element;
         }
         forEach(callback) {
-          let i = this._cursor;
+          let i2 = this._cursor;
           let node = this._front;
           let elements = node._elements;
-          while (i !== elements.length || node._next !== void 0) {
-            if (i === elements.length) {
+          while (i2 !== elements.length || node._next !== void 0) {
+            if (i2 === elements.length) {
               node = node._next;
               elements = node._elements;
-              i = 0;
+              i2 = 0;
               if (elements.length === 0) {
                 break;
               }
             }
-            callback(elements[i]);
-            ++i;
+            callback(elements[i2]);
+            ++i2;
           }
         }
         peek() {
@@ -380,71 +343,71 @@ var require_ponyfill_es2018 = __commonJS({
       const ErrorSteps = SymbolPolyfill("[[ErrorSteps]]");
       const CancelSteps = SymbolPolyfill("[[CancelSteps]]");
       const PullSteps = SymbolPolyfill("[[PullSteps]]");
-      const NumberIsFinite = Number.isFinite || function(x) {
-        return typeof x === "number" && isFinite(x);
+      const NumberIsFinite = Number.isFinite || function(x2) {
+        return typeof x2 === "number" && isFinite(x2);
       };
       const MathTrunc = Math.trunc || function(v) {
         return v < 0 ? Math.ceil(v) : Math.floor(v);
       };
-      function isDictionary(x) {
-        return typeof x === "object" || typeof x === "function";
+      function isDictionary(x2) {
+        return typeof x2 === "object" || typeof x2 === "function";
       }
       function assertDictionary(obj, context) {
         if (obj !== void 0 && !isDictionary(obj)) {
           throw new TypeError(`${context} is not an object.`);
         }
       }
-      function assertFunction(x, context) {
-        if (typeof x !== "function") {
+      function assertFunction(x2, context) {
+        if (typeof x2 !== "function") {
           throw new TypeError(`${context} is not a function.`);
         }
       }
-      function isObject(x) {
-        return typeof x === "object" && x !== null || typeof x === "function";
+      function isObject(x2) {
+        return typeof x2 === "object" && x2 !== null || typeof x2 === "function";
       }
-      function assertObject(x, context) {
-        if (!isObject(x)) {
+      function assertObject(x2, context) {
+        if (!isObject(x2)) {
           throw new TypeError(`${context} is not an object.`);
         }
       }
-      function assertRequiredArgument(x, position, context) {
-        if (x === void 0) {
+      function assertRequiredArgument(x2, position, context) {
+        if (x2 === void 0) {
           throw new TypeError(`Parameter ${position} is required in '${context}'.`);
         }
       }
-      function assertRequiredField(x, field, context) {
-        if (x === void 0) {
+      function assertRequiredField(x2, field, context) {
+        if (x2 === void 0) {
           throw new TypeError(`${field} is required in '${context}'.`);
         }
       }
       function convertUnrestrictedDouble(value) {
         return Number(value);
       }
-      function censorNegativeZero(x) {
-        return x === 0 ? 0 : x;
+      function censorNegativeZero(x2) {
+        return x2 === 0 ? 0 : x2;
       }
-      function integerPart(x) {
-        return censorNegativeZero(MathTrunc(x));
+      function integerPart(x2) {
+        return censorNegativeZero(MathTrunc(x2));
       }
       function convertUnsignedLongLongWithEnforceRange(value, context) {
         const lowerBound = 0;
         const upperBound = Number.MAX_SAFE_INTEGER;
-        let x = Number(value);
-        x = censorNegativeZero(x);
-        if (!NumberIsFinite(x)) {
+        let x2 = Number(value);
+        x2 = censorNegativeZero(x2);
+        if (!NumberIsFinite(x2)) {
           throw new TypeError(`${context} is not a finite number`);
         }
-        x = integerPart(x);
-        if (x < lowerBound || x > upperBound) {
+        x2 = integerPart(x2);
+        if (x2 < lowerBound || x2 > upperBound) {
           throw new TypeError(`${context} is outside the accepted range of ${lowerBound} to ${upperBound}, inclusive`);
         }
-        if (!NumberIsFinite(x) || x === 0) {
+        if (!NumberIsFinite(x2) || x2 === 0) {
           return 0;
         }
-        return x;
+        return x2;
       }
-      function assertReadableStream(x, context) {
-        if (!IsReadableStream(x)) {
+      function assertReadableStream(x2, context) {
+        if (!IsReadableStream(x2)) {
           throw new TypeError(`${context} is not a ReadableStream.`);
         }
       }
@@ -517,7 +480,7 @@ var require_ponyfill_es2018 = __commonJS({
           const readRequest = {
             _chunkSteps: (chunk) => resolvePromise({ value: chunk, done: false }),
             _closeSteps: () => resolvePromise({ value: void 0, done: true }),
-            _errorSteps: (e) => rejectPromise(e)
+            _errorSteps: (e2) => rejectPromise(e2)
           };
           ReadableStreamDefaultReaderRead(this, readRequest);
           return promise;
@@ -547,14 +510,14 @@ var require_ponyfill_es2018 = __commonJS({
           configurable: true
         });
       }
-      function IsReadableStreamDefaultReader(x) {
-        if (!typeIsObject(x)) {
+      function IsReadableStreamDefaultReader(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_readRequests")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_readRequests")) {
           return false;
         }
-        return x instanceof ReadableStreamDefaultReader;
+        return x2 instanceof ReadableStreamDefaultReader;
       }
       function ReadableStreamDefaultReaderRead(reader, readRequest) {
         const stream = reader._ownerReadableStream;
@@ -665,24 +628,24 @@ var require_ponyfill_es2018 = __commonJS({
         iterator._asyncIteratorImpl = impl;
         return iterator;
       }
-      function IsReadableStreamAsyncIterator(x) {
-        if (!typeIsObject(x)) {
+      function IsReadableStreamAsyncIterator(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_asyncIteratorImpl")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_asyncIteratorImpl")) {
           return false;
         }
         try {
-          return x._asyncIteratorImpl instanceof ReadableStreamAsyncIteratorImpl;
-        } catch (_a2) {
+          return x2._asyncIteratorImpl instanceof ReadableStreamAsyncIteratorImpl;
+        } catch (_a4) {
           return false;
         }
       }
       function streamAsyncIteratorBrandCheckException(name) {
         return new TypeError(`ReadableStreamAsyncIterator.${name} can only be used on a ReadableSteamAsyncIterator`);
       }
-      const NumberIsNaN = Number.isNaN || function(x) {
-        return x !== x;
+      const NumberIsNaN = Number.isNaN || function(x2) {
+        return x2 !== x2;
       };
       function CreateArrayFromList(elements) {
         return elements.slice();
@@ -846,11 +809,11 @@ var require_ponyfill_es2018 = __commonJS({
           }
           ReadableByteStreamControllerEnqueue(this, chunk);
         }
-        error(e = void 0) {
+        error(e2 = void 0) {
           if (!IsReadableByteStreamController(this)) {
             throw byteStreamControllerBrandCheckException("error");
           }
-          ReadableByteStreamControllerError(this, e);
+          ReadableByteStreamControllerError(this, e2);
         }
         [CancelSteps](reason) {
           ReadableByteStreamControllerClearPendingPullIntos(this);
@@ -907,23 +870,23 @@ var require_ponyfill_es2018 = __commonJS({
           configurable: true
         });
       }
-      function IsReadableByteStreamController(x) {
-        if (!typeIsObject(x)) {
+      function IsReadableByteStreamController(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_controlledReadableByteStream")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_controlledReadableByteStream")) {
           return false;
         }
-        return x instanceof ReadableByteStreamController;
+        return x2 instanceof ReadableByteStreamController;
       }
-      function IsReadableStreamBYOBRequest(x) {
-        if (!typeIsObject(x)) {
+      function IsReadableStreamBYOBRequest(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_associatedReadableByteStreamController")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_associatedReadableByteStreamController")) {
           return false;
         }
-        return x instanceof ReadableStreamBYOBRequest;
+        return x2 instanceof ReadableStreamBYOBRequest;
       }
       function ReadableByteStreamControllerCallPullIfNeeded(controller) {
         const shouldPull = ReadableByteStreamControllerShouldCallPull(controller);
@@ -942,8 +905,8 @@ var require_ponyfill_es2018 = __commonJS({
             controller._pullAgain = false;
             ReadableByteStreamControllerCallPullIfNeeded(controller);
           }
-        }, (e) => {
-          ReadableByteStreamControllerError(controller, e);
+        }, (e2) => {
+          ReadableByteStreamControllerError(controller, e2);
         });
       }
       function ReadableByteStreamControllerClearPendingPullIntos(controller) {
@@ -1068,9 +1031,9 @@ var require_ponyfill_es2018 = __commonJS({
             return;
           }
           if (controller._closeRequested) {
-            const e = new TypeError("Insufficient bytes to fill elements in the given buffer");
-            ReadableByteStreamControllerError(controller, e);
-            readIntoRequest._errorSteps(e);
+            const e2 = new TypeError("Insufficient bytes to fill elements in the given buffer");
+            ReadableByteStreamControllerError(controller, e2);
+            readIntoRequest._errorSteps(e2);
             return;
           }
         }
@@ -1157,9 +1120,9 @@ var require_ponyfill_es2018 = __commonJS({
         if (controller._pendingPullIntos.length > 0) {
           const firstPendingPullInto = controller._pendingPullIntos.peek();
           if (firstPendingPullInto.bytesFilled > 0) {
-            const e = new TypeError("Insufficient bytes to fill elements in the given buffer");
-            ReadableByteStreamControllerError(controller, e);
-            throw e;
+            const e2 = new TypeError("Insufficient bytes to fill elements in the given buffer");
+            ReadableByteStreamControllerError(controller, e2);
+            throw e2;
           }
         }
         ReadableByteStreamControllerClearAlgorithms(controller);
@@ -1185,6 +1148,9 @@ var require_ponyfill_es2018 = __commonJS({
           if (ReadableStreamGetNumReadRequests(stream) === 0) {
             ReadableByteStreamControllerEnqueueChunkToQueue(controller, transferredBuffer, byteOffset, byteLength);
           } else {
+            if (controller._pendingPullIntos.length > 0) {
+              ReadableByteStreamControllerShiftPendingPullInto(controller);
+            }
             const transferredView = new Uint8Array(transferredBuffer, byteOffset, byteLength);
             ReadableStreamFulfillReadRequest(stream, transferredView, false);
           }
@@ -1196,7 +1162,7 @@ var require_ponyfill_es2018 = __commonJS({
         }
         ReadableByteStreamControllerCallPullIfNeeded(controller);
       }
-      function ReadableByteStreamControllerError(controller, e) {
+      function ReadableByteStreamControllerError(controller, e2) {
         const stream = controller._controlledReadableByteStream;
         if (stream._state !== "readable") {
           return;
@@ -1204,7 +1170,7 @@ var require_ponyfill_es2018 = __commonJS({
         ReadableByteStreamControllerClearPendingPullIntos(controller);
         ResetQueue(controller);
         ReadableByteStreamControllerClearAlgorithms(controller);
-        ReadableStreamError(stream, e);
+        ReadableStreamError(stream, e2);
       }
       function ReadableByteStreamControllerGetBYOBRequest(controller) {
         if (controller._byobRequest === null && controller._pendingPullIntos.length > 0) {
@@ -1265,8 +1231,9 @@ var require_ponyfill_es2018 = __commonJS({
         if (firstDescriptor.bytesFilled + view.byteLength > firstDescriptor.byteLength) {
           throw new RangeError("The region specified by view is larger than byobRequest");
         }
+        const viewByteLength = view.byteLength;
         firstDescriptor.buffer = TransferArrayBuffer(view.buffer);
-        ReadableByteStreamControllerRespondInternal(controller, view.byteLength);
+        ReadableByteStreamControllerRespondInternal(controller, viewByteLength);
       }
       function SetUpReadableByteStreamController(stream, controller, startAlgorithm, pullAlgorithm, cancelAlgorithm, highWaterMark, autoAllocateChunkSize) {
         controller._controlledReadableByteStream = stream;
@@ -1287,8 +1254,8 @@ var require_ponyfill_es2018 = __commonJS({
         uponPromise(promiseResolvedWith(startResult), () => {
           controller._started = true;
           ReadableByteStreamControllerCallPullIfNeeded(controller);
-        }, (r) => {
-          ReadableByteStreamControllerError(controller, r);
+        }, (r2) => {
+          ReadableByteStreamControllerError(controller, r2);
         });
       }
       function SetUpReadableByteStreamControllerFromUnderlyingSource(stream, underlyingByteSource, highWaterMark) {
@@ -1404,7 +1371,7 @@ var require_ponyfill_es2018 = __commonJS({
           const readIntoRequest = {
             _chunkSteps: (chunk) => resolvePromise({ value: chunk, done: false }),
             _closeSteps: (chunk) => resolvePromise({ value: chunk, done: true }),
-            _errorSteps: (e) => rejectPromise(e)
+            _errorSteps: (e2) => rejectPromise(e2)
           };
           ReadableStreamBYOBReaderRead(this, view, readIntoRequest);
           return promise;
@@ -1434,14 +1401,14 @@ var require_ponyfill_es2018 = __commonJS({
           configurable: true
         });
       }
-      function IsReadableStreamBYOBReader(x) {
-        if (!typeIsObject(x)) {
+      function IsReadableStreamBYOBReader(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_readIntoRequests")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_readIntoRequests")) {
           return false;
         }
-        return x instanceof ReadableStreamBYOBReader;
+        return x2 instanceof ReadableStreamBYOBReader;
       }
       function ReadableStreamBYOBReaderRead(reader, view, readIntoRequest) {
         const stream = reader._ownerReadableStream;
@@ -1516,8 +1483,8 @@ var require_ponyfill_es2018 = __commonJS({
         assertFunction(fn, context);
         return (chunk, controller) => promiseCall(fn, original, [chunk, controller]);
       }
-      function assertWritableStream(x, context) {
-        if (!IsWritableStream(x)) {
+      function assertWritableStream(x2, context) {
+        if (!IsWritableStream(x2)) {
           throw new TypeError(`${context} is not a WritableStream.`);
         }
       }
@@ -1527,7 +1494,7 @@ var require_ponyfill_es2018 = __commonJS({
         }
         try {
           return typeof value.aborted === "boolean";
-        } catch (_a2) {
+        } catch (_a4) {
           return false;
         }
       }
@@ -1624,14 +1591,14 @@ var require_ponyfill_es2018 = __commonJS({
         stream._pendingAbortRequest = void 0;
         stream._backpressure = false;
       }
-      function IsWritableStream(x) {
-        if (!typeIsObject(x)) {
+      function IsWritableStream(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_writableStreamController")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_writableStreamController")) {
           return false;
         }
-        return x instanceof WritableStream;
+        return x2 instanceof WritableStream;
       }
       function IsWritableStreamLocked(stream) {
         if (stream._writer === void 0) {
@@ -1640,12 +1607,12 @@ var require_ponyfill_es2018 = __commonJS({
         return true;
       }
       function WritableStreamAbort(stream, reason) {
-        var _a2;
+        var _a4;
         if (stream._state === "closed" || stream._state === "errored") {
           return promiseResolvedWith(void 0);
         }
         stream._writableStreamController._abortReason = reason;
-        (_a2 = stream._writableStreamController._abortController) === null || _a2 === void 0 ? void 0 : _a2.abort();
+        (_a4 = stream._writableStreamController._abortController) === null || _a4 === void 0 ? void 0 : _a4.abort();
         const state = stream._state;
         if (state === "closed" || state === "errored") {
           return promiseResolvedWith(void 0);
@@ -1932,14 +1899,14 @@ var require_ponyfill_es2018 = __commonJS({
           configurable: true
         });
       }
-      function IsWritableStreamDefaultWriter(x) {
-        if (!typeIsObject(x)) {
+      function IsWritableStreamDefaultWriter(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_ownerWritableStream")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_ownerWritableStream")) {
           return false;
         }
-        return x instanceof WritableStreamDefaultWriter;
+        return x2 instanceof WritableStreamDefaultWriter;
       }
       function WritableStreamDefaultWriterAbort(writer, reason) {
         const stream = writer._ownerWritableStream;
@@ -2034,7 +2001,7 @@ var require_ponyfill_es2018 = __commonJS({
           }
           return this._abortController.signal;
         }
-        error(e = void 0) {
+        error(e2 = void 0) {
           if (!IsWritableStreamDefaultController(this)) {
             throw defaultControllerBrandCheckException$2("error");
           }
@@ -2042,7 +2009,7 @@ var require_ponyfill_es2018 = __commonJS({
           if (state !== "writable") {
             return;
           }
-          WritableStreamDefaultControllerError(this, e);
+          WritableStreamDefaultControllerError(this, e2);
         }
         [AbortSteps](reason) {
           const result = this._abortAlgorithm(reason);
@@ -2054,6 +2021,8 @@ var require_ponyfill_es2018 = __commonJS({
         }
       }
       Object.defineProperties(WritableStreamDefaultController.prototype, {
+        abortReason: { enumerable: true },
+        signal: { enumerable: true },
         error: { enumerable: true }
       });
       if (typeof SymbolPolyfill.toStringTag === "symbol") {
@@ -2062,14 +2031,14 @@ var require_ponyfill_es2018 = __commonJS({
           configurable: true
         });
       }
-      function IsWritableStreamDefaultController(x) {
-        if (!typeIsObject(x)) {
+      function IsWritableStreamDefaultController(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_controlledWritableStream")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_controlledWritableStream")) {
           return false;
         }
-        return x instanceof WritableStreamDefaultController;
+        return x2 instanceof WritableStreamDefaultController;
       }
       function SetUpWritableStreamDefaultController(stream, controller, startAlgorithm, writeAlgorithm, closeAlgorithm, abortAlgorithm, highWaterMark, sizeAlgorithm) {
         controller._controlledWritableStream = stream;
@@ -2092,9 +2061,9 @@ var require_ponyfill_es2018 = __commonJS({
         uponPromise(startPromise, () => {
           controller._started = true;
           WritableStreamDefaultControllerAdvanceQueueIfNeeded(controller);
-        }, (r) => {
+        }, (r2) => {
           controller._started = true;
-          WritableStreamDealWithRejection(stream, r);
+          WritableStreamDealWithRejection(stream, r2);
         });
       }
       function SetUpWritableStreamDefaultControllerFromUnderlyingSink(stream, underlyingSink, highWaterMark, sizeAlgorithm) {
@@ -2318,12 +2287,12 @@ var require_ponyfill_es2018 = __commonJS({
         try {
           new ctor();
           return true;
-        } catch (_a2) {
+        } catch (_a4) {
           return false;
         }
       }
       function createDOMExceptionPolyfill() {
-        const ctor = function DOMException2(message, name) {
+        const ctor = function DOMException3(message, name) {
           this.message = message || "";
           this.name = name || "Error";
           if (Error.captureStackTrace) {
@@ -2391,7 +2360,7 @@ var require_ponyfill_es2018 = __commonJS({
               return newPromise((resolveRead, rejectRead) => {
                 ReadableStreamDefaultReaderRead(reader, {
                   _chunkSteps: (chunk) => {
-                    currentWrite = PerformPromiseThen(WritableStreamDefaultWriterWrite(writer, chunk), void 0, noop);
+                    currentWrite = PerformPromiseThen(WritableStreamDefaultWriterWrite(writer, chunk), void 0, noop2);
                     resolveRead(false);
                   },
                   _closeSteps: () => resolveRead(true),
@@ -2515,11 +2484,11 @@ var require_ponyfill_es2018 = __commonJS({
           }
           return ReadableStreamDefaultControllerEnqueue(this, chunk);
         }
-        error(e = void 0) {
+        error(e2 = void 0) {
           if (!IsReadableStreamDefaultController(this)) {
             throw defaultControllerBrandCheckException$1("error");
           }
-          ReadableStreamDefaultControllerError(this, e);
+          ReadableStreamDefaultControllerError(this, e2);
         }
         [CancelSteps](reason) {
           ResetQueue(this);
@@ -2556,14 +2525,14 @@ var require_ponyfill_es2018 = __commonJS({
           configurable: true
         });
       }
-      function IsReadableStreamDefaultController(x) {
-        if (!typeIsObject(x)) {
+      function IsReadableStreamDefaultController(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_controlledReadableStream")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_controlledReadableStream")) {
           return false;
         }
-        return x instanceof ReadableStreamDefaultController;
+        return x2 instanceof ReadableStreamDefaultController;
       }
       function ReadableStreamDefaultControllerCallPullIfNeeded(controller) {
         const shouldPull = ReadableStreamDefaultControllerShouldCallPull(controller);
@@ -2582,8 +2551,8 @@ var require_ponyfill_es2018 = __commonJS({
             controller._pullAgain = false;
             ReadableStreamDefaultControllerCallPullIfNeeded(controller);
           }
-        }, (e) => {
-          ReadableStreamDefaultControllerError(controller, e);
+        }, (e2) => {
+          ReadableStreamDefaultControllerError(controller, e2);
         });
       }
       function ReadableStreamDefaultControllerShouldCallPull(controller) {
@@ -2643,14 +2612,14 @@ var require_ponyfill_es2018 = __commonJS({
         }
         ReadableStreamDefaultControllerCallPullIfNeeded(controller);
       }
-      function ReadableStreamDefaultControllerError(controller, e) {
+      function ReadableStreamDefaultControllerError(controller, e2) {
         const stream = controller._controlledReadableStream;
         if (stream._state !== "readable") {
           return;
         }
         ResetQueue(controller);
         ReadableStreamDefaultControllerClearAlgorithms(controller);
-        ReadableStreamError(stream, e);
+        ReadableStreamError(stream, e2);
       }
       function ReadableStreamDefaultControllerGetDesiredSize(controller) {
         const state = controller._controlledReadableStream._state;
@@ -2693,8 +2662,8 @@ var require_ponyfill_es2018 = __commonJS({
         uponPromise(promiseResolvedWith(startResult), () => {
           controller._started = true;
           ReadableStreamDefaultControllerCallPullIfNeeded(controller);
-        }, (r) => {
-          ReadableStreamDefaultControllerError(controller, r);
+        }, (r2) => {
+          ReadableStreamDefaultControllerError(controller, r2);
         });
       }
       function SetUpReadableStreamDefaultControllerFromUnderlyingSource(stream, underlyingSource, highWaterMark, sizeAlgorithm) {
@@ -2725,6 +2694,7 @@ var require_ponyfill_es2018 = __commonJS({
       function ReadableStreamDefaultTee(stream, cloneForBranch2) {
         const reader = AcquireReadableStreamDefaultReader(stream);
         let reading = false;
+        let readAgain = false;
         let canceled1 = false;
         let canceled2 = false;
         let reason1;
@@ -2737,13 +2707,14 @@ var require_ponyfill_es2018 = __commonJS({
         });
         function pullAlgorithm() {
           if (reading) {
+            readAgain = true;
             return promiseResolvedWith(void 0);
           }
           reading = true;
           const readRequest = {
             _chunkSteps: (chunk) => {
               queueMicrotask(() => {
-                reading = false;
+                readAgain = false;
                 const chunk1 = chunk;
                 const chunk2 = chunk;
                 if (!canceled1) {
@@ -2751,6 +2722,10 @@ var require_ponyfill_es2018 = __commonJS({
                 }
                 if (!canceled2) {
                   ReadableStreamDefaultControllerEnqueue(branch2._readableStreamController, chunk2);
+                }
+                reading = false;
+                if (readAgain) {
+                  pullAlgorithm();
                 }
               });
             },
@@ -2797,9 +2772,9 @@ var require_ponyfill_es2018 = __commonJS({
         }
         branch1 = CreateReadableStream(startAlgorithm, pullAlgorithm, cancel1Algorithm);
         branch2 = CreateReadableStream(startAlgorithm, pullAlgorithm, cancel2Algorithm);
-        uponRejection(reader._closedPromise, (r) => {
-          ReadableStreamDefaultControllerError(branch1._readableStreamController, r);
-          ReadableStreamDefaultControllerError(branch2._readableStreamController, r);
+        uponRejection(reader._closedPromise, (r2) => {
+          ReadableStreamDefaultControllerError(branch1._readableStreamController, r2);
+          ReadableStreamDefaultControllerError(branch2._readableStreamController, r2);
           if (!canceled1 || !canceled2) {
             resolveCancelPromise(void 0);
           }
@@ -2809,6 +2784,8 @@ var require_ponyfill_es2018 = __commonJS({
       function ReadableByteStreamTee(stream) {
         let reader = AcquireReadableStreamDefaultReader(stream);
         let reading = false;
+        let readAgainForBranch1 = false;
+        let readAgainForBranch2 = false;
         let canceled1 = false;
         let canceled2 = false;
         let reason1;
@@ -2820,12 +2797,12 @@ var require_ponyfill_es2018 = __commonJS({
           resolveCancelPromise = resolve;
         });
         function forwardReaderError(thisReader) {
-          uponRejection(thisReader._closedPromise, (r) => {
+          uponRejection(thisReader._closedPromise, (r2) => {
             if (thisReader !== reader) {
               return;
             }
-            ReadableByteStreamControllerError(branch1._readableStreamController, r);
-            ReadableByteStreamControllerError(branch2._readableStreamController, r);
+            ReadableByteStreamControllerError(branch1._readableStreamController, r2);
+            ReadableByteStreamControllerError(branch2._readableStreamController, r2);
             if (!canceled1 || !canceled2) {
               resolveCancelPromise(void 0);
             }
@@ -2840,7 +2817,8 @@ var require_ponyfill_es2018 = __commonJS({
           const readRequest = {
             _chunkSteps: (chunk) => {
               queueMicrotask(() => {
-                reading = false;
+                readAgainForBranch1 = false;
+                readAgainForBranch2 = false;
                 const chunk1 = chunk;
                 let chunk2 = chunk;
                 if (!canceled1 && !canceled2) {
@@ -2858,6 +2836,12 @@ var require_ponyfill_es2018 = __commonJS({
                 }
                 if (!canceled2) {
                   ReadableByteStreamControllerEnqueue(branch2._readableStreamController, chunk2);
+                }
+                reading = false;
+                if (readAgainForBranch1) {
+                  pull1Algorithm();
+                } else if (readAgainForBranch2) {
+                  pull2Algorithm();
                 }
               });
             },
@@ -2896,7 +2880,8 @@ var require_ponyfill_es2018 = __commonJS({
           const readIntoRequest = {
             _chunkSteps: (chunk) => {
               queueMicrotask(() => {
-                reading = false;
+                readAgainForBranch1 = false;
+                readAgainForBranch2 = false;
                 const byobCanceled = forBranch2 ? canceled2 : canceled1;
                 const otherCanceled = forBranch2 ? canceled1 : canceled2;
                 if (!otherCanceled) {
@@ -2915,6 +2900,12 @@ var require_ponyfill_es2018 = __commonJS({
                   ReadableByteStreamControllerEnqueue(otherBranch._readableStreamController, clonedChunk);
                 } else if (!byobCanceled) {
                   ReadableByteStreamControllerRespondWithNewView(byobBranch._readableStreamController, chunk);
+                }
+                reading = false;
+                if (readAgainForBranch1) {
+                  pull1Algorithm();
+                } else if (readAgainForBranch2) {
+                  pull2Algorithm();
                 }
               });
             },
@@ -2948,6 +2939,7 @@ var require_ponyfill_es2018 = __commonJS({
         }
         function pull1Algorithm() {
           if (reading) {
+            readAgainForBranch1 = true;
             return promiseResolvedWith(void 0);
           }
           reading = true;
@@ -2961,6 +2953,7 @@ var require_ponyfill_es2018 = __commonJS({
         }
         function pull2Algorithm() {
           if (reading) {
+            readAgainForBranch2 = true;
             return promiseResolvedWith(void 0);
           }
           reading = true;
@@ -3162,8 +3155,8 @@ var require_ponyfill_es2018 = __commonJS({
           let options;
           try {
             options = convertPipeOptions(rawOptions, "Second parameter");
-          } catch (e) {
-            return promiseRejectedWith(e);
+          } catch (e2) {
+            return promiseRejectedWith(e2);
           }
           if (IsReadableStreamLocked(this)) {
             return promiseRejectedWith(new TypeError("ReadableStream.prototype.pipeTo cannot be used on a locked ReadableStream"));
@@ -3230,14 +3223,14 @@ var require_ponyfill_es2018 = __commonJS({
         stream._storedError = void 0;
         stream._disturbed = false;
       }
-      function IsReadableStream(x) {
-        if (!typeIsObject(x)) {
+      function IsReadableStream(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_readableStreamController")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_readableStreamController")) {
           return false;
         }
-        return x instanceof ReadableStream2;
+        return x2 instanceof ReadableStream2;
       }
       function IsReadableStreamLocked(stream) {
         if (stream._reader === void 0) {
@@ -3262,7 +3255,7 @@ var require_ponyfill_es2018 = __commonJS({
           reader._readIntoRequests = new SimpleQueue();
         }
         const sourceCancelPromise = stream._readableStreamController[CancelSteps](reason);
-        return transformPromiseWith(sourceCancelPromise, noop);
+        return transformPromiseWith(sourceCancelPromise, noop2);
       }
       function ReadableStreamClose(stream) {
         stream._state = "closed";
@@ -3278,22 +3271,22 @@ var require_ponyfill_es2018 = __commonJS({
           reader._readRequests = new SimpleQueue();
         }
       }
-      function ReadableStreamError(stream, e) {
+      function ReadableStreamError(stream, e2) {
         stream._state = "errored";
-        stream._storedError = e;
+        stream._storedError = e2;
         const reader = stream._reader;
         if (reader === void 0) {
           return;
         }
-        defaultReaderClosedPromiseReject(reader, e);
+        defaultReaderClosedPromiseReject(reader, e2);
         if (IsReadableStreamDefaultReader(reader)) {
           reader._readRequests.forEach((readRequest) => {
-            readRequest._errorSteps(e);
+            readRequest._errorSteps(e2);
           });
           reader._readRequests = new SimpleQueue();
         } else {
           reader._readIntoRequests.forEach((readIntoRequest) => {
-            readIntoRequest._errorSteps(e);
+            readIntoRequest._errorSteps(e2);
           });
           reader._readIntoRequests = new SimpleQueue();
         }
@@ -3312,10 +3305,13 @@ var require_ponyfill_es2018 = __commonJS({
       const byteLengthSizeFunction = (chunk) => {
         return chunk.byteLength;
       };
-      Object.defineProperty(byteLengthSizeFunction, "name", {
-        value: "size",
-        configurable: true
-      });
+      try {
+        Object.defineProperty(byteLengthSizeFunction, "name", {
+          value: "size",
+          configurable: true
+        });
+      } catch (_a4) {
+      }
       class ByteLengthQueuingStrategy {
         constructor(options) {
           assertRequiredArgument(options, 1, "ByteLengthQueuingStrategy");
@@ -3348,22 +3344,25 @@ var require_ponyfill_es2018 = __commonJS({
       function byteLengthBrandCheckException(name) {
         return new TypeError(`ByteLengthQueuingStrategy.prototype.${name} can only be used on a ByteLengthQueuingStrategy`);
       }
-      function IsByteLengthQueuingStrategy(x) {
-        if (!typeIsObject(x)) {
+      function IsByteLengthQueuingStrategy(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_byteLengthQueuingStrategyHighWaterMark")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_byteLengthQueuingStrategyHighWaterMark")) {
           return false;
         }
-        return x instanceof ByteLengthQueuingStrategy;
+        return x2 instanceof ByteLengthQueuingStrategy;
       }
       const countSizeFunction = () => {
         return 1;
       };
-      Object.defineProperty(countSizeFunction, "name", {
-        value: "size",
-        configurable: true
-      });
+      try {
+        Object.defineProperty(countSizeFunction, "name", {
+          value: "size",
+          configurable: true
+        });
+      } catch (_a4) {
+      }
       class CountQueuingStrategy {
         constructor(options) {
           assertRequiredArgument(options, 1, "CountQueuingStrategy");
@@ -3396,14 +3395,14 @@ var require_ponyfill_es2018 = __commonJS({
       function countBrandCheckException(name) {
         return new TypeError(`CountQueuingStrategy.prototype.${name} can only be used on a CountQueuingStrategy`);
       }
-      function IsCountQueuingStrategy(x) {
-        if (!typeIsObject(x)) {
+      function IsCountQueuingStrategy(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_countQueuingStrategyHighWaterMark")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_countQueuingStrategyHighWaterMark")) {
           return false;
         }
-        return x instanceof CountQueuingStrategy;
+        return x2 instanceof CountQueuingStrategy;
       }
       function convertTransformer(original, context) {
         assertDictionary(original, context);
@@ -3513,22 +3512,22 @@ var require_ponyfill_es2018 = __commonJS({
         TransformStreamSetBackpressure(stream, true);
         stream._transformStreamController = void 0;
       }
-      function IsTransformStream(x) {
-        if (!typeIsObject(x)) {
+      function IsTransformStream(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_transformStreamController")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_transformStreamController")) {
           return false;
         }
-        return x instanceof TransformStream;
+        return x2 instanceof TransformStream;
       }
-      function TransformStreamError(stream, e) {
-        ReadableStreamDefaultControllerError(stream._readable._readableStreamController, e);
-        TransformStreamErrorWritableAndUnblockWrite(stream, e);
+      function TransformStreamError(stream, e2) {
+        ReadableStreamDefaultControllerError(stream._readable._readableStreamController, e2);
+        TransformStreamErrorWritableAndUnblockWrite(stream, e2);
       }
-      function TransformStreamErrorWritableAndUnblockWrite(stream, e) {
+      function TransformStreamErrorWritableAndUnblockWrite(stream, e2) {
         TransformStreamDefaultControllerClearAlgorithms(stream._transformStreamController);
-        WritableStreamDefaultControllerErrorIfNeeded(stream._writable._writableStreamController, e);
+        WritableStreamDefaultControllerErrorIfNeeded(stream._writable._writableStreamController, e2);
         if (stream._backpressure) {
           TransformStreamSetBackpressure(stream, false);
         }
@@ -3584,14 +3583,14 @@ var require_ponyfill_es2018 = __commonJS({
           configurable: true
         });
       }
-      function IsTransformStreamDefaultController(x) {
-        if (!typeIsObject(x)) {
+      function IsTransformStreamDefaultController(x2) {
+        if (!typeIsObject(x2)) {
           return false;
         }
-        if (!Object.prototype.hasOwnProperty.call(x, "_controlledTransformStream")) {
+        if (!Object.prototype.hasOwnProperty.call(x2, "_controlledTransformStream")) {
           return false;
         }
-        return x instanceof TransformStreamDefaultController;
+        return x2 instanceof TransformStreamDefaultController;
       }
       function SetUpTransformStreamDefaultController(stream, controller, transformAlgorithm, flushAlgorithm) {
         controller._controlledTransformStream = stream;
@@ -3630,8 +3629,8 @@ var require_ponyfill_es2018 = __commonJS({
         }
         try {
           ReadableStreamDefaultControllerEnqueue(readableController, chunk);
-        } catch (e) {
-          TransformStreamErrorWritableAndUnblockWrite(stream, e);
+        } catch (e2) {
+          TransformStreamErrorWritableAndUnblockWrite(stream, e2);
           throw stream._readable._storedError;
         }
         const backpressure = ReadableStreamDefaultControllerHasBackpressure(readableController);
@@ -3639,14 +3638,14 @@ var require_ponyfill_es2018 = __commonJS({
           TransformStreamSetBackpressure(stream, true);
         }
       }
-      function TransformStreamDefaultControllerError(controller, e) {
-        TransformStreamError(controller._controlledTransformStream, e);
+      function TransformStreamDefaultControllerError(controller, e2) {
+        TransformStreamError(controller._controlledTransformStream, e2);
       }
       function TransformStreamDefaultControllerPerformTransform(controller, chunk) {
         const transformPromise = controller._transformAlgorithm(chunk);
-        return transformPromiseWith(transformPromise, void 0, (r) => {
-          TransformStreamError(controller._controlledTransformStream, r);
-          throw r;
+        return transformPromiseWith(transformPromise, void 0, (r2) => {
+          TransformStreamError(controller._controlledTransformStream, r2);
+          throw r2;
         });
       }
       function TransformStreamDefaultControllerTerminate(controller) {
@@ -3685,8 +3684,8 @@ var require_ponyfill_es2018 = __commonJS({
             throw readable._storedError;
           }
           ReadableStreamDefaultControllerClose(readable._readableStreamController);
-        }, (r) => {
-          TransformStreamError(stream, r);
+        }, (r2) => {
+          TransformStreamError(stream, r2);
           throw readable._storedError;
         });
       }
@@ -3724,7 +3723,17 @@ var require_streams = __commonJS({
     var POOL_SIZE2 = 65536;
     if (!globalThis.ReadableStream) {
       try {
-        Object.assign(globalThis, require("stream/web"));
+        const process2 = require("process");
+        const { emitWarning } = process2;
+        try {
+          process2.emitWarning = () => {
+          };
+          Object.assign(globalThis, require("stream/web"));
+          process2.emitWarning = emitWarning;
+        } catch (error) {
+          process2.emitWarning = emitWarning;
+          throw error;
+        }
       } catch (error) {
         Object.assign(globalThis, require_ponyfill_es2018());
       }
@@ -3754,34 +3763,15 @@ var require_streams = __commonJS({
   }
 });
 
-// functions/get-project/get-project.js
-__export(exports, {
-  handler: () => handler
-});
-var import_dotenv = __toModule(require_main());
-
-// node_modules/node-fetch/src/index.js
-var import_http2 = __toModule(require("http"));
-var import_https = __toModule(require("https"));
-var import_zlib = __toModule(require("zlib"));
-var import_stream2 = __toModule(require("stream"));
-var import_data_uri_to_buffer = __toModule(require_src());
-
-// node_modules/node-fetch/src/body.js
-var import_stream = __toModule(require("stream"));
-var import_util = __toModule(require("util"));
-
 // node_modules/fetch-blob/index.js
-var import_streams = __toModule(require_streams());
-var POOL_SIZE = 65536;
 async function* toIterator(parts, clone2 = true) {
-  for (let part of parts) {
+  for (const part of parts) {
     if ("stream" in part) {
       yield* part.stream();
     } else if (ArrayBuffer.isView(part)) {
       if (clone2) {
         let position = part.byteOffset;
-        let end = part.byteOffset + part.byteLength;
+        const end = part.byteOffset + part.byteLength;
         while (position !== end) {
           const size = Math.min(end - position, POOL_SIZE);
           const chunk = part.buffer.slice(position, position + size);
@@ -3792,9 +3782,9 @@ async function* toIterator(parts, clone2 = true) {
         yield part;
       }
     } else {
-      let position = 0;
-      while (position !== part.size) {
-        const chunk = part.slice(position, Math.min(part.size, position + POOL_SIZE));
+      let position = 0, b = part;
+      while (position !== b.size) {
+        const chunk = b.slice(position, Math.min(b.size, position + POOL_SIZE));
         const buffer = await chunk.arrayBuffer();
         position += buffer.byteLength;
         yield new Uint8Array(buffer);
@@ -3802,114 +3792,757 @@ async function* toIterator(parts, clone2 = true) {
     }
   }
 }
-var _parts, _type, _size, _a;
-var _Blob = (_a = class {
-  constructor(blobParts = [], options = {}) {
-    __privateAdd(this, _parts, []);
-    __privateAdd(this, _type, "");
-    __privateAdd(this, _size, 0);
-    let size = 0;
-    const parts = blobParts.map((element) => {
-      let part;
-      if (ArrayBuffer.isView(element)) {
-        part = new Uint8Array(element.buffer.slice(element.byteOffset, element.byteOffset + element.byteLength));
-      } else if (element instanceof ArrayBuffer) {
-        part = new Uint8Array(element.slice(0));
-      } else if (element instanceof _a) {
-        part = element;
-      } else {
-        part = new TextEncoder().encode(element);
-      }
-      size += ArrayBuffer.isView(part) ? part.byteLength : part.size;
-      return part;
-    });
-    const type = options.type === void 0 ? "" : String(options.type);
-    __privateSet(this, _type, /[^\u0020-\u007E]/.test(type) ? "" : type);
-    __privateSet(this, _size, size);
-    __privateSet(this, _parts, parts);
-  }
-  get size() {
-    return __privateGet(this, _size);
-  }
-  get type() {
-    return __privateGet(this, _type);
-  }
-  async text() {
-    const decoder = new TextDecoder();
-    let str = "";
-    for await (let part of toIterator(__privateGet(this, _parts), false)) {
-      str += decoder.decode(part, { stream: true });
-    }
-    str += decoder.decode();
-    return str;
-  }
-  async arrayBuffer() {
-    const data = new Uint8Array(this.size);
-    let offset = 0;
-    for await (const chunk of toIterator(__privateGet(this, _parts), false)) {
-      data.set(chunk, offset);
-      offset += chunk.length;
-    }
-    return data.buffer;
-  }
-  stream() {
-    const it = toIterator(__privateGet(this, _parts), true);
-    return new ReadableStream({
-      type: "bytes",
-      async pull(ctrl) {
-        const chunk = await it.next();
-        chunk.done ? ctrl.close() : ctrl.enqueue(chunk.value);
-      }
-    });
-  }
-  slice(start = 0, end = this.size, type = "") {
-    const { size } = this;
-    let relativeStart = start < 0 ? Math.max(size + start, 0) : Math.min(start, size);
-    let relativeEnd = end < 0 ? Math.max(size + end, 0) : Math.min(end, size);
-    const span = Math.max(relativeEnd - relativeStart, 0);
-    const parts = __privateGet(this, _parts);
-    const blobParts = [];
-    let added = 0;
-    for (const part of parts) {
-      if (added >= span) {
-        break;
-      }
-      const size2 = ArrayBuffer.isView(part) ? part.byteLength : part.size;
-      if (relativeStart && size2 <= relativeStart) {
-        relativeStart -= size2;
-        relativeEnd -= size2;
-      } else {
-        let chunk;
-        if (ArrayBuffer.isView(part)) {
-          chunk = part.subarray(relativeStart, Math.min(size2, relativeEnd));
-          added += chunk.byteLength;
-        } else {
-          chunk = part.slice(relativeStart, Math.min(size2, relativeEnd));
-          added += chunk.size;
+var import_streams, POOL_SIZE, _parts, _type, _size, _endings, _a, _Blob, Blob, fetch_blob_default;
+var init_fetch_blob = __esm({
+  "node_modules/fetch-blob/index.js"() {
+    import_streams = __toESM(require_streams(), 1);
+    POOL_SIZE = 65536;
+    _Blob = (_a = class {
+      constructor(blobParts = [], options = {}) {
+        __privateAdd(this, _parts, []);
+        __privateAdd(this, _type, "");
+        __privateAdd(this, _size, 0);
+        __privateAdd(this, _endings, "transparent");
+        if (typeof blobParts !== "object" || blobParts === null) {
+          throw new TypeError("Failed to construct 'Blob': The provided value cannot be converted to a sequence.");
         }
-        blobParts.push(chunk);
-        relativeStart = 0;
+        if (typeof blobParts[Symbol.iterator] !== "function") {
+          throw new TypeError("Failed to construct 'Blob': The object must have a callable @@iterator property.");
+        }
+        if (typeof options !== "object" && typeof options !== "function") {
+          throw new TypeError("Failed to construct 'Blob': parameter 2 cannot convert to dictionary.");
+        }
+        if (options === null)
+          options = {};
+        const encoder = new TextEncoder();
+        for (const element of blobParts) {
+          let part;
+          if (ArrayBuffer.isView(element)) {
+            part = new Uint8Array(element.buffer.slice(element.byteOffset, element.byteOffset + element.byteLength));
+          } else if (element instanceof ArrayBuffer) {
+            part = new Uint8Array(element.slice(0));
+          } else if (element instanceof _a) {
+            part = element;
+          } else {
+            part = encoder.encode(`${element}`);
+          }
+          const size = ArrayBuffer.isView(part) ? part.byteLength : part.size;
+          if (size) {
+            __privateSet(this, _size, __privateGet(this, _size) + size);
+            __privateGet(this, _parts).push(part);
+          }
+        }
+        __privateSet(this, _endings, `${options.endings === void 0 ? "transparent" : options.endings}`);
+        const type = options.type === void 0 ? "" : String(options.type);
+        __privateSet(this, _type, /^[\x20-\x7E]*$/.test(type) ? type : "");
+      }
+      get size() {
+        return __privateGet(this, _size);
+      }
+      get type() {
+        return __privateGet(this, _type);
+      }
+      async text() {
+        const decoder = new TextDecoder();
+        let str = "";
+        for await (const part of toIterator(__privateGet(this, _parts), false)) {
+          str += decoder.decode(part, { stream: true });
+        }
+        str += decoder.decode();
+        return str;
+      }
+      async arrayBuffer() {
+        const data = new Uint8Array(this.size);
+        let offset = 0;
+        for await (const chunk of toIterator(__privateGet(this, _parts), false)) {
+          data.set(chunk, offset);
+          offset += chunk.length;
+        }
+        return data.buffer;
+      }
+      stream() {
+        const it = toIterator(__privateGet(this, _parts), true);
+        return new globalThis.ReadableStream({
+          type: "bytes",
+          async pull(ctrl) {
+            const chunk = await it.next();
+            chunk.done ? ctrl.close() : ctrl.enqueue(chunk.value);
+          },
+          async cancel() {
+            await it.return();
+          }
+        });
+      }
+      slice(start = 0, end = this.size, type = "") {
+        const { size } = this;
+        let relativeStart = start < 0 ? Math.max(size + start, 0) : Math.min(start, size);
+        let relativeEnd = end < 0 ? Math.max(size + end, 0) : Math.min(end, size);
+        const span = Math.max(relativeEnd - relativeStart, 0);
+        const parts = __privateGet(this, _parts);
+        const blobParts = [];
+        let added = 0;
+        for (const part of parts) {
+          if (added >= span) {
+            break;
+          }
+          const size2 = ArrayBuffer.isView(part) ? part.byteLength : part.size;
+          if (relativeStart && size2 <= relativeStart) {
+            relativeStart -= size2;
+            relativeEnd -= size2;
+          } else {
+            let chunk;
+            if (ArrayBuffer.isView(part)) {
+              chunk = part.subarray(relativeStart, Math.min(size2, relativeEnd));
+              added += chunk.byteLength;
+            } else {
+              chunk = part.slice(relativeStart, Math.min(size2, relativeEnd));
+              added += chunk.size;
+            }
+            relativeEnd -= size2;
+            blobParts.push(chunk);
+            relativeStart = 0;
+          }
+        }
+        const blob = new _a([], { type: String(type).toLowerCase() });
+        __privateSet(blob, _size, span);
+        __privateSet(blob, _parts, blobParts);
+        return blob;
+      }
+      get [Symbol.toStringTag]() {
+        return "Blob";
+      }
+      static [Symbol.hasInstance](object) {
+        return object && typeof object === "object" && typeof object.constructor === "function" && (typeof object.stream === "function" || typeof object.arrayBuffer === "function") && /^(Blob|File)$/.test(object[Symbol.toStringTag]);
+      }
+    }, _parts = new WeakMap(), _type = new WeakMap(), _size = new WeakMap(), _endings = new WeakMap(), _a);
+    Object.defineProperties(_Blob.prototype, {
+      size: { enumerable: true },
+      type: { enumerable: true },
+      slice: { enumerable: true }
+    });
+    Blob = _Blob;
+    fetch_blob_default = Blob;
+  }
+});
+
+// node_modules/fetch-blob/file.js
+var _lastModified, _name, _a2, _File, File, file_default;
+var init_file = __esm({
+  "node_modules/fetch-blob/file.js"() {
+    init_fetch_blob();
+    _File = (_a2 = class extends fetch_blob_default {
+      constructor(fileBits, fileName, options = {}) {
+        if (arguments.length < 2) {
+          throw new TypeError(`Failed to construct 'File': 2 arguments required, but only ${arguments.length} present.`);
+        }
+        super(fileBits, options);
+        __privateAdd(this, _lastModified, 0);
+        __privateAdd(this, _name, "");
+        if (options === null)
+          options = {};
+        const lastModified = options.lastModified === void 0 ? Date.now() : Number(options.lastModified);
+        if (!Number.isNaN(lastModified)) {
+          __privateSet(this, _lastModified, lastModified);
+        }
+        __privateSet(this, _name, String(fileName));
+      }
+      get name() {
+        return __privateGet(this, _name);
+      }
+      get lastModified() {
+        return __privateGet(this, _lastModified);
+      }
+      get [Symbol.toStringTag]() {
+        return "File";
+      }
+      static [Symbol.hasInstance](object) {
+        return !!object && object instanceof fetch_blob_default && /^(File)$/.test(object[Symbol.toStringTag]);
+      }
+    }, _lastModified = new WeakMap(), _name = new WeakMap(), _a2);
+    File = _File;
+    file_default = File;
+  }
+});
+
+// node_modules/formdata-polyfill/esm.min.js
+function formDataToBlob(F2, B = fetch_blob_default) {
+  var b = `${r()}${r()}`.replace(/\./g, "").slice(-28).padStart(32, "-"), c = [], p = `--${b}\r
+Content-Disposition: form-data; name="`;
+  F2.forEach((v, n) => typeof v == "string" ? c.push(p + e(n) + `"\r
+\r
+${v.replace(/\r(?!\n)|(?<!\r)\n/g, "\r\n")}\r
+`) : c.push(p + e(n) + `"; filename="${e(v.name, 1)}"\r
+Content-Type: ${v.type || "application/octet-stream"}\r
+\r
+`, v, "\r\n"));
+  c.push(`--${b}--`);
+  return new B(c, { type: "multipart/form-data; boundary=" + b });
+}
+var t, i, h, r, m, f, e, x, _d, _a3, FormData;
+var init_esm_min = __esm({
+  "node_modules/formdata-polyfill/esm.min.js"() {
+    init_fetch_blob();
+    init_file();
+    ({ toStringTag: t, iterator: i, hasInstance: h } = Symbol);
+    r = Math.random;
+    m = "append,set,get,getAll,delete,keys,values,entries,forEach,constructor".split(",");
+    f = (a, b, c) => (a += "", /^(Blob|File)$/.test(b && b[t]) ? [(c = c !== void 0 ? c + "" : b[t] == "File" ? b.name : "blob", a), b.name !== c || b[t] == "blob" ? new file_default([b], c, b) : b] : [a, b + ""]);
+    e = (c, f3) => (f3 ? c : c.replace(/\r?\n|\r/g, "\r\n")).replace(/\n/g, "%0A").replace(/\r/g, "%0D").replace(/"/g, "%22");
+    x = (n, a, e2) => {
+      if (a.length < e2) {
+        throw new TypeError(`Failed to execute '${n}' on 'FormData': ${e2} arguments required, but only ${a.length} present.`);
+      }
+    };
+    FormData = (_a3 = class {
+      constructor(...a) {
+        __privateAdd(this, _d, []);
+        if (a.length)
+          throw new TypeError(`Failed to construct 'FormData': parameter 1 is not of type 'HTMLFormElement'.`);
+      }
+      get [t]() {
+        return "FormData";
+      }
+      [i]() {
+        return this.entries();
+      }
+      static [h](o) {
+        return o && typeof o === "object" && o[t] === "FormData" && !m.some((m2) => typeof o[m2] != "function");
+      }
+      append(...a) {
+        x("append", arguments, 2);
+        __privateGet(this, _d).push(f(...a));
+      }
+      delete(a) {
+        x("delete", arguments, 1);
+        a += "";
+        __privateSet(this, _d, __privateGet(this, _d).filter(([b]) => b !== a));
+      }
+      get(a) {
+        x("get", arguments, 1);
+        a += "";
+        for (var b = __privateGet(this, _d), l = b.length, c = 0; c < l; c++)
+          if (b[c][0] === a)
+            return b[c][1];
+        return null;
+      }
+      getAll(a, b) {
+        x("getAll", arguments, 1);
+        b = [];
+        a += "";
+        __privateGet(this, _d).forEach((c) => c[0] === a && b.push(c[1]));
+        return b;
+      }
+      has(a) {
+        x("has", arguments, 1);
+        a += "";
+        return __privateGet(this, _d).some((b) => b[0] === a);
+      }
+      forEach(a, b) {
+        x("forEach", arguments, 1);
+        for (var [c, d] of this)
+          a.call(b, d, c, this);
+      }
+      set(...a) {
+        x("set", arguments, 2);
+        var b = [], c = true;
+        a = f(...a);
+        __privateGet(this, _d).forEach((d) => {
+          d[0] === a[0] ? c && (c = !b.push(a)) : b.push(d);
+        });
+        c && b.push(a);
+        __privateSet(this, _d, b);
+      }
+      *entries() {
+        yield* __privateGet(this, _d);
+      }
+      *keys() {
+        for (var [a] of this)
+          yield a;
+      }
+      *values() {
+        for (var [, a] of this)
+          yield a;
+      }
+    }, _d = new WeakMap(), _a3);
+  }
+});
+
+// node_modules/node-domexception/index.js
+var require_node_domexception = __commonJS({
+  "node_modules/node-domexception/index.js"(exports, module2) {
+    if (!globalThis.DOMException) {
+      try {
+        const { MessageChannel } = require("worker_threads"), port = new MessageChannel().port1, ab = new ArrayBuffer();
+        port.postMessage(ab, [ab, ab]);
+      } catch (err) {
+        err.constructor.name === "DOMException" && (globalThis.DOMException = err.constructor);
       }
     }
-    const blob = new _a([], { type: String(type).toLowerCase() });
-    __privateSet(blob, _size, span);
-    __privateSet(blob, _parts, blobParts);
-    return blob;
+    module2.exports = globalThis.DOMException;
   }
-  get [Symbol.toStringTag]() {
-    return "Blob";
-  }
-  static [Symbol.hasInstance](object) {
-    return object && typeof object === "object" && typeof object.constructor === "function" && (typeof object.stream === "function" || typeof object.arrayBuffer === "function") && /^(Blob|File)$/.test(object[Symbol.toStringTag]);
-  }
-}, _parts = new WeakMap(), _type = new WeakMap(), _size = new WeakMap(), _a);
-Object.defineProperties(_Blob.prototype, {
-  size: { enumerable: true },
-  type: { enumerable: true },
-  slice: { enumerable: true }
 });
-var Blob = _Blob;
-var fetch_blob_default = Blob;
+
+// node_modules/fetch-blob/from.js
+var import_node_fs, import_node_path, import_node_domexception, stat, _path, _start, _BlobDataItem, BlobDataItem;
+var init_from = __esm({
+  "node_modules/fetch-blob/from.js"() {
+    import_node_fs = require("fs");
+    import_node_path = require("path");
+    import_node_domexception = __toESM(require_node_domexception(), 1);
+    init_file();
+    init_fetch_blob();
+    ({ stat } = import_node_fs.promises);
+    _BlobDataItem = class {
+      constructor(options) {
+        __privateAdd(this, _path, void 0);
+        __privateAdd(this, _start, void 0);
+        __privateSet(this, _path, options.path);
+        __privateSet(this, _start, options.start);
+        this.size = options.size;
+        this.lastModified = options.lastModified;
+        this.originalSize = options.originalSize === void 0 ? options.size : options.originalSize;
+      }
+      slice(start, end) {
+        return new _BlobDataItem({
+          path: __privateGet(this, _path),
+          lastModified: this.lastModified,
+          originalSize: this.originalSize,
+          size: end - start,
+          start: __privateGet(this, _start) + start
+        });
+      }
+      async *stream() {
+        const { mtimeMs, size } = await stat(__privateGet(this, _path));
+        if (mtimeMs > this.lastModified || this.originalSize !== size) {
+          throw new import_node_domexception.default("The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.", "NotReadableError");
+        }
+        yield* (0, import_node_fs.createReadStream)(__privateGet(this, _path), {
+          start: __privateGet(this, _start),
+          end: __privateGet(this, _start) + this.size - 1
+        });
+      }
+      get [Symbol.toStringTag]() {
+        return "Blob";
+      }
+    };
+    BlobDataItem = _BlobDataItem;
+    _path = new WeakMap();
+    _start = new WeakMap();
+  }
+});
+
+// node_modules/node-fetch/src/utils/multipart-parser.js
+var multipart_parser_exports = {};
+__export(multipart_parser_exports, {
+  toFormData: () => toFormData
+});
+function _fileName(headerValue) {
+  const m2 = headerValue.match(/\bfilename=("(.*?)"|([^()<>@,;:\\"/[\]?={}\s\t]+))($|;\s)/i);
+  if (!m2) {
+    return;
+  }
+  const match = m2[2] || m2[3] || "";
+  let filename = match.slice(match.lastIndexOf("\\") + 1);
+  filename = filename.replace(/%22/g, '"');
+  filename = filename.replace(/&#(\d{4});/g, (m3, code) => {
+    return String.fromCharCode(code);
+  });
+  return filename;
+}
+async function toFormData(Body2, ct) {
+  if (!/multipart/i.test(ct)) {
+    throw new TypeError("Failed to fetch");
+  }
+  const m2 = ct.match(/boundary=(?:"([^"]+)"|([^;]+))/i);
+  if (!m2) {
+    throw new TypeError("no or bad content-type header, no multipart boundary");
+  }
+  const parser = new MultipartParser(m2[1] || m2[2]);
+  let headerField;
+  let headerValue;
+  let entryValue;
+  let entryName;
+  let contentType;
+  let filename;
+  const entryChunks = [];
+  const formData = new FormData();
+  const onPartData = (ui8a) => {
+    entryValue += decoder.decode(ui8a, { stream: true });
+  };
+  const appendToFile = (ui8a) => {
+    entryChunks.push(ui8a);
+  };
+  const appendFileToFormData = () => {
+    const file = new file_default(entryChunks, filename, { type: contentType });
+    formData.append(entryName, file);
+  };
+  const appendEntryToFormData = () => {
+    formData.append(entryName, entryValue);
+  };
+  const decoder = new TextDecoder("utf-8");
+  decoder.decode();
+  parser.onPartBegin = function() {
+    parser.onPartData = onPartData;
+    parser.onPartEnd = appendEntryToFormData;
+    headerField = "";
+    headerValue = "";
+    entryValue = "";
+    entryName = "";
+    contentType = "";
+    filename = null;
+    entryChunks.length = 0;
+  };
+  parser.onHeaderField = function(ui8a) {
+    headerField += decoder.decode(ui8a, { stream: true });
+  };
+  parser.onHeaderValue = function(ui8a) {
+    headerValue += decoder.decode(ui8a, { stream: true });
+  };
+  parser.onHeaderEnd = function() {
+    headerValue += decoder.decode();
+    headerField = headerField.toLowerCase();
+    if (headerField === "content-disposition") {
+      const m3 = headerValue.match(/\bname=("([^"]*)"|([^()<>@,;:\\"/[\]?={}\s\t]+))/i);
+      if (m3) {
+        entryName = m3[2] || m3[3] || "";
+      }
+      filename = _fileName(headerValue);
+      if (filename) {
+        parser.onPartData = appendToFile;
+        parser.onPartEnd = appendFileToFormData;
+      }
+    } else if (headerField === "content-type") {
+      contentType = headerValue;
+    }
+    headerValue = "";
+    headerField = "";
+  };
+  for await (const chunk of Body2) {
+    parser.write(chunk);
+  }
+  parser.end();
+  return formData;
+}
+var s, S, f2, F, LF, CR, SPACE, HYPHEN, COLON, A, Z, lower, noop, MultipartParser;
+var init_multipart_parser = __esm({
+  "node_modules/node-fetch/src/utils/multipart-parser.js"() {
+    init_from();
+    init_esm_min();
+    s = 0;
+    S = {
+      START_BOUNDARY: s++,
+      HEADER_FIELD_START: s++,
+      HEADER_FIELD: s++,
+      HEADER_VALUE_START: s++,
+      HEADER_VALUE: s++,
+      HEADER_VALUE_ALMOST_DONE: s++,
+      HEADERS_ALMOST_DONE: s++,
+      PART_DATA_START: s++,
+      PART_DATA: s++,
+      END: s++
+    };
+    f2 = 1;
+    F = {
+      PART_BOUNDARY: f2,
+      LAST_BOUNDARY: f2 *= 2
+    };
+    LF = 10;
+    CR = 13;
+    SPACE = 32;
+    HYPHEN = 45;
+    COLON = 58;
+    A = 97;
+    Z = 122;
+    lower = (c) => c | 32;
+    noop = () => {
+    };
+    MultipartParser = class {
+      constructor(boundary) {
+        this.index = 0;
+        this.flags = 0;
+        this.onHeaderEnd = noop;
+        this.onHeaderField = noop;
+        this.onHeadersEnd = noop;
+        this.onHeaderValue = noop;
+        this.onPartBegin = noop;
+        this.onPartData = noop;
+        this.onPartEnd = noop;
+        this.boundaryChars = {};
+        boundary = "\r\n--" + boundary;
+        const ui8a = new Uint8Array(boundary.length);
+        for (let i2 = 0; i2 < boundary.length; i2++) {
+          ui8a[i2] = boundary.charCodeAt(i2);
+          this.boundaryChars[ui8a[i2]] = true;
+        }
+        this.boundary = ui8a;
+        this.lookbehind = new Uint8Array(this.boundary.length + 8);
+        this.state = S.START_BOUNDARY;
+      }
+      write(data) {
+        let i2 = 0;
+        const length_ = data.length;
+        let previousIndex = this.index;
+        let { lookbehind, boundary, boundaryChars, index, state, flags } = this;
+        const boundaryLength = this.boundary.length;
+        const boundaryEnd = boundaryLength - 1;
+        const bufferLength = data.length;
+        let c;
+        let cl;
+        const mark = (name) => {
+          this[name + "Mark"] = i2;
+        };
+        const clear = (name) => {
+          delete this[name + "Mark"];
+        };
+        const callback = (callbackSymbol, start, end, ui8a) => {
+          if (start === void 0 || start !== end) {
+            this[callbackSymbol](ui8a && ui8a.subarray(start, end));
+          }
+        };
+        const dataCallback = (name, clear2) => {
+          const markSymbol = name + "Mark";
+          if (!(markSymbol in this)) {
+            return;
+          }
+          if (clear2) {
+            callback(name, this[markSymbol], i2, data);
+            delete this[markSymbol];
+          } else {
+            callback(name, this[markSymbol], data.length, data);
+            this[markSymbol] = 0;
+          }
+        };
+        for (i2 = 0; i2 < length_; i2++) {
+          c = data[i2];
+          switch (state) {
+            case S.START_BOUNDARY:
+              if (index === boundary.length - 2) {
+                if (c === HYPHEN) {
+                  flags |= F.LAST_BOUNDARY;
+                } else if (c !== CR) {
+                  return;
+                }
+                index++;
+                break;
+              } else if (index - 1 === boundary.length - 2) {
+                if (flags & F.LAST_BOUNDARY && c === HYPHEN) {
+                  state = S.END;
+                  flags = 0;
+                } else if (!(flags & F.LAST_BOUNDARY) && c === LF) {
+                  index = 0;
+                  callback("onPartBegin");
+                  state = S.HEADER_FIELD_START;
+                } else {
+                  return;
+                }
+                break;
+              }
+              if (c !== boundary[index + 2]) {
+                index = -2;
+              }
+              if (c === boundary[index + 2]) {
+                index++;
+              }
+              break;
+            case S.HEADER_FIELD_START:
+              state = S.HEADER_FIELD;
+              mark("onHeaderField");
+              index = 0;
+            case S.HEADER_FIELD:
+              if (c === CR) {
+                clear("onHeaderField");
+                state = S.HEADERS_ALMOST_DONE;
+                break;
+              }
+              index++;
+              if (c === HYPHEN) {
+                break;
+              }
+              if (c === COLON) {
+                if (index === 1) {
+                  return;
+                }
+                dataCallback("onHeaderField", true);
+                state = S.HEADER_VALUE_START;
+                break;
+              }
+              cl = lower(c);
+              if (cl < A || cl > Z) {
+                return;
+              }
+              break;
+            case S.HEADER_VALUE_START:
+              if (c === SPACE) {
+                break;
+              }
+              mark("onHeaderValue");
+              state = S.HEADER_VALUE;
+            case S.HEADER_VALUE:
+              if (c === CR) {
+                dataCallback("onHeaderValue", true);
+                callback("onHeaderEnd");
+                state = S.HEADER_VALUE_ALMOST_DONE;
+              }
+              break;
+            case S.HEADER_VALUE_ALMOST_DONE:
+              if (c !== LF) {
+                return;
+              }
+              state = S.HEADER_FIELD_START;
+              break;
+            case S.HEADERS_ALMOST_DONE:
+              if (c !== LF) {
+                return;
+              }
+              callback("onHeadersEnd");
+              state = S.PART_DATA_START;
+              break;
+            case S.PART_DATA_START:
+              state = S.PART_DATA;
+              mark("onPartData");
+            case S.PART_DATA:
+              previousIndex = index;
+              if (index === 0) {
+                i2 += boundaryEnd;
+                while (i2 < bufferLength && !(data[i2] in boundaryChars)) {
+                  i2 += boundaryLength;
+                }
+                i2 -= boundaryEnd;
+                c = data[i2];
+              }
+              if (index < boundary.length) {
+                if (boundary[index] === c) {
+                  if (index === 0) {
+                    dataCallback("onPartData", true);
+                  }
+                  index++;
+                } else {
+                  index = 0;
+                }
+              } else if (index === boundary.length) {
+                index++;
+                if (c === CR) {
+                  flags |= F.PART_BOUNDARY;
+                } else if (c === HYPHEN) {
+                  flags |= F.LAST_BOUNDARY;
+                } else {
+                  index = 0;
+                }
+              } else if (index - 1 === boundary.length) {
+                if (flags & F.PART_BOUNDARY) {
+                  index = 0;
+                  if (c === LF) {
+                    flags &= ~F.PART_BOUNDARY;
+                    callback("onPartEnd");
+                    callback("onPartBegin");
+                    state = S.HEADER_FIELD_START;
+                    break;
+                  }
+                } else if (flags & F.LAST_BOUNDARY) {
+                  if (c === HYPHEN) {
+                    callback("onPartEnd");
+                    state = S.END;
+                    flags = 0;
+                  } else {
+                    index = 0;
+                  }
+                } else {
+                  index = 0;
+                }
+              }
+              if (index > 0) {
+                lookbehind[index - 1] = c;
+              } else if (previousIndex > 0) {
+                const _lookbehind = new Uint8Array(lookbehind.buffer, lookbehind.byteOffset, lookbehind.byteLength);
+                callback("onPartData", 0, previousIndex, _lookbehind);
+                previousIndex = 0;
+                mark("onPartData");
+                i2--;
+              }
+              break;
+            case S.END:
+              break;
+            default:
+              throw new Error(`Unexpected state entered: ${state}`);
+          }
+        }
+        dataCallback("onHeaderField");
+        dataCallback("onHeaderValue");
+        dataCallback("onPartData");
+        this.index = index;
+        this.state = state;
+        this.flags = flags;
+      }
+      end() {
+        if (this.state === S.HEADER_FIELD_START && this.index === 0 || this.state === S.PART_DATA && this.index === this.boundary.length) {
+          this.onPartEnd();
+        } else if (this.state !== S.END) {
+          throw new Error("MultipartParser.end(): stream ended unexpectedly");
+        }
+      }
+    };
+  }
+});
+
+// functions/get-project/get-project.js
+var get_project_exports = {};
+__export(get_project_exports, {
+  handler: () => handler
+});
+var import_dotenv = __toESM(require_main());
+
+// node_modules/node-fetch/src/index.js
+var import_node_http2 = __toESM(require("http"), 1);
+var import_node_https = __toESM(require("https"), 1);
+var import_node_zlib = __toESM(require("zlib"), 1);
+var import_node_stream2 = __toESM(require("stream"), 1);
+var import_node_buffer2 = require("buffer");
+
+// node_modules/data-uri-to-buffer/dist/index.js
+function dataUriToBuffer(uri) {
+  if (!/^data:/i.test(uri)) {
+    throw new TypeError('`uri` does not appear to be a Data URI (must begin with "data:")');
+  }
+  uri = uri.replace(/\r?\n/g, "");
+  const firstComma = uri.indexOf(",");
+  if (firstComma === -1 || firstComma <= 4) {
+    throw new TypeError("malformed data: URI");
+  }
+  const meta = uri.substring(5, firstComma).split(";");
+  let charset = "";
+  let base64 = false;
+  const type = meta[0] || "text/plain";
+  let typeFull = type;
+  for (let i2 = 1; i2 < meta.length; i2++) {
+    if (meta[i2] === "base64") {
+      base64 = true;
+    } else {
+      typeFull += `;${meta[i2]}`;
+      if (meta[i2].indexOf("charset=") === 0) {
+        charset = meta[i2].substring(8);
+      }
+    }
+  }
+  if (!meta[0] && !charset.length) {
+    typeFull += ";charset=US-ASCII";
+    charset = "US-ASCII";
+  }
+  const encoding = base64 ? "base64" : "ascii";
+  const data = unescape(uri.substring(firstComma + 1));
+  const buffer = Buffer.from(data, encoding);
+  buffer.type = type;
+  buffer.typeFull = typeFull;
+  buffer.charset = charset;
+  return buffer;
+}
+var dist_default = dataUriToBuffer;
+
+// node_modules/node-fetch/src/body.js
+var import_node_stream = __toESM(require("stream"), 1);
+var import_node_util = require("util");
+var import_node_buffer = require("buffer");
+init_fetch_blob();
+init_esm_min();
 
 // node_modules/node-fetch/src/errors/base.js
 var FetchBaseError = class extends Error {
@@ -3937,64 +4570,25 @@ var FetchError = class extends FetchBaseError {
   }
 };
 
-// node_modules/node-fetch/src/utils/form-data.js
-var import_crypto = __toModule(require("crypto"));
-
 // node_modules/node-fetch/src/utils/is.js
 var NAME = Symbol.toStringTag;
 var isURLSearchParameters = (object) => {
   return typeof object === "object" && typeof object.append === "function" && typeof object.delete === "function" && typeof object.get === "function" && typeof object.getAll === "function" && typeof object.has === "function" && typeof object.set === "function" && typeof object.sort === "function" && object[NAME] === "URLSearchParams";
 };
 var isBlob = (object) => {
-  return typeof object === "object" && typeof object.arrayBuffer === "function" && typeof object.type === "string" && typeof object.stream === "function" && typeof object.constructor === "function" && /^(Blob|File)$/.test(object[NAME]);
+  return object && typeof object === "object" && typeof object.arrayBuffer === "function" && typeof object.type === "string" && typeof object.stream === "function" && typeof object.constructor === "function" && /^(Blob|File)$/.test(object[NAME]);
 };
-function isFormData(object) {
-  return typeof object === "object" && typeof object.append === "function" && typeof object.set === "function" && typeof object.get === "function" && typeof object.getAll === "function" && typeof object.delete === "function" && typeof object.keys === "function" && typeof object.values === "function" && typeof object.entries === "function" && typeof object.constructor === "function" && object[NAME] === "FormData";
-}
 var isAbortSignal = (object) => {
   return typeof object === "object" && (object[NAME] === "AbortSignal" || object[NAME] === "EventTarget");
 };
-
-// node_modules/node-fetch/src/utils/form-data.js
-var carriage = "\r\n";
-var dashes = "-".repeat(2);
-var carriageLength = Buffer.byteLength(carriage);
-var getFooter = (boundary) => `${dashes}${boundary}${dashes}${carriage.repeat(2)}`;
-function getHeader(boundary, name, field) {
-  let header = "";
-  header += `${dashes}${boundary}${carriage}`;
-  header += `Content-Disposition: form-data; name="${name}"`;
-  if (isBlob(field)) {
-    header += `; filename="${field.name}"${carriage}`;
-    header += `Content-Type: ${field.type || "application/octet-stream"}`;
-  }
-  return `${header}${carriage.repeat(2)}`;
-}
-var getBoundary = () => (0, import_crypto.randomBytes)(8).toString("hex");
-async function* formDataIterator(form, boundary) {
-  for (const [name, value] of form) {
-    yield getHeader(boundary, name, value);
-    if (isBlob(value)) {
-      yield* value.stream();
-    } else {
-      yield value;
-    }
-    yield carriage;
-  }
-  yield getFooter(boundary);
-}
-function getFormDataLength(form, boundary) {
-  let length = 0;
-  for (const [name, value] of form) {
-    length += Buffer.byteLength(getHeader(boundary, name, value));
-    length += isBlob(value) ? value.size : Buffer.byteLength(String(value));
-    length += carriageLength;
-  }
-  length += Buffer.byteLength(getFooter(boundary));
-  return length;
-}
+var isDomainOrSubdomain = (destination, original) => {
+  const orig = new URL(original).hostname;
+  const dest = new URL(destination).hostname;
+  return orig === dest || orig.endsWith(`.${dest}`);
+};
 
 // node_modules/node-fetch/src/body.js
+var pipeline = (0, import_node_util.promisify)(import_node_stream.default.pipeline);
 var INTERNALS = Symbol("Body internals");
 var Body = class {
   constructor(body, {
@@ -4004,28 +4598,35 @@ var Body = class {
     if (body === null) {
       body = null;
     } else if (isURLSearchParameters(body)) {
-      body = Buffer.from(body.toString());
+      body = import_node_buffer.Buffer.from(body.toString());
     } else if (isBlob(body)) {
-    } else if (Buffer.isBuffer(body)) {
-    } else if (import_util.types.isAnyArrayBuffer(body)) {
-      body = Buffer.from(body);
+    } else if (import_node_buffer.Buffer.isBuffer(body)) {
+    } else if (import_node_util.types.isAnyArrayBuffer(body)) {
+      body = import_node_buffer.Buffer.from(body);
     } else if (ArrayBuffer.isView(body)) {
-      body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-    } else if (body instanceof import_stream.default) {
-    } else if (isFormData(body)) {
-      boundary = `NodeFetchFormDataBoundary${getBoundary()}`;
-      body = import_stream.default.Readable.from(formDataIterator(body, boundary));
+      body = import_node_buffer.Buffer.from(body.buffer, body.byteOffset, body.byteLength);
+    } else if (body instanceof import_node_stream.default) {
+    } else if (body instanceof FormData) {
+      body = formDataToBlob(body);
+      boundary = body.type.split("=")[1];
     } else {
-      body = Buffer.from(String(body));
+      body = import_node_buffer.Buffer.from(String(body));
+    }
+    let stream = body;
+    if (import_node_buffer.Buffer.isBuffer(body)) {
+      stream = import_node_stream.default.Readable.from(body);
+    } else if (isBlob(body)) {
+      stream = import_node_stream.default.Readable.from(body.stream());
     }
     this[INTERNALS] = {
       body,
+      stream,
       boundary,
       disturbed: false,
       error: null
     };
     this.size = size;
-    if (body instanceof import_stream.default) {
+    if (body instanceof import_node_stream.default) {
       body.on("error", (error_) => {
         const error = error_ instanceof FetchBaseError ? error_ : new FetchError(`Invalid response body while trying to fetch ${this.url}: ${error_.message}`, "system", error_);
         this[INTERNALS].error = error;
@@ -4033,7 +4634,7 @@ var Body = class {
     }
   }
   get body() {
-    return this[INTERNALS].body;
+    return this[INTERNALS].stream;
   }
   get bodyUsed() {
     return this[INTERNALS].disturbed;
@@ -4042,32 +4643,48 @@ var Body = class {
     const { buffer, byteOffset, byteLength } = await consumeBody(this);
     return buffer.slice(byteOffset, byteOffset + byteLength);
   }
+  async formData() {
+    const ct = this.headers.get("content-type");
+    if (ct.startsWith("application/x-www-form-urlencoded")) {
+      const formData = new FormData();
+      const parameters = new URLSearchParams(await this.text());
+      for (const [name, value] of parameters) {
+        formData.append(name, value);
+      }
+      return formData;
+    }
+    const { toFormData: toFormData2 } = await Promise.resolve().then(() => (init_multipart_parser(), multipart_parser_exports));
+    return toFormData2(this.body, ct);
+  }
   async blob() {
     const ct = this.headers && this.headers.get("content-type") || this[INTERNALS].body && this[INTERNALS].body.type || "";
-    const buf = await this.buffer();
+    const buf = await this.arrayBuffer();
     return new fetch_blob_default([buf], {
       type: ct
     });
   }
   async json() {
-    const buffer = await consumeBody(this);
-    return JSON.parse(buffer.toString());
+    const text = await this.text();
+    return JSON.parse(text);
   }
   async text() {
     const buffer = await consumeBody(this);
-    return buffer.toString();
+    return new TextDecoder().decode(buffer);
   }
   buffer() {
     return consumeBody(this);
   }
 };
+Body.prototype.buffer = (0, import_node_util.deprecate)(Body.prototype.buffer, "Please use 'response.arrayBuffer()' instead of 'response.buffer()'", "node-fetch#buffer");
 Object.defineProperties(Body.prototype, {
   body: { enumerable: true },
   bodyUsed: { enumerable: true },
   arrayBuffer: { enumerable: true },
   blob: { enumerable: true },
   json: { enumerable: true },
-  text: { enumerable: true }
+  text: { enumerable: true },
+  data: { get: (0, import_node_util.deprecate)(() => {
+  }, "data doesn't exist, use json(), text(), arrayBuffer(), or body instead", "https://github.com/node-fetch/node-fetch/issues/1000 (response)") }
 });
 async function consumeBody(data) {
   if (data[INTERNALS].disturbed) {
@@ -4077,18 +4694,12 @@ async function consumeBody(data) {
   if (data[INTERNALS].error) {
     throw data[INTERNALS].error;
   }
-  let { body } = data;
+  const { body } = data;
   if (body === null) {
-    return Buffer.alloc(0);
+    return import_node_buffer.Buffer.alloc(0);
   }
-  if (isBlob(body)) {
-    body = import_stream.default.Readable.from(body.stream());
-  }
-  if (Buffer.isBuffer(body)) {
-    return body;
-  }
-  if (!(body instanceof import_stream.default)) {
-    return Buffer.alloc(0);
+  if (!(body instanceof import_node_stream.default)) {
+    return import_node_buffer.Buffer.alloc(0);
   }
   const accum = [];
   let accumBytes = 0;
@@ -4109,9 +4720,9 @@ async function consumeBody(data) {
   if (body.readableEnded === true || body._readableState.ended === true) {
     try {
       if (accum.every((c) => typeof c === "string")) {
-        return Buffer.from(accum.join(""));
+        return import_node_buffer.Buffer.from(accum.join(""));
       }
-      return Buffer.concat(accum, accumBytes);
+      return import_node_buffer.Buffer.concat(accum, accumBytes);
     } catch (error) {
       throw new FetchError(`Could not create Buffer from response body for ${data.url}: ${error.message}`, "system", error);
     }
@@ -4122,20 +4733,21 @@ async function consumeBody(data) {
 var clone = (instance, highWaterMark) => {
   let p1;
   let p2;
-  let { body } = instance;
+  let { body } = instance[INTERNALS];
   if (instance.bodyUsed) {
     throw new Error("cannot clone body after it is used");
   }
-  if (body instanceof import_stream.default && typeof body.getBoundary !== "function") {
-    p1 = new import_stream.PassThrough({ highWaterMark });
-    p2 = new import_stream.PassThrough({ highWaterMark });
+  if (body instanceof import_node_stream.default && typeof body.getBoundary !== "function") {
+    p1 = new import_node_stream.PassThrough({ highWaterMark });
+    p2 = new import_node_stream.PassThrough({ highWaterMark });
     body.pipe(p1);
     body.pipe(p2);
-    instance[INTERNALS].body = p1;
+    instance[INTERNALS].stream = p1;
     body = p2;
   }
   return body;
 };
+var getNonSpecFormDataBoundary = (0, import_node_util.deprecate)((body) => body.getBoundary(), "form-data doesn't follow the spec and requires special treatment. Use alternative package", "https://github.com/node-fetch/node-fetch/issues/1167");
 var extractContentType = (body, request) => {
   if (body === null) {
     return null;
@@ -4149,63 +4761,55 @@ var extractContentType = (body, request) => {
   if (isBlob(body)) {
     return body.type || null;
   }
-  if (Buffer.isBuffer(body) || import_util.types.isAnyArrayBuffer(body) || ArrayBuffer.isView(body)) {
+  if (import_node_buffer.Buffer.isBuffer(body) || import_node_util.types.isAnyArrayBuffer(body) || ArrayBuffer.isView(body)) {
     return null;
   }
-  if (body && typeof body.getBoundary === "function") {
-    return `multipart/form-data;boundary=${body.getBoundary()}`;
-  }
-  if (isFormData(body)) {
+  if (body instanceof FormData) {
     return `multipart/form-data; boundary=${request[INTERNALS].boundary}`;
   }
-  if (body instanceof import_stream.default) {
+  if (body && typeof body.getBoundary === "function") {
+    return `multipart/form-data;boundary=${getNonSpecFormDataBoundary(body)}`;
+  }
+  if (body instanceof import_node_stream.default) {
     return null;
   }
   return "text/plain;charset=UTF-8";
 };
 var getTotalBytes = (request) => {
-  const { body } = request;
+  const { body } = request[INTERNALS];
   if (body === null) {
     return 0;
   }
   if (isBlob(body)) {
     return body.size;
   }
-  if (Buffer.isBuffer(body)) {
+  if (import_node_buffer.Buffer.isBuffer(body)) {
     return body.length;
   }
   if (body && typeof body.getLengthSync === "function") {
     return body.hasKnownLength && body.hasKnownLength() ? body.getLengthSync() : null;
   }
-  if (isFormData(body)) {
-    return getFormDataLength(request[INTERNALS].boundary);
-  }
   return null;
 };
-var writeToStream = (dest, { body }) => {
+var writeToStream = async (dest, { body }) => {
   if (body === null) {
     dest.end();
-  } else if (isBlob(body)) {
-    import_stream.default.Readable.from(body.stream()).pipe(dest);
-  } else if (Buffer.isBuffer(body)) {
-    dest.write(body);
-    dest.end();
   } else {
-    body.pipe(dest);
+    await pipeline(body, dest);
   }
 };
 
 // node_modules/node-fetch/src/headers.js
-var import_util2 = __toModule(require("util"));
-var import_http = __toModule(require("http"));
-var validateHeaderName = typeof import_http.default.validateHeaderName === "function" ? import_http.default.validateHeaderName : (name) => {
+var import_node_util2 = require("util");
+var import_node_http = __toESM(require("http"), 1);
+var validateHeaderName = typeof import_node_http.default.validateHeaderName === "function" ? import_node_http.default.validateHeaderName : (name) => {
   if (!/^[\^`\-\w!#$%&'*+.|~]+$/.test(name)) {
     const error = new TypeError(`Header name must be a valid HTTP token [${name}]`);
     Object.defineProperty(error, "code", { value: "ERR_INVALID_HTTP_TOKEN" });
     throw error;
   }
 };
-var validateHeaderValue = typeof import_http.default.validateHeaderValue === "function" ? import_http.default.validateHeaderValue : (name, value) => {
+var validateHeaderValue = typeof import_node_http.default.validateHeaderValue === "function" ? import_node_http.default.validateHeaderValue : (name, value) => {
   if (/[^\t\u0020-\u007E\u0080-\u00FF]/.test(value)) {
     const error = new TypeError(`Invalid character in header content ["${name}"]`);
     Object.defineProperty(error, "code", { value: "ERR_INVALID_CHAR" });
@@ -4221,7 +4825,7 @@ var Headers = class extends URLSearchParams {
         result.push(...values.map((value) => [name, value]));
       }
     } else if (init == null) {
-    } else if (typeof init === "object" && !import_util2.types.isBoxedPrimitive(init)) {
+    } else if (typeof init === "object" && !import_node_util2.types.isBoxedPrimitive(init)) {
       const method = init[Symbol.iterator];
       if (method == null) {
         result.push(...Object.entries(init));
@@ -4230,7 +4834,7 @@ var Headers = class extends URLSearchParams {
           throw new TypeError("Header pairs must be iterable");
         }
         result = [...init].map((pair) => {
-          if (typeof pair !== "object" || import_util2.types.isBoxedPrimitive(pair)) {
+          if (typeof pair !== "object" || import_node_util2.types.isBoxedPrimitive(pair)) {
             throw new TypeError("Each header pair must be an iterable object");
           }
           return [...pair];
@@ -4353,7 +4957,7 @@ function fromRawHeaders(headers = []) {
 }
 
 // node_modules/node-fetch/src/utils/is-redirect.js
-var redirectStatus = new Set([301, 302, 303, 307, 308]);
+var redirectStatus = /* @__PURE__ */ new Set([301, 302, 303, 307, 308]);
 var isRedirect = (code) => {
   return redirectStatus.has(code);
 };
@@ -4366,7 +4970,7 @@ var Response = class extends Body {
     const status = options.status != null ? options.status : 200;
     const headers = new Headers(options.headers);
     if (body !== null && !headers.has("Content-Type")) {
-      const contentType = extractContentType(body);
+      const contentType = extractContentType(body, this);
       if (contentType) {
         headers.append("Content-Type", contentType);
       }
@@ -4414,7 +5018,8 @@ var Response = class extends Body {
       headers: this.headers,
       ok: this.ok,
       redirected: this.redirected,
-      size: this.size
+      size: this.size,
+      highWaterMark: this.highWaterMark
     });
   }
   static redirect(url, status = 302) {
@@ -4449,7 +5054,8 @@ Object.defineProperties(Response.prototype, {
 });
 
 // node_modules/node-fetch/src/request.js
-var import_url = __toModule(require("url"));
+var import_node_url = require("url");
+var import_node_util3 = require("util");
 
 // node_modules/node-fetch/src/utils/get-search.js
 var getSearch = (parsedURL) => {
@@ -4461,11 +5067,153 @@ var getSearch = (parsedURL) => {
   return parsedURL.href[lastOffset - hash.length] === "?" ? "?" : "";
 };
 
+// node_modules/node-fetch/src/utils/referrer.js
+var import_node_net = require("net");
+function stripURLForUseAsAReferrer(url, originOnly = false) {
+  if (url == null) {
+    return "no-referrer";
+  }
+  url = new URL(url);
+  if (/^(about|blob|data):$/.test(url.protocol)) {
+    return "no-referrer";
+  }
+  url.username = "";
+  url.password = "";
+  url.hash = "";
+  if (originOnly) {
+    url.pathname = "";
+    url.search = "";
+  }
+  return url;
+}
+var ReferrerPolicy = /* @__PURE__ */ new Set([
+  "",
+  "no-referrer",
+  "no-referrer-when-downgrade",
+  "same-origin",
+  "origin",
+  "strict-origin",
+  "origin-when-cross-origin",
+  "strict-origin-when-cross-origin",
+  "unsafe-url"
+]);
+var DEFAULT_REFERRER_POLICY = "strict-origin-when-cross-origin";
+function validateReferrerPolicy(referrerPolicy) {
+  if (!ReferrerPolicy.has(referrerPolicy)) {
+    throw new TypeError(`Invalid referrerPolicy: ${referrerPolicy}`);
+  }
+  return referrerPolicy;
+}
+function isOriginPotentiallyTrustworthy(url) {
+  if (/^(http|ws)s:$/.test(url.protocol)) {
+    return true;
+  }
+  const hostIp = url.host.replace(/(^\[)|(]$)/g, "");
+  const hostIPVersion = (0, import_node_net.isIP)(hostIp);
+  if (hostIPVersion === 4 && /^127\./.test(hostIp)) {
+    return true;
+  }
+  if (hostIPVersion === 6 && /^(((0+:){7})|(::(0+:){0,6}))0*1$/.test(hostIp)) {
+    return true;
+  }
+  if (/^(.+\.)*localhost$/.test(url.host)) {
+    return false;
+  }
+  if (url.protocol === "file:") {
+    return true;
+  }
+  return false;
+}
+function isUrlPotentiallyTrustworthy(url) {
+  if (/^about:(blank|srcdoc)$/.test(url)) {
+    return true;
+  }
+  if (url.protocol === "data:") {
+    return true;
+  }
+  if (/^(blob|filesystem):$/.test(url.protocol)) {
+    return true;
+  }
+  return isOriginPotentiallyTrustworthy(url);
+}
+function determineRequestsReferrer(request, { referrerURLCallback, referrerOriginCallback } = {}) {
+  if (request.referrer === "no-referrer" || request.referrerPolicy === "") {
+    return null;
+  }
+  const policy = request.referrerPolicy;
+  if (request.referrer === "about:client") {
+    return "no-referrer";
+  }
+  const referrerSource = request.referrer;
+  let referrerURL = stripURLForUseAsAReferrer(referrerSource);
+  let referrerOrigin = stripURLForUseAsAReferrer(referrerSource, true);
+  if (referrerURL.toString().length > 4096) {
+    referrerURL = referrerOrigin;
+  }
+  if (referrerURLCallback) {
+    referrerURL = referrerURLCallback(referrerURL);
+  }
+  if (referrerOriginCallback) {
+    referrerOrigin = referrerOriginCallback(referrerOrigin);
+  }
+  const currentURL = new URL(request.url);
+  switch (policy) {
+    case "no-referrer":
+      return "no-referrer";
+    case "origin":
+      return referrerOrigin;
+    case "unsafe-url":
+      return referrerURL;
+    case "strict-origin":
+      if (isUrlPotentiallyTrustworthy(referrerURL) && !isUrlPotentiallyTrustworthy(currentURL)) {
+        return "no-referrer";
+      }
+      return referrerOrigin.toString();
+    case "strict-origin-when-cross-origin":
+      if (referrerURL.origin === currentURL.origin) {
+        return referrerURL;
+      }
+      if (isUrlPotentiallyTrustworthy(referrerURL) && !isUrlPotentiallyTrustworthy(currentURL)) {
+        return "no-referrer";
+      }
+      return referrerOrigin;
+    case "same-origin":
+      if (referrerURL.origin === currentURL.origin) {
+        return referrerURL;
+      }
+      return "no-referrer";
+    case "origin-when-cross-origin":
+      if (referrerURL.origin === currentURL.origin) {
+        return referrerURL;
+      }
+      return referrerOrigin;
+    case "no-referrer-when-downgrade":
+      if (isUrlPotentiallyTrustworthy(referrerURL) && !isUrlPotentiallyTrustworthy(currentURL)) {
+        return "no-referrer";
+      }
+      return referrerURL;
+    default:
+      throw new TypeError(`Invalid referrerPolicy: ${policy}`);
+  }
+}
+function parseReferrerPolicyFromHeader(headers) {
+  const policyTokens = (headers.get("referrer-policy") || "").split(/[,\s]+/);
+  let policy = "";
+  for (const token of policyTokens) {
+    if (token && ReferrerPolicy.has(token)) {
+      policy = token;
+    }
+  }
+  return policy;
+}
+
 // node_modules/node-fetch/src/request.js
 var INTERNALS3 = Symbol("Request internals");
 var isRequest = (object) => {
   return typeof object === "object" && typeof object[INTERNALS3] === "object";
 };
+var doBadDataWarn = (0, import_node_util3.deprecate)(() => {
+}, ".data is not a valid RequestInit property, use .body instead", "https://github.com/node-fetch/node-fetch/issues/1000 (request)");
 var Request = class extends Body {
   constructor(input, init = {}) {
     let parsedURL;
@@ -4475,9 +5223,17 @@ var Request = class extends Body {
       parsedURL = new URL(input);
       input = {};
     }
+    if (parsedURL.username !== "" || parsedURL.password !== "") {
+      throw new TypeError(`${parsedURL} is an url with embedded credentials.`);
+    }
     let method = init.method || input.method || "GET";
-    method = method.toUpperCase();
-    if ((init.body != null || isRequest(input)) && input.body !== null && (method === "GET" || method === "HEAD")) {
+    if (/^(delete|get|head|options|post|put)$/i.test(method)) {
+      method = method.toUpperCase();
+    }
+    if ("data" in init) {
+      doBadDataWarn();
+    }
+    if ((init.body != null || isRequest(input) && input.body !== null) && (method === "GET" || method === "HEAD")) {
       throw new TypeError("Request with GET/HEAD method cannot have body");
     }
     const inputBody = init.body ? init.body : isRequest(input) && input.body !== null ? clone(input) : null;
@@ -4488,7 +5244,7 @@ var Request = class extends Body {
     if (inputBody !== null && !headers.has("Content-Type")) {
       const contentType = extractContentType(inputBody, this);
       if (contentType) {
-        headers.append("Content-Type", contentType);
+        headers.set("Content-Type", contentType);
       }
     }
     let signal = isRequest(input) ? input.signal : null;
@@ -4498,12 +5254,22 @@ var Request = class extends Body {
     if (signal != null && !isAbortSignal(signal)) {
       throw new TypeError("Expected signal to be an instanceof AbortSignal or EventTarget");
     }
+    let referrer = init.referrer == null ? input.referrer : init.referrer;
+    if (referrer === "") {
+      referrer = "no-referrer";
+    } else if (referrer) {
+      const parsedReferrer = new URL(referrer);
+      referrer = /^about:(\/\/)?client$/.test(parsedReferrer) ? "client" : parsedReferrer;
+    } else {
+      referrer = void 0;
+    }
     this[INTERNALS3] = {
       method,
       redirect: init.redirect || input.redirect || "follow",
       headers,
       parsedURL,
-      signal
+      signal,
+      referrer
     };
     this.follow = init.follow === void 0 ? input.follow === void 0 ? 20 : input.follow : init.follow;
     this.compress = init.compress === void 0 ? input.compress === void 0 ? true : input.compress : init.compress;
@@ -4511,12 +5277,13 @@ var Request = class extends Body {
     this.agent = init.agent || input.agent;
     this.highWaterMark = init.highWaterMark || input.highWaterMark || 16384;
     this.insecureHTTPParser = init.insecureHTTPParser || input.insecureHTTPParser || false;
+    this.referrerPolicy = init.referrerPolicy || input.referrerPolicy || "";
   }
   get method() {
     return this[INTERNALS3].method;
   }
   get url() {
-    return (0, import_url.format)(this[INTERNALS3].parsedURL);
+    return (0, import_node_url.format)(this[INTERNALS3].parsedURL);
   }
   get headers() {
     return this[INTERNALS3].headers;
@@ -4526,6 +5293,24 @@ var Request = class extends Body {
   }
   get signal() {
     return this[INTERNALS3].signal;
+  }
+  get referrer() {
+    if (this[INTERNALS3].referrer === "no-referrer") {
+      return "";
+    }
+    if (this[INTERNALS3].referrer === "client") {
+      return "about:client";
+    }
+    if (this[INTERNALS3].referrer) {
+      return this[INTERNALS3].referrer.toString();
+    }
+    return void 0;
+  }
+  get referrerPolicy() {
+    return this[INTERNALS3].referrerPolicy;
+  }
+  set referrerPolicy(referrerPolicy) {
+    this[INTERNALS3].referrerPolicy = validateReferrerPolicy(referrerPolicy);
   }
   clone() {
     return new Request(this);
@@ -4540,7 +5325,9 @@ Object.defineProperties(Request.prototype, {
   headers: { enumerable: true },
   redirect: { enumerable: true },
   clone: { enumerable: true },
-  signal: { enumerable: true }
+  signal: { enumerable: true },
+  referrer: { enumerable: true },
+  referrerPolicy: { enumerable: true }
 });
 var getNodeRequestOptions = (request) => {
   const { parsedURL } = request[INTERNALS3];
@@ -4561,11 +5348,22 @@ var getNodeRequestOptions = (request) => {
   if (contentLengthValue) {
     headers.set("Content-Length", contentLengthValue);
   }
+  if (request.referrerPolicy === "") {
+    request.referrerPolicy = DEFAULT_REFERRER_POLICY;
+  }
+  if (request.referrer && request.referrer !== "no-referrer") {
+    request[INTERNALS3].referrer = determineRequestsReferrer(request);
+  } else {
+    request[INTERNALS3].referrer = "no-referrer";
+  }
+  if (request[INTERNALS3].referrer instanceof URL) {
+    headers.set("Referer", request.referrer);
+  }
   if (!headers.has("User-Agent")) {
     headers.set("User-Agent", "node-fetch");
   }
   if (request.compress && !headers.has("Accept-Encoding")) {
-    headers.set("Accept-Encoding", "gzip,deflate,br");
+    headers.set("Accept-Encoding", "gzip, deflate, br");
   }
   let { agent } = request;
   if (typeof agent === "function") {
@@ -4575,22 +5373,17 @@ var getNodeRequestOptions = (request) => {
     headers.set("Connection", "close");
   }
   const search = getSearch(parsedURL);
-  const requestOptions = {
+  const options = {
     path: parsedURL.pathname + search,
-    pathname: parsedURL.pathname,
-    hostname: parsedURL.hostname,
-    protocol: parsedURL.protocol,
-    port: parsedURL.port,
-    hash: parsedURL.hash,
-    search: parsedURL.search,
-    query: parsedURL.query,
-    href: parsedURL.href,
     method: request.method,
     headers: headers[Symbol.for("nodejs.util.inspect.custom")](),
     insecureHTTPParser: request.insecureHTTPParser,
     agent
   };
-  return requestOptions;
+  return {
+    parsedURL,
+    options
+  };
 };
 
 // node_modules/node-fetch/src/errors/abort-error.js
@@ -4601,27 +5394,29 @@ var AbortError = class extends FetchBaseError {
 };
 
 // node_modules/node-fetch/src/index.js
-var supportedSchemas = new Set(["data:", "http:", "https:"]);
+init_esm_min();
+init_from();
+var supportedSchemas = /* @__PURE__ */ new Set(["data:", "http:", "https:"]);
 async function fetch(url, options_) {
   return new Promise((resolve, reject) => {
     const request = new Request(url, options_);
-    const options = getNodeRequestOptions(request);
-    if (!supportedSchemas.has(options.protocol)) {
-      throw new TypeError(`node-fetch cannot load ${url}. URL scheme "${options.protocol.replace(/:$/, "")}" is not supported.`);
+    const { parsedURL, options } = getNodeRequestOptions(request);
+    if (!supportedSchemas.has(parsedURL.protocol)) {
+      throw new TypeError(`node-fetch cannot load ${url}. URL scheme "${parsedURL.protocol.replace(/:$/, "")}" is not supported.`);
     }
-    if (options.protocol === "data:") {
-      const data = (0, import_data_uri_to_buffer.default)(request.url);
+    if (parsedURL.protocol === "data:") {
+      const data = dist_default(request.url);
       const response2 = new Response(data, { headers: { "Content-Type": data.typeFull } });
       resolve(response2);
       return;
     }
-    const send = (options.protocol === "https:" ? import_https.default : import_http2.default).request;
+    const send = (parsedURL.protocol === "https:" ? import_node_https.default : import_node_http2.default).request;
     const { signal } = request;
     let response = null;
     const abort = () => {
       const error = new AbortError("The operation was aborted.");
       reject(error);
-      if (request.body && request.body instanceof import_stream2.default.Readable) {
+      if (request.body && request.body instanceof import_node_stream2.default.Readable) {
         request.body.destroy(error);
       }
       if (!response || !response.body) {
@@ -4637,7 +5432,7 @@ async function fetch(url, options_) {
       abort();
       finalize();
     };
-    const request_ = send(options);
+    const request_ = send(parsedURL.toString(), options);
     if (signal) {
       signal.addEventListener("abort", abortAndFinalize);
     }
@@ -4652,16 +5447,18 @@ async function fetch(url, options_) {
       finalize();
     });
     fixResponseChunkedTransferBadEnding(request_, (error) => {
-      response.body.destroy(error);
+      if (response && response.body) {
+        response.body.destroy(error);
+      }
     });
     if (process.version < "v14") {
-      request_.on("socket", (s) => {
+      request_.on("socket", (s2) => {
         let endedWithEventsCount;
-        s.prependListener("end", () => {
-          endedWithEventsCount = s._eventsCount;
+        s2.prependListener("end", () => {
+          endedWithEventsCount = s2._eventsCount;
         });
-        s.prependListener("close", (hadError) => {
-          if (response && endedWithEventsCount < s._eventsCount && !hadError) {
+        s2.prependListener("close", (hadError) => {
+          if (response && endedWithEventsCount < s2._eventsCount && !hadError) {
             const error = new Error("Premature close");
             error.code = "ERR_STREAM_PREMATURE_CLOSE";
             response.body.emit("error", error);
@@ -4674,16 +5471,22 @@ async function fetch(url, options_) {
       const headers = fromRawHeaders(response_.rawHeaders);
       if (isRedirect(response_.statusCode)) {
         const location = headers.get("Location");
-        const locationURL = location === null ? null : new URL(location, request.url);
+        let locationURL = null;
+        try {
+          locationURL = location === null ? null : new URL(location, request.url);
+        } catch {
+          if (request.redirect !== "manual") {
+            reject(new FetchError(`uri requested responds with an invalid redirect URL: ${location}`, "invalid-redirect"));
+            finalize();
+            return;
+          }
+        }
         switch (request.redirect) {
           case "error":
             reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, "no-redirect"));
             finalize();
             return;
           case "manual":
-            if (locationURL !== null) {
-              headers.set("Location", locationURL);
-            }
             break;
           case "follow": {
             if (locationURL === null) {
@@ -4701,11 +5504,18 @@ async function fetch(url, options_) {
               agent: request.agent,
               compress: request.compress,
               method: request.method,
-              body: request.body,
+              body: clone(request),
               signal: request.signal,
-              size: request.size
+              size: request.size,
+              referrer: request.referrer,
+              referrerPolicy: request.referrerPolicy
             };
-            if (response_.statusCode !== 303 && request.body && options_.body instanceof import_stream2.default.Readable) {
+            if (!isDomainOrSubdomain(request.url, locationURL)) {
+              for (const name of ["authorization", "www-authenticate", "cookie", "cookie2"]) {
+                requestOptions.headers.delete(name);
+              }
+            }
+            if (response_.statusCode !== 303 && request.body && options_.body instanceof import_node_stream2.default.Readable) {
               reject(new FetchError("Cannot follow redirect with body being a readable stream", "unsupported-redirect"));
               finalize();
               return;
@@ -4714,6 +5524,10 @@ async function fetch(url, options_) {
               requestOptions.method = "GET";
               requestOptions.body = void 0;
               requestOptions.headers.delete("content-length");
+            }
+            const responseReferrerPolicy = parseReferrerPolicyFromHeader(headers);
+            if (responseReferrerPolicy) {
+              requestOptions.referrerPolicy = responseReferrerPolicy;
             }
             resolve(fetch(new Request(locationURL, requestOptions)));
             finalize();
@@ -4728,7 +5542,11 @@ async function fetch(url, options_) {
           signal.removeEventListener("abort", abortAndFinalize);
         });
       }
-      let body = (0, import_stream2.pipeline)(response_, new import_stream2.PassThrough(), reject);
+      let body = (0, import_node_stream2.pipeline)(response_, new import_node_stream2.PassThrough(), (error) => {
+        if (error) {
+          reject(error);
+        }
+      });
       if (process.version < "v12.10") {
         response_.on("aborted", abortAndFinalize);
       }
@@ -4748,26 +5566,56 @@ async function fetch(url, options_) {
         return;
       }
       const zlibOptions = {
-        flush: import_zlib.default.Z_SYNC_FLUSH,
-        finishFlush: import_zlib.default.Z_SYNC_FLUSH
+        flush: import_node_zlib.default.Z_SYNC_FLUSH,
+        finishFlush: import_node_zlib.default.Z_SYNC_FLUSH
       };
       if (codings === "gzip" || codings === "x-gzip") {
-        body = (0, import_stream2.pipeline)(body, import_zlib.default.createGunzip(zlibOptions), reject);
+        body = (0, import_node_stream2.pipeline)(body, import_node_zlib.default.createGunzip(zlibOptions), (error) => {
+          if (error) {
+            reject(error);
+          }
+        });
         response = new Response(body, responseOptions);
         resolve(response);
         return;
       }
       if (codings === "deflate" || codings === "x-deflate") {
-        const raw = (0, import_stream2.pipeline)(response_, new import_stream2.PassThrough(), reject);
+        const raw = (0, import_node_stream2.pipeline)(response_, new import_node_stream2.PassThrough(), (error) => {
+          if (error) {
+            reject(error);
+          }
+        });
         raw.once("data", (chunk) => {
-          body = (chunk[0] & 15) === 8 ? (0, import_stream2.pipeline)(body, import_zlib.default.createInflate(), reject) : (0, import_stream2.pipeline)(body, import_zlib.default.createInflateRaw(), reject);
+          if ((chunk[0] & 15) === 8) {
+            body = (0, import_node_stream2.pipeline)(body, import_node_zlib.default.createInflate(), (error) => {
+              if (error) {
+                reject(error);
+              }
+            });
+          } else {
+            body = (0, import_node_stream2.pipeline)(body, import_node_zlib.default.createInflateRaw(), (error) => {
+              if (error) {
+                reject(error);
+              }
+            });
+          }
           response = new Response(body, responseOptions);
           resolve(response);
+        });
+        raw.once("end", () => {
+          if (!response) {
+            response = new Response(body, responseOptions);
+            resolve(response);
+          }
         });
         return;
       }
       if (codings === "br") {
-        body = (0, import_stream2.pipeline)(body, import_zlib.default.createBrotliDecompress(), reject);
+        body = (0, import_node_stream2.pipeline)(body, import_node_zlib.default.createBrotliDecompress(), (error) => {
+          if (error) {
+            reject(error);
+          }
+        });
         response = new Response(body, responseOptions);
         resolve(response);
         return;
@@ -4775,11 +5623,11 @@ async function fetch(url, options_) {
       response = new Response(body, responseOptions);
       resolve(response);
     });
-    writeToStream(request_, request);
+    writeToStream(request_, request).catch(reject);
   });
 }
 function fixResponseChunkedTransferBadEnding(request, errorCallback) {
-  const LAST_CHUNK = Buffer.from("0\r\n\r\n");
+  const LAST_CHUNK = import_node_buffer2.Buffer.from("0\r\n\r\n");
   let isChunkedTransfer = false;
   let properLastChunkReceived = false;
   let previousChunk;
@@ -4795,16 +5643,18 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
         errorCallback(error);
       }
     };
-    socket.prependListener("close", onSocketClose);
-    request.on("abort", () => {
-      socket.removeListener("close", onSocketClose);
-    });
-    socket.on("data", (buf) => {
-      properLastChunkReceived = Buffer.compare(buf.slice(-5), LAST_CHUNK) === 0;
+    const onData = (buf) => {
+      properLastChunkReceived = import_node_buffer2.Buffer.compare(buf.slice(-5), LAST_CHUNK) === 0;
       if (!properLastChunkReceived && previousChunk) {
-        properLastChunkReceived = Buffer.compare(previousChunk.slice(-3), LAST_CHUNK.slice(0, 3)) === 0 && Buffer.compare(buf.slice(-2), LAST_CHUNK.slice(3)) === 0;
+        properLastChunkReceived = import_node_buffer2.Buffer.compare(previousChunk.slice(-3), LAST_CHUNK.slice(0, 3)) === 0 && import_node_buffer2.Buffer.compare(buf.slice(-2), LAST_CHUNK.slice(3)) === 0;
       }
       previousChunk = buf;
+    };
+    socket.prependListener("close", onSocketClose);
+    socket.on("data", onData);
+    request.on("close", () => {
+      socket.removeListener("close", onSocketClose);
+      socket.removeListener("data", onData);
     });
   });
 }
@@ -4847,7 +5697,7 @@ function getProjectInfo(id) {
 }
 function getValidTasks(allTasks) {
   return allTasks.filter((task) => {
-    var _a2;
+    var _a4;
     if (task.completed)
       return false;
     const customFields = task.custom_fields;
@@ -4855,7 +5705,7 @@ function getValidTasks(allTasks) {
     if (!visibilityField)
       return false;
     console.log(visibilityField.enum_value);
-    return ((_a2 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a2.gid) === "1200954383416360";
+    return ((_a4 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a4.gid) === "1200954383416360";
   });
 }
 function groupByDate(taskArray) {
@@ -4872,8 +5722,12 @@ function groupByDate(taskArray) {
 function getDatesAndSort(tasksByDate) {
   return Object.keys(tasksByDate).filter((key) => key !== "0").sort((a, b) => a >= b ? 1 : -1);
 }
+module.exports = __toCommonJS(get_project_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
 });
+/*! fetch-blob. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
+/*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
+/*! node-domexception. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
 //# sourceMappingURL=get-project.js.map

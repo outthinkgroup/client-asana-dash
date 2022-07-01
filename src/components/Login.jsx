@@ -1,5 +1,5 @@
 import React from "react";
-import LoginForm from "../auth/LoginForm.js";
+import LoginForm from "../auth/LoginForm.jsx";
 
 export default function Login() {
   const [isShowForm, setIsShowForm] = React.useState(false);

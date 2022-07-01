@@ -1,7 +1,7 @@
 import React from "react";
 
 import { login } from "./utils.js";
-import { AuthContext } from "./Context.js";
+import { AuthContext } from "./Context.jsx";
 
 export default function LoginForm({ onSubmitAction }) {
   const { setIsUserSignedIn } = React.useContext(AuthContext);

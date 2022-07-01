@@ -2,12 +2,12 @@ import React from "react";
 import "./index.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import AuthContextProvider from "./auth/Context.js";
+import AuthContextProvider from "./auth/Context.jsx";
 
 //Pages
-import Project from "./pages/Project.js";
-import Home from "./pages/Home.js";
-import NotFound from "./pages/NotFound.js";
+import Project from "./pages/Project.jsx";
+import Home from "./pages/Home.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
   return (

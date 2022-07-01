@@ -1,9 +1,9 @@
 import React from "react";
 import { Redirect, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { AuthContext } from "../auth/Context.js";
-import Login from "../components/Login.js";
-import ProjectList from "../components/ProjectList.js";
+import { AuthContext } from "../auth/Context.jsx";
+import Login from "../components/Login.jsx";
+import ProjectList from "../components/ProjectList.jsx";
 
 function Home({ className }) {
   const params = useQuery();

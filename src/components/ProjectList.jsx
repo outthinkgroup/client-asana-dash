@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import ProjectStatus from "./ProjectStatus.js";
+import ProjectStatus from "./ProjectStatus.jsx";
 
 function ProjectList({ className }) {
   const [projects, setProjects] = React.useState([]);

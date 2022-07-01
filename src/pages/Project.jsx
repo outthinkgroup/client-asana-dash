@@ -3,8 +3,8 @@ import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
 
 import TaskDateRangeCalendar from "../components/TaskRangeCalendar";
-import ShowError from "../components/ShowError.js";
-import ClientTaskIcon from "../components/ClientTaskIcon.js";
+import ShowError from "../components/ShowError.jsx";
+import ClientTaskIcon from "../components/ClientTaskIcon.jsx";
 
 const CLIENT_TASK = {
   name: "Client Task",

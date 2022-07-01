@@ -1,5 +1,5 @@
 // import { render, screen } from "@testing-library/react";
-import { getDay, getMonth, parseDateString } from "./App.js";
+import { getDay, getMonth, parseDateString } from "./App.jsx";
 
 describe("Date Functions", () => {
   test("parseDateString creates array of numbers that correspond to date string", () => {

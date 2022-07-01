@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import Calendar, { CalendarWrapper } from "./Calendar.js";
-import CalendarIcon from "./CalendarIcon.js";
+import Calendar, { CalendarWrapper } from "./Calendar.jsx";
+import CalendarIcon from "./CalendarIcon.jsx";
 
 export default function TaskDateRangeCalendar({ startOn, dueOn }) {
   const ref = useRef();

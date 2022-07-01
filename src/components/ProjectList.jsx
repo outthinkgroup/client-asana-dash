@@ -38,15 +38,23 @@ function ProjectList({ className }) {
                   >
                     <h3>{project.name}</h3>
                   </Link>
-                  <button
-                    onClick={(e) => {
-                      const url = `${window.location.origin}/project/?id=${project.gid}`;
-                      e.stopPropagation();
-                      copyToClipboard(url);
-                    }}
-                  >
-                    copy link
-                  </button>
+                  <div class="actions">
+                    <button
+                      onClick={(e) => {
+                        const url = `${window.location.origin}/project/?id=${project.gid}`;
+                        e.stopPropagation();
+                        copyToClipboard(url);
+                      }}
+                    >
+                      copy link
+                    </button>
+                    <a
+                      style={{ background: `#f9f9f9`, color: `#1e3a8a` }}
+                      href={`https://app.asana.com/0/${project.gid}`}
+                    >
+                      View in asana
+                    </a>
+                  </div>
                 </header>
                 <ProjectStatus
                   initialStatus={project.current_status}
@@ -79,6 +87,11 @@ export default styled(ProjectList)`
     display: flex;
     align-items: center;
   }
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
   h3 {
     margin: 0;
     margin-bottom: 1em;
@@ -98,7 +111,9 @@ export default styled(ProjectList)`
       color: black;
     }
   }
-  button {
+  button,
+  .actions a {
+    font-size: 14px;
     cursor: pointer;
     background: #1e3a8a;
     color: white;
@@ -106,10 +121,11 @@ export default styled(ProjectList)`
     border-radius: 6px;
     appearance: none;
     border: 1px solid transparent;
-    height: calc(1.2em + 10px);
+    padding: 4px 8px;
     white-space: nowrap;
     &:hover {
       background: #2e468a;
+      color: white;
     }
     &:focus {
       box-shadow: 0 0 0 4px #1e3a8a44;

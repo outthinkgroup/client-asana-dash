@@ -1,10 +1,13 @@
 [dev]
-  command = "yarn start"
+  command = "yarn dev"
+  targetPort=5173
+
 [build]
 	functions = "functions"
 
 [functions]
 	node_bundler = "esbuild"
+
 
 [[redirects]]
   from = "/api/*"

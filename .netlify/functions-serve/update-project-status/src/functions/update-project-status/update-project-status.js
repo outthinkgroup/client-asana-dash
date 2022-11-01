@@ -1,9 +1,26 @@
 var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
@@ -49,82 +66,6 @@ var __privateSet = (obj, member, value, setter) => {
   setter ? setter.call(obj, value) : member.set(obj, value);
   return value;
 };
-
-// node_modules/dotenv/lib/main.js
-var require_main = __commonJS({
-  "node_modules/dotenv/lib/main.js"(exports, module2) {
-    var fs2 = require("fs");
-    var path = require("path");
-    var os = require("os");
-    function log(message) {
-      console.log(`[dotenv][DEBUG] ${message}`);
-    }
-    var NEWLINE = "\n";
-    var RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
-    var RE_NEWLINES = /\\n/g;
-    var NEWLINES_MATCH = /\r\n|\n|\r/;
-    function parse(src, options) {
-      const debug = Boolean(options && options.debug);
-      const obj = {};
-      src.toString().split(NEWLINES_MATCH).forEach(function(line, idx) {
-        const keyValueArr = line.match(RE_INI_KEY_VAL);
-        if (keyValueArr != null) {
-          const key = keyValueArr[1];
-          let val = keyValueArr[2] || "";
-          const end = val.length - 1;
-          const isDoubleQuoted = val[0] === '"' && val[end] === '"';
-          const isSingleQuoted = val[0] === "'" && val[end] === "'";
-          if (isSingleQuoted || isDoubleQuoted) {
-            val = val.substring(1, end);
-            if (isDoubleQuoted) {
-              val = val.replace(RE_NEWLINES, NEWLINE);
-            }
-          } else {
-            val = val.trim();
-          }
-          obj[key] = val;
-        } else if (debug) {
-          log(`did not match key and value when parsing line ${idx + 1}: ${line}`);
-        }
-      });
-      return obj;
-    }
-    function resolveHome(envPath) {
-      return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
-    }
-    function config2(options) {
-      let dotenvPath = path.resolve(process.cwd(), ".env");
-      let encoding = "utf8";
-      let debug = false;
-      if (options) {
-        if (options.path != null) {
-          dotenvPath = resolveHome(options.path);
-        }
-        if (options.encoding != null) {
-          encoding = options.encoding;
-        }
-        if (options.debug != null) {
-          debug = true;
-        }
-      }
-      try {
-        const parsed = parse(fs2.readFileSync(dotenvPath, { encoding }), { debug });
-        Object.keys(parsed).forEach(function(key) {
-          if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
-            process.env[key] = parsed[key];
-          } else if (debug) {
-            log(`"${key}" is already defined in \`process.env\` and will not be overwritten`);
-          }
-        });
-        return { parsed };
-      } catch (e2) {
-        return { error: e2 };
-      }
-    }
-    module2.exports.config = config2;
-    module2.exports.parse = parse;
-  }
-});
 
 // node_modules/web-streams-polyfill/dist/ponyfill.es2018.js
 var require_ponyfill_es2018 = __commonJS({
@@ -4479,12 +4420,87 @@ var init_multipart_parser = __esm({
   }
 });
 
-// functions/get-project/get-project.js
-var get_project_exports = {};
-__export(get_project_exports, {
+// node_modules/dotenv/lib/main.js
+var require_main = __commonJS({
+  "node_modules/dotenv/lib/main.js"(exports, module2) {
+    var fs2 = require("fs");
+    var path = require("path");
+    var os = require("os");
+    function log(message) {
+      console.log(`[dotenv][DEBUG] ${message}`);
+    }
+    var NEWLINE = "\n";
+    var RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
+    var RE_NEWLINES = /\\n/g;
+    var NEWLINES_MATCH = /\r\n|\n|\r/;
+    function parse(src, options) {
+      const debug = Boolean(options && options.debug);
+      const obj = {};
+      src.toString().split(NEWLINES_MATCH).forEach(function(line, idx) {
+        const keyValueArr = line.match(RE_INI_KEY_VAL);
+        if (keyValueArr != null) {
+          const key = keyValueArr[1];
+          let val = keyValueArr[2] || "";
+          const end = val.length - 1;
+          const isDoubleQuoted = val[0] === '"' && val[end] === '"';
+          const isSingleQuoted = val[0] === "'" && val[end] === "'";
+          if (isSingleQuoted || isDoubleQuoted) {
+            val = val.substring(1, end);
+            if (isDoubleQuoted) {
+              val = val.replace(RE_NEWLINES, NEWLINE);
+            }
+          } else {
+            val = val.trim();
+          }
+          obj[key] = val;
+        } else if (debug) {
+          log(`did not match key and value when parsing line ${idx + 1}: ${line}`);
+        }
+      });
+      return obj;
+    }
+    function resolveHome(envPath) {
+      return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
+    }
+    function config2(options) {
+      let dotenvPath = path.resolve(process.cwd(), ".env");
+      let encoding = "utf8";
+      let debug = false;
+      if (options) {
+        if (options.path != null) {
+          dotenvPath = resolveHome(options.path);
+        }
+        if (options.encoding != null) {
+          encoding = options.encoding;
+        }
+        if (options.debug != null) {
+          debug = true;
+        }
+      }
+      try {
+        const parsed = parse(fs2.readFileSync(dotenvPath, { encoding }), { debug });
+        Object.keys(parsed).forEach(function(key) {
+          if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
+            process.env[key] = parsed[key];
+          } else if (debug) {
+            log(`"${key}" is already defined in \`process.env\` and will not be overwritten`);
+          }
+        });
+        return { parsed };
+      } catch (e2) {
+        return { error: e2 };
+      }
+    }
+    module2.exports.config = config2;
+    module2.exports.parse = parse;
+  }
+});
+
+// functions/update-project-status/update-project-status.js
+var update_project_status_exports = {};
+__export(update_project_status_exports, {
   handler: () => handler
 });
-var import_dotenv = __toESM(require_main(), 1);
 
 // node_modules/node-fetch/src/index.js
 var import_node_http2 = __toESM(require("http"), 1);
@@ -5659,70 +5675,43 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
   });
 }
 
-// functions/get-project/get-project.js
+// functions/update-project-status/update-project-status.js
+var import_dotenv = __toESM(require_main(), 1);
 (0, import_dotenv.config)();
 var TOKEN = process.env.ASANA_TOKEN;
+var ADMIN_ID = process.env.ADMIN_ID;
 var BASEURL = `https://app.asana.com/api/1.0`;
 async function handler(event) {
-  const projId = event.queryStringParameters.project;
-  const { data: taskData } = await fetch(`${getProjectTasks(projId)}`, {
+  const { projId, newStatus, userId } = JSON.parse(event.body);
+  if (userId !== ADMIN_ID) {
+    return {
+      statusCode: 401,
+      body: "Not Authorized"
+    };
+  }
+  const { data: projectStatusInfo } = await fetch(`${updateProjectURL(projId)}`, {
+    method: "POST",
     headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${TOKEN}`
-    }
-  }).then((res) => res.json());
-  const { data: projectInfo } = await fetch(`${getProjectInfo(projId)}`, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`
-    }
-  }).then((res) => res.json());
-  const publicTasks = getValidTasks(taskData);
-  const tasksByDate = groupByDate(publicTasks);
-  const datesSorted = getDatesAndSort(tasksByDate);
+    },
+    body: JSON.stringify({
+      data: __spreadProps(__spreadValues({}, newStatus), { color: "green" })
+    })
+  }).then((res) => {
+    console.log(res);
+    return res.json();
+  }).catch(console.error);
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      project: projectInfo,
-      tasks: tasksByDate,
-      dates: datesSorted
-    })
+    body: JSON.stringify(projectStatusInfo)
   };
 }
-var taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,html_notes,num_subtasks,tags`;
-var projectFields = `opt_fields=gid,name,created_at,current_status`;
-function getProjectTasks(id) {
-  return `${BASEURL}/projects/${id}/tasks?${taskFields}`;
+function updateProjectURL(id) {
+  return `${BASEURL}/projects/${id}/project_statuses`;
 }
-function getProjectInfo(id) {
-  return `${BASEURL}/projects/${id}?${projectFields}`;
-}
-function getValidTasks(allTasks) {
-  return allTasks.filter((task) => {
-    var _a4;
-    if (task.completed)
-      return false;
-    const customFields = task.custom_fields;
-    const visibilityField = customFields.find((field) => field.name === "Visiblity");
-    if (!visibilityField)
-      return false;
-    console.log(visibilityField.enum_value);
-    return ((_a4 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a4.gid) === "1200954383416360";
-  });
-}
-function groupByDate(taskArray) {
-  return taskArray.reduce((acc, task) => {
-    const { due_on } = task;
-    const dueDate = due_on == null ? 0 : due_on;
-    if (!acc[dueDate]) {
-      acc[dueDate] = [];
-    }
-    acc[dueDate].push(task);
-    return acc;
-  }, {});
-}
-function getDatesAndSort(tasksByDate) {
-  return Object.keys(tasksByDate).filter((key) => key !== "0").sort((a, b) => a >= b ? 1 : -1);
-}
-module.exports = __toCommonJS(get_project_exports);
+module.exports = __toCommonJS(update_project_status_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
@@ -5730,4 +5719,4 @@ module.exports = __toCommonJS(get_project_exports);
 /*! fetch-blob. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
 /*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
 /*! node-domexception. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
-//# sourceMappingURL=get-project.js.map
+//# sourceMappingURL=update-project-status.js.map

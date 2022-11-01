@@ -4479,9 +4479,9 @@ var init_multipart_parser = __esm({
   }
 });
 
-// functions/get-project/get-project.js
-var get_project_exports = {};
-__export(get_project_exports, {
+// functions/list-projects/list-projects.js
+var list_projects_exports = {};
+__export(list_projects_exports, {
   handler: () => handler
 });
 var import_dotenv = __toESM(require_main(), 1);
@@ -5659,70 +5659,27 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
   });
 }
 
-// functions/get-project/get-project.js
+// functions/list-projects/list-projects.js
 (0, import_dotenv.config)();
 var TOKEN = process.env.ASANA_TOKEN;
 var BASEURL = `https://app.asana.com/api/1.0`;
 async function handler(event) {
   const projId = event.queryStringParameters.project;
-  const { data: taskData } = await fetch(`${getProjectTasks(projId)}`, {
+  const { data: projects } = await fetch(`${getProjects(projId)}`, {
     headers: {
       Authorization: `Bearer ${TOKEN}`
     }
   }).then((res) => res.json());
-  const { data: projectInfo } = await fetch(`${getProjectInfo(projId)}`, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`
-    }
-  }).then((res) => res.json());
-  const publicTasks = getValidTasks(taskData);
-  const tasksByDate = groupByDate(publicTasks);
-  const datesSorted = getDatesAndSort(tasksByDate);
+  console.log(projects);
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      project: projectInfo,
-      tasks: tasksByDate,
-      dates: datesSorted
-    })
+    body: JSON.stringify(projects.filter((p) => !p.archived))
   };
 }
-var taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,html_notes,num_subtasks,tags`;
-var projectFields = `opt_fields=gid,name,created_at,current_status`;
-function getProjectTasks(id) {
-  return `${BASEURL}/projects/${id}/tasks?${taskFields}`;
+function getProjects() {
+  return `${BASEURL}/projects/?opt_fields=archived,name,created_at,current_status&workspace=23156169120585`;
 }
-function getProjectInfo(id) {
-  return `${BASEURL}/projects/${id}?${projectFields}`;
-}
-function getValidTasks(allTasks) {
-  return allTasks.filter((task) => {
-    var _a4;
-    if (task.completed)
-      return false;
-    const customFields = task.custom_fields;
-    const visibilityField = customFields.find((field) => field.name === "Visiblity");
-    if (!visibilityField)
-      return false;
-    console.log(visibilityField.enum_value);
-    return ((_a4 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a4.gid) === "1200954383416360";
-  });
-}
-function groupByDate(taskArray) {
-  return taskArray.reduce((acc, task) => {
-    const { due_on } = task;
-    const dueDate = due_on == null ? 0 : due_on;
-    if (!acc[dueDate]) {
-      acc[dueDate] = [];
-    }
-    acc[dueDate].push(task);
-    return acc;
-  }, {});
-}
-function getDatesAndSort(tasksByDate) {
-  return Object.keys(tasksByDate).filter((key) => key !== "0").sort((a, b) => a >= b ? 1 : -1);
-}
-module.exports = __toCommonJS(get_project_exports);
+module.exports = __toCommonJS(list_projects_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
@@ -5730,4 +5687,4 @@ module.exports = __toCommonJS(get_project_exports);
 /*! fetch-blob. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
 /*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
 /*! node-domexception. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
-//# sourceMappingURL=get-project.js.map
+//# sourceMappingURL=list-projects.js.map

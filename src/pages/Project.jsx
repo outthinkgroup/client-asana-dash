@@ -67,7 +67,7 @@ function Project({ className }) {
     <div className={`App ${className}`}>
       <header>
         <div className="wrapper">
-          <h1>Outthink Asana Client Dashboard</h1>
+          <h1>Out:think Client Timeline</h1>
           <h2>{project?.name}</h2>
         </div>
       </header>

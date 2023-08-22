@@ -1,5 +1,4 @@
 import React from "react";
-
 import { login } from "./utils.js";
 import { AuthContext } from "./Context.jsx";
 
@@ -20,8 +19,13 @@ export default function LoginForm({ onSubmitAction }) {
     setLoading(true);
     const user = await login(form.email, form.password);
     setLoading(false);
-    setIsUserSignedIn(Boolean(user.user_metadata.full_name));
-    onSubmitAction();
+    if (!user) {
+      setIsUserSignedIn(false);
+			window.alert("Not a valid Login")
+    } else {
+      setIsUserSignedIn(Boolean(user.user_metadata.full_name));
+      onSubmitAction();
+    }
   }
   return (
     <form onSubmit={loginUser}>

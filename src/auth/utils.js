@@ -23,19 +23,21 @@ export async function login(username, password) {
     `${api}/token?grant_type=password&username=${username}&password=${password}`,
     {
       method: "POST",
-    }
+    },
   )
     .then((res) => res.json())
     .catch(console.error);
 
   const { access_token } = data;
   const userData = await getUser(access_token);
+  if (userData.hasOwnProperty("user_metadata")) {
+    const identity = {
+      ...data,
+      user: userData,
+    };
+		localStorage.setItem("identity", JSON.stringify(identity));
+		return identity.user;
+  }
 
-  const identity = {
-    ...data,
-    user: userData,
-  };
-
-  localStorage.setItem("identity", JSON.stringify(identity));
-  return identity.user;
+	return null
 }

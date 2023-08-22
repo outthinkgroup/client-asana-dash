@@ -1,5 +1,5 @@
 [dev]
-  command = "yarn dev"
+  command = "vite"
   targetPort=5173
 
 [build]
@@ -15,6 +15,6 @@
   status = 200
 
 [[redirects]]
-	from = "/*"
+	from = "/project/*"
 	to = "/"
 	status = 200

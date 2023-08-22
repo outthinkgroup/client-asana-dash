@@ -5670,7 +5670,6 @@ async function handler(event) {
       Authorization: `Bearer ${TOKEN}`
     }
   }).then((res) => res.json());
-  console.log(projects);
   return {
     statusCode: 200,
     body: JSON.stringify(projects.filter((p) => !p.archived))

@@ -5664,6 +5664,8 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 var TOKEN = process.env.ASANA_TOKEN;
 var BASEURL = `https://app.asana.com/api/1.0`;
 async function handler(event) {
+  var _a4;
+  let resData = {};
   const projId = event.queryStringParameters.project;
   const { data: taskData } = await fetch(`${getProjectTasks(projId)}`, {
     headers: {
@@ -5678,22 +5680,37 @@ async function handler(event) {
   const publicTasks = getValidTasks(taskData);
   const tasksByDate = groupByDate(publicTasks);
   const datesSorted = getDatesAndSort(tasksByDate);
+  resData = {
+    project: projectInfo,
+    tasks: tasksByDate,
+    dates: datesSorted
+  };
+  if ((_a4 = projectInfo.project_brief) == null ? void 0 : _a4.gid) {
+    const { data: projectBrief } = await fetch(`${getProjectBrief(projectInfo.project_brief.gid)}`, {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    }).then((res) => res.json()).catch((e2) => console.log({ e: e2 }));
+    resData.brief = {};
+    resData.brief.title = projectBrief.title;
+    resData.brief.html = formatBriefMarkup(projectBrief.html_text);
+  }
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      project: projectInfo,
-      tasks: tasksByDate,
-      dates: datesSorted
-    })
+    body: JSON.stringify(resData)
   };
 }
 var taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,html_notes,num_subtasks,tags`;
-var projectFields = `opt_fields=gid,name,created_at,current_status`;
+var projectFields = `opt_fields=gid,name,created_at,current_status,project_brief`;
+var briefFields = `opt_fields=title,html_text`;
 function getProjectTasks(id) {
   return `${BASEURL}/projects/${id}/tasks?${taskFields}`;
 }
 function getProjectInfo(id) {
   return `${BASEURL}/projects/${id}?${projectFields}`;
+}
+function getProjectBrief(id) {
+  return `${BASEURL}/project_briefs/${id}?${briefFields}`;
 }
 function getValidTasks(allTasks) {
   return allTasks.filter((task) => {
@@ -5704,7 +5721,6 @@ function getValidTasks(allTasks) {
     const visibilityField = customFields.find((field) => field.name === "Visiblity");
     if (!visibilityField)
       return false;
-    console.log(visibilityField.enum_value);
     return ((_a4 = visibilityField == null ? void 0 : visibilityField.enum_value) == null ? void 0 : _a4.gid) === "1200954383416360";
   });
 }
@@ -5721,6 +5737,9 @@ function groupByDate(taskArray) {
 }
 function getDatesAndSort(tasksByDate) {
   return Object.keys(tasksByDate).filter((key) => key !== "0").sort((a, b) => a >= b ? 1 : -1);
+}
+function formatBriefMarkup(html) {
+  return html;
 }
 module.exports = __toCommonJS(get_project_exports);
 // Annotate the CommonJS export names for ESM import in node:

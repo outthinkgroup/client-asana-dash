@@ -5,11 +5,11 @@ export default function CalendarIcon() {
     <span>
       <svg
         style={{ width: `1em` }}
-        ariaHidden="true"
+        aria-hidden="true"
         focusable="false"
-        dataPrefix="far"
-        dataIcon="calendar-alt"
-        class="svg-inline--fa fa-calendar-alt fa-w-14"
+        data-Prefix="far"
+        data-icon="calendar-alt"
+        className="svg-inline--fa fa-calendar-alt fa-w-14"
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 448 512"

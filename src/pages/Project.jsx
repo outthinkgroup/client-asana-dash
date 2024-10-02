@@ -5,196 +5,201 @@ import DotLoader from "react-spinners/DotLoader";
 import TaskDateRangeCalendar from "../components/TaskRangeCalendar";
 import ShowError from "../components/ShowError.jsx";
 import ClientTaskIcon from "../components/ClientTaskIcon.jsx";
+import ProjectOverview from "../components/ProjectOverview.jsx";
 
 const CLIENT_TASK = {
-  name: "Client Task",
-  trueId: "1200972896299432",
+	name: "Client Task",
+	trueId: "1200972896299432",
 };
 
 // Used for filtering the task list by a custom field value
 const filterFunctions = {
-  all: () => true,
-  client: (task) => isClientTask(task.custom_fields),
-  agency: (task) => !isClientTask(task.custom_fields),
+	all: () => true,
+	client: (task) => isClientTask(task.custom_fields),
+	agency: (task) => !isClientTask(task.custom_fields),
 };
 
 function Project({ className }) {
-  const [projectData, setProjectData] = useState(null);
-  const [appError, setAppError] = useState(false);
+	const [projectData, setProjectData] = useState(null);
+	const [appError, setAppError] = useState(false);
 
-  const [filter, setFilter] = useState("all");
+	const [filter, setFilter] = useState("all");
 
-  useLayoutEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    getData(params)
-      .then(setProjectData)
-      .catch((e) => {
-        setAppError(e.toString());
-      });
-  }, []);
+	useLayoutEffect(() => {
+		const params = new URLSearchParams(window.location.search);
+		getData(params)
+			.then(setProjectData)
+			.catch((e) => {
+				setAppError(e.toString());
+			});
+	}, []);
 
-  const { project, tasks } = projectData ? projectData : {};
+	const { project, tasks } = projectData ? projectData : {};
 
-  // filter tasks and dates based on the filter state
-  const [filteredDates, filteredTasks] = useMemo(() => {
-    if (!tasks) return [];
-    const tasksByDate = Object.keys(tasks).reduce((tasksObj, date) => {
-      const filteredTasks = tasks[date].filter(filterFunctions[filter]);
-      if (filteredTasks.length) {
-        tasksObj[date] = filteredTasks;
-      }
-      return tasksObj;
-    }, {});
+	// filter tasks and dates based on the filter state
+	const [filteredDates, filteredTasks] = useMemo(() => {
+		if (!tasks) return [];
+		const tasksByDate = Object.keys(tasks).reduce((tasksObj, date) => {
+			const filteredTasks = tasks[date].filter(filterFunctions[filter]);
+			if (filteredTasks.length) {
+				tasksObj[date] = filteredTasks;
+			}
+			return tasksObj;
+		}, {});
 
-    const dates = Object.keys(tasksByDate);
+		const dates = Object.keys(tasksByDate);
 
-    return [dates, tasksByDate];
-  }, [tasks, filter]);
+		return [dates, tasksByDate];
+	}, [tasks, filter]);
 
-  if (!filteredTasks) {
-    return (
-      <LoaderFrame>
-        {appError ? (
-          <ShowError message={appError} />
-        ) : (
-          <DotLoader color={"#1E3A8A"} />
-        )}
-      </LoaderFrame>
-    );
-  }
+	if (!filteredTasks) {
+		return (
+			<LoaderFrame>
+				{appError ? (
+					<ShowError message={appError} />
+				) : (
+					<DotLoader color={"#1E3A8A"} />
+				)}
+			</LoaderFrame>
+		);
+	}
 
-  return (
-    <div className={`App ${className}`}>
-      <header>
-        <div className="wrapper">
-          <h1>Out:think Client Timeline</h1>
-          <h2>{project?.name}</h2>
-        </div>
-      </header>
+	return (
+		<div className={`App ${className}`}>
+			<header>
+				<div className="wrapper">
+					<h1>Out:think Client Timeline</h1>
+					<h2>{project?.name}</h2>
+				</div>
+			</header>
 
-      <TopBar className=" wrapper">
-        <div className="filters">
-          <label>
-            <span>Show</span>
-            <select onChange={(e) => setFilter(e.target.value)} value={filter}>
-              {Object.keys(filterFunctions).map((filterName) => (
-                <option key={filterName} value={filterName}>
-                  {filterName} tasks
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <ul className="key">
-          <li>
-            <ClientTaskIcon
-              color="#FF8F69"
-              className="special-identifier-icon"
-            />
-            Client Task
-          </li>
-        </ul>
-      </TopBar>
+			<div className="wrapper">
+				<ProjectOverview brief={projectData.brief} />
+			</div>
 
-      <div className="wrapper">
-        {project.current_status && (
-          <>
-            <p className="heading-label">Status</p>
-            <h2>{project.current_status?.title}</h2>
-          </>
-        )}
-        <DateGroups>
-          {filteredDates
-            .filter((a) => {
-              // Bugs out without
-              return a !== "0";
-            })
-            .sort()
-            .map((date) => {
-              return (
-                <li key={date}>
-                  <TaskGroup date={date} tasks={filteredTasks[date]} />
-                </li>
-              );
-            })}
-          <li>{tasks[0] && <TaskGroup tasks={filteredTasks[0]} />}</li>
-        </DateGroups>
-      </div>
-    </div>
-  );
+			<TopBar className=" wrapper">
+				<div className="filters">
+					<label>
+						<span>Show</span>
+						<select onChange={(e) => setFilter(e.target.value)} value={filter}>
+							{Object.keys(filterFunctions).map((filterName) => (
+								<option key={filterName} value={filterName}>
+									{filterName} tasks
+								</option>
+							))}
+						</select>
+					</label>
+				</div>
+				<ul className="key">
+					<li>
+						<ClientTaskIcon
+							color="#FF8F69"
+							className="special-identifier-icon"
+						/>
+						Client Task
+					</li>
+				</ul>
+			</TopBar>
+
+			<div className="wrapper">
+				{project.current_status && (
+					<>
+						<p className="heading-label">Status</p>
+						<h2>{project.current_status?.title}</h2>
+					</>
+				)}
+				<DateGroups>
+					{filteredDates
+						.filter((a) => {
+							// Bugs out without
+							return a !== "0";
+						})
+						.sort()
+						.map((date) => {
+							return (
+								<li key={date}>
+									<TaskGroup date={date} tasks={filteredTasks[date]} />
+								</li>
+							);
+						})}
+					<li>{tasks[0] && <TaskGroup tasks={filteredTasks[0]} />}</li>
+				</DateGroups>
+			</div>
+		</div>
+	);
 }
 
 function TaskGroup({ tasks, date }) {
-  const month = date ? getMonth(date) : null;
-  const { day, dayOfWeek } = date ? getDay(date) : {};
-  return (
-    <div className="date-group">
-      <h3>
-        {typeof date == "string" ? (
-          <>
-            <span>
-              <div className="dayofweek">{dayOfWeek}</div>
-            </span>
-            <div className="day">{day}</div>
-            <span className="month">{month}</span>
-          </>
-        ) : (
-          "No Date Given"
-        )}
-      </h3>
-      <ul className="tasks">
-        {tasks &&
-          tasks.map((task) => {
-            return (
-              <Task
-                key={task.gid}
-                clientTask={isClientTask(task.custom_fields)}
-              >
-                {isClientTask(task.custom_fields) ? (
-                  <ClientTaskIcon
-                    title="Client Task"
-                    className="special-identifier-icon "
-                    color={`#FF8F69`}
-                  />
-                ) : null}
-                <h4>{task.name}</h4>
-                <DateRange task={task} />
-                {task.html_notes && (
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: task.html_notes.replace("\n", "</br>"),
-                    }}
-                  />
-                )}
-              </Task>
-            );
-          })}
-      </ul>
-    </div>
-  );
+	const month = date ? getMonth(date) : null;
+	const { day, dayOfWeek } = date ? getDay(date) : {};
+	return (
+		<div className="date-group">
+			<h3>
+				{typeof date == "string" ? (
+					<>
+						<span>
+							<div className="dayofweek">{dayOfWeek}</div>
+						</span>
+						<div className="day">{day}</div>
+						<span className="month">{month}</span>
+					</>
+				) : (
+					"No Date Given"
+				)}
+			</h3>
+			<ul className="tasks">
+				{tasks &&
+					tasks.map((task) => {
+						return (
+							<Task
+								key={task.gid}
+								clientTask={isClientTask(task.custom_fields)}
+							>
+								{isClientTask(task.custom_fields) ? (
+									<ClientTaskIcon
+										title="Client Task"
+										className="special-identifier-icon "
+										color={`#FF8F69`}
+									/>
+								) : null}
+								<h4>{task.name}</h4>
+								<DateRange task={task} />
+								{task.html_notes && (
+									<p
+										dangerouslySetInnerHTML={{
+											__html: task.html_notes.replace("\n", "</br>"),
+										}}
+									/>
+								)}
+							</Task>
+						);
+					})}
+			</ul>
+		</div>
+	);
 }
 function DateRange({ task }) {
-  return task.start_on && task.due_on ? (
-    <DateRangeWrapper>
-      <div>
-        <div className="date-range">
-          <span>
-            {getMonth(task.start_on, false)} {getDay(task.start_on).day}
-          </span>{" "}
-          -
-          <span>
-            {" "}
-            {getMonth(task.due_on, false)} {getDay(task.due_on).day}
-          </span>
-        </div>
-      </div>
+	return task.start_on && task.due_on ? (
+		<DateRangeWrapper>
+			<div>
+				<div className="date-range">
+					<span>
+						{getMonth(task.start_on, false)} {getDay(task.start_on).day}
+					</span>{" "}
+					-
+					<span>
+						{" "}
+						{getMonth(task.due_on, false)} {getDay(task.due_on).day}
+					</span>
+				</div>
+			</div>
 
-      <TaskDateRangeCalendar
-        startOn={new Date(...parseDateString(task.start_on))}
-        dueOn={new Date(...parseDateString(task.due_on))}
-      />
-    </DateRangeWrapper>
-  ) : null;
+			<TaskDateRangeCalendar
+				startOn={new Date(...parseDateString(task.start_on))}
+				dueOn={new Date(...parseDateString(task.due_on))}
+			/>
+		</DateRangeWrapper>
+	) : null;
 }
 
 export default styled(Project)`
@@ -344,7 +349,7 @@ const Task = styled.li`
   > * {
     margin: 0;
   }
-  ${({ clientTask }) => {}}
+  ${({ clientTask }) => { }}
   .date-range {
     background: #aac0de33;
     font-size: 12px;
@@ -415,47 +420,47 @@ const TopBar = styled.div`
 `;
 
 async function getData(query) {
-  if (query && query.has("id") && query.get("id")) {
-    const projId = query.get("id");
-    return fetch(
-      `${window.location.origin}/api/get-project?project=${projId}`
-    ).then((res) => res.json());
-  } else {
-    throw new Error("No Project found");
-  }
+	if (query && query.has("id") && query.get("id")) {
+		const projId = query.get("id");
+		return fetch(
+			`${window.location.origin}/api/get-project?project=${projId}`,
+		).then((res) => res.json());
+	} else {
+		throw new Error("No Project found");
+	}
 }
 
 export function getMonth(dateString, isLong = true) {
-  const dateArr = parseDateString(dateString);
-  const date = new Date(...dateArr); // 2009-11-10
-  const month = date.toLocaleString("default", {
-    month: isLong ? "long" : "short",
-  });
-  return month;
+	const dateArr = parseDateString(dateString);
+	const date = new Date(...dateArr); // 2009-11-10
+	const month = date.toLocaleString("default", {
+		month: isLong ? "long" : "short",
+	});
+	return month;
 }
 
 export function getDay(dateString, isLong = true) {
-  const dateArr = parseDateString(dateString);
-  const date = new Date(...dateArr);
-  const day = date.getDate();
-  const dayOfWeek = date.toLocaleString("default", {
-    weekday: isLong ? "long" : "short",
-  });
-  return { day, dayOfWeek };
+	const dateArr = parseDateString(dateString);
+	const date = new Date(...dateArr);
+	const day = date.getDate();
+	const dayOfWeek = date.toLocaleString("default", {
+		weekday: isLong ? "long" : "short",
+	});
+	return { day, dayOfWeek };
 }
 
 export function parseDateString(dateString) {
-  const [year, day, month] = dateString.split("-");
-  return [Number(year), Number(day) - 1, Number(month)];
+	const [year, day, month] = dateString.split("-");
+	return [Number(year), Number(day) - 1, Number(month)];
 }
 
 function isClientTask(customFields) {
-  const clientTaskField = customFields.find(
-    (field) => field.name === CLIENT_TASK.name
-  );
-  if (!clientTaskField) return false;
-  return (
-    Boolean(clientTaskField.enum_value) &&
-    clientTaskField.enum_value.gid === CLIENT_TASK.trueId
-  ); //if the id of fields value matches the yes enum id
+	const clientTaskField = customFields.find(
+		(field) => field.name === CLIENT_TASK.name,
+	);
+	if (!clientTaskField) return false;
+	return (
+		Boolean(clientTaskField.enum_value) &&
+		clientTaskField.enum_value.gid === CLIENT_TASK.trueId
+	); //if the id of fields value matches the yes enum id
 }

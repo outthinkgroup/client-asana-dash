@@ -8,11 +8,11 @@ export default function ClientTaskIcon({ className, title, color }) {
       style={{ "--special-color": color }}
     >
       <svg
-        ariaHidden="true"
+        aria-hidden="true"
         focusable="false"
-        dataPrefix="fas"
-        dataIcon="user-circle"
-        class="svg-inline--fa fa-user-circle fa-w-16"
+        data-prefix="fas"
+        data-icon="user-circle"
+        className="svg-inline--fa fa-user-circle fa-w-16"
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 496 512"

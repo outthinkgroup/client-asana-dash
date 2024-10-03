@@ -5695,6 +5695,14 @@ async function handler(event) {
     resData.brief.title = projectBrief.title;
     resData.brief.html = formatBriefMarkup(projectBrief.html_text);
   }
+  if (projectInfo.gid) {
+    const { data: projectUpdates } = await fetch(`${getProjectUpdates(projectInfo.gid)}`, {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    }).then((res) => res.json()).catch((e2) => console.log({ e: e2 }));
+    resData.updates = projectUpdates;
+  }
   return {
     statusCode: 200,
     body: JSON.stringify(resData)
@@ -5703,8 +5711,12 @@ async function handler(event) {
 var taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,html_notes,num_subtasks,tags`;
 var projectFields = `opt_fields=gid,name,created_at,current_status,project_brief`;
 var briefFields = `opt_fields=title,html_text`;
+var updateFields = `opt_fields=title,html_text,created_at,author.name`;
 function getProjectTasks(id) {
   return `${BASEURL}/projects/${id}/tasks?${taskFields}`;
+}
+function getProjectUpdates(id) {
+  return `${BASEURL}/projects/${id}/project_statuses?${updateFields}`;
 }
 function getProjectInfo(id) {
   return `${BASEURL}/projects/${id}?${projectFields}`;

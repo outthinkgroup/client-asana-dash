@@ -38,7 +38,7 @@ function ProjectList({ className }) {
                   >
                     <h3>{project.name}</h3>
                   </Link>
-                  <div class="actions">
+                  <div className="actions">
                     <button
                       onClick={(e) => {
                         const url = `${window.location.origin}/project/?id=${project.gid}`;

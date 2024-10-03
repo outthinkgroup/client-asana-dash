@@ -33,8 +33,8 @@ function Project({ className }) {
 				setAppError(e.toString());
 			});
 	}, []);
-
-	const { project, tasks } = projectData ? projectData : {};
+	console.log({projectData})
+	const { project, tasks, updates } = projectData ? projectData : {};
 
 	// filter tasks and dates based on the filter state
 	const [filteredDates, filteredTasks] = useMemo(() => {
@@ -74,7 +74,7 @@ function Project({ className }) {
 			</header>
 
 			<div className="wrapper">
-				<ProjectOverview brief={projectData.brief} />
+				<ProjectOverview brief={projectData.brief} updates={updates} />
 			</div>
 
 			<TopBar className=" wrapper">

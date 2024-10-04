@@ -77,9 +77,9 @@ export async function handler(event) {
 }
 
 const taskFields = `opt_fields=gid,start_on,assignee,assignee_status,created_at,completed,completed_at,custom_fields,dependents,dependencies,due_on,name,html_notes,num_subtasks,tags`;
-const projectFields = `opt_fields=gid,name,created_at,current_status,project_brief`;
+const projectFields = `opt_fields=gid,name,created_at,current_status,project_brief,color`;
 const briefFields = `opt_fields=title,html_text`;
-const updateFields = `opt_fields=title,html_text,created_at,author.name`;
+const updateFields = `opt_fields=title,html_text,created_at,author.name,color`;
 
 function getProjectTasks(id) {
   return `${BASEURL}/projects/${id}/tasks?${taskFields}`;

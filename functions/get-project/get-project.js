@@ -37,6 +37,7 @@ export async function handler(event) {
 
   //Project Brief
   if (projectInfo.project_brief?.gid) {
+		console.log('brief id:', projectInfo.project_brief?.gid)
     const { data: projectBrief } = await fetch(
       `${getProjectBrief(projectInfo.project_brief.gid)}`,
       {

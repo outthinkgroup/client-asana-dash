@@ -5,6 +5,7 @@ config();
 
 const TOKEN = process.env.ASANA_TOKEN;
 const BASEURL = `https://app.asana.com/api/1.0`;
+const WORKSPACE_ID = process.env.WORKSPACE_ID;
 
 export async function handler(event) {
   const projId = event.queryStringParameters.project;
@@ -22,5 +23,5 @@ export async function handler(event) {
 }
 
 function getProjects() {
-  return `${BASEURL}/projects/?opt_fields=archived,name,created_at,current_status&workspace=23156169120585`;
+  return `${BASEURL}/projects/?opt_fields=archived,name,created_at,current_status&workspace=${WORKSPACE_ID}`;
 }

@@ -1,31 +1,29 @@
-import { useLayoutEffect, useMemo, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useLayoutEffect, useState } from "react";
+
+import {
+	Route,
+	Switch,
+	Redirect,
+	useRouteMatch,
+	useParams,
+} from "react-router-dom";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
-
+import ProjectBrief from "./ProjectBrief.jsx"
+import ProjectUpdates from "./ProjectUpdates.jsx";
 import ShowError from "../../components/ShowError.jsx";
-import ProjectOverview from "../../components/ProjectOverview.jsx";
+import ProjectHeader from "./ProjectHeader.jsx";
 import Timeline from "./TimeLine.jsx";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min.js";
 
-const CLIENT_TASK = {
-	name: "Client Task",
-	trueId: "1200972896299432",
-};
-
-// Used for filtering the task list by a custom field value
-const filterFunctions = {
-	all: () => true,
-	client: (task) => isClientTask(task.custom_fields),
-	agency: (task) => !isClientTask(task.custom_fields),
-};
 
 function Project({ className }) {
-	const {id:projectId} = useParams()
+	const { id: projectId } = useParams();
+	let { path, url } = useRouteMatch();
+
 	const [projectData, setProjectData] = useState(null);
 	const [appError, setAppError] = useState(false);
 
-
+	console.log(projectData)
 	useLayoutEffect(() => {
 		getData(projectId)
 			.then(setProjectData)
@@ -34,8 +32,7 @@ function Project({ className }) {
 			});
 	}, [projectId]);
 
-	console.log({projectData})
-	const { project, tasks, updates, brief } = projectData ? projectData : {};
+	const { project, tasks, updates, brief, milestones, attachments } = projectData ? projectData : {};
 
 	if (!projectData) {
 		return (
@@ -50,24 +47,29 @@ function Project({ className }) {
 	}
 	return (
 		<div className={`App ${className}`}>
-			<header>
-				<div className="wrapper">
-					<h1>Out:think Client Timeline</h1>
-					<h2>{project?.name}</h2>
-				</div>
-			</header>
 
-		<div className="wrapper">
-				<ProjectOverview brief={brief} updates={updates} />
-			</div>
+			<ProjectHeader project={project}/>
 
 			<div>
+				<Switch>
 
-		<Switch>
-			<Timeline tasks={tasks}/>
-		</Switch>
-		</div>
+					<Route path={`${path}`} exact>
+						<Redirect to={`${url}/updates`} />
+					</Route>
 
+					<Route path={`${path}/updates`}>
+						<ProjectUpdates updates={updates}/>
+					</Route>
+
+					<Route path={`${path}/timeline`}>
+						<Timeline tasks={tasks} />
+					</Route>
+
+					<Route path={`${path}/brief`}>
+						<ProjectBrief brief={brief}	milestones={milestones} attachments={attachments}/>
+					</Route>
+				</Switch>
+			</div>
 		</div>
 	);
 }
@@ -75,6 +77,8 @@ function Project({ className }) {
 export default styled(Project)`
   header {
     background: #eff6ff;
+		
+		border-bottom:1px solid #CEE2FB;
 
     h1 {
       color: #1e3a8a;
@@ -142,8 +146,6 @@ export default styled(Project)`
   }
 `;
 
-
-
 const LoaderFrame = styled.div`
   width: 100vw;
   position: fixed;
@@ -164,5 +166,3 @@ async function getData(projectId) {
 		throw new Error("No Project found");
 	}
 }
-
-

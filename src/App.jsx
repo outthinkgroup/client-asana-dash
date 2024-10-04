@@ -1,11 +1,16 @@
 import React from "react";
 import "./index.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 import AuthContextProvider from "./auth/Context.jsx";
 
 //Pages
-import Project from "./pages/Project.jsx";
+import Project from "./pages/Project/index.jsx";
 import Home from "./pages/Home.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
@@ -17,8 +22,8 @@ export default function App() {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/project/">
-            <Project />
+          <Route path="/project/:id" >
+            <Project/>
           </Route>
           <Route path="*">
             <NotFound />

@@ -32,8 +32,7 @@ function ProjectList({ className }) {
                 <header>
                   <Link
                     to={{
-                      pathname: "/project",
-                      search: `?id=${project.gid}`,
+                      pathname: `/project/${project.gid}`,
                     }}
                   >
                     <h3>{project.name}</h3>
@@ -41,7 +40,7 @@ function ProjectList({ className }) {
                   <div className="actions">
                     <button
                       onClick={(e) => {
-                        const url = `${window.location.origin}/project/?id=${project.gid}`;
+                        const url = `${window.location.origin}/project/${project.gid}`;
                         e.stopPropagation();
                         copyToClipboard(url);
                       }}

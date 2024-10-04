@@ -2,10 +2,10 @@ import { useLayoutEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
 
-import TaskDateRangeCalendar from "../components/TaskRangeCalendar";
-import ShowError from "../components/ShowError.jsx";
-import ClientTaskIcon from "../components/ClientTaskIcon.jsx";
-import ProjectOverview from "../components/ProjectOverview.jsx";
+import TaskDateRangeCalendar from "../../components/TaskRangeCalendar";
+import {getMonth, parseDateString, getDay} from  "../../dateUtils.js"
+
+import ClientTaskIcon from "../../components/ClientTaskIcon.jsx";
 
 const CLIENT_TASK = {
 	name: "Client Task",
@@ -18,25 +18,8 @@ const filterFunctions = {
 	client: (task) => isClientTask(task.custom_fields),
 	agency: (task) => !isClientTask(task.custom_fields),
 };
-
-function Project({ className }) {
-	const [projectData, setProjectData] = useState(null);
-	const [appError, setAppError] = useState(false);
-
+export default function Timeline({ tasks }) {
 	const [filter, setFilter] = useState("all");
-
-	useLayoutEffect(() => {
-		const params = new URLSearchParams(window.location.search);
-		getData(params)
-			.then(setProjectData)
-			.catch((e) => {
-				setAppError(e.toString());
-			});
-	}, []);
-	console.log({projectData})
-	const { project, tasks, updates } = projectData ? projectData : {};
-
-	// filter tasks and dates based on the filter state
 	const [filteredDates, filteredTasks] = useMemo(() => {
 		if (!tasks) return [];
 		const tasksByDate = Object.keys(tasks).reduce((tasksObj, date) => {
@@ -52,31 +35,9 @@ function Project({ className }) {
 		return [dates, tasksByDate];
 	}, [tasks, filter]);
 
-	if (!filteredTasks) {
-		return (
-			<LoaderFrame>
-				{appError ? (
-					<ShowError message={appError} />
-				) : (
-					<DotLoader color={"#1E3A8A"} />
-				)}
-			</LoaderFrame>
-		);
-	}
 
 	return (
-		<div className={`App ${className}`}>
-			<header>
-				<div className="wrapper">
-					<h1>Out:think Client Timeline</h1>
-					<h2>{project?.name}</h2>
-				</div>
-			</header>
-
-			<div className="wrapper">
-				<ProjectOverview brief={projectData.brief} updates={updates} />
-			</div>
-
+		<>
 			<TopBar className=" wrapper">
 				<div className="filters">
 					<label>
@@ -102,12 +63,6 @@ function Project({ className }) {
 			</TopBar>
 
 			<div className="wrapper">
-				{project.current_status && (
-					<>
-						<p className="heading-label">Status</p>
-						<h2>{project.current_status?.title}</h2>
-					</>
-				)}
 				<DateGroups>
 					{filteredDates
 						.filter((a) => {
@@ -125,7 +80,7 @@ function Project({ className }) {
 					<li>{tasks[0] && <TaskGroup tasks={filteredTasks[0]} />}</li>
 				</DateGroups>
 			</div>
-		</div>
+		</>
 	);
 }
 
@@ -178,6 +133,7 @@ function TaskGroup({ tasks, date }) {
 		</div>
 	);
 }
+
 function DateRange({ task }) {
 	return task.start_on && task.due_on ? (
 		<DateRangeWrapper>
@@ -202,76 +158,46 @@ function DateRange({ task }) {
 	) : null;
 }
 
-export default styled(Project)`
-  header {
-    background: #eff6ff;
-
-    h1 {
-      color: #1e3a8a;
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 0.4em;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 30px;
-      font-weight: 300;
-    }
-    margin-bottom: 40px;
+const TopBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
   }
-  .wrapper {
-    padding: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .heading-label {
-    font-size: 13px;
-    margin-bottom: 0.4em;
+  li {
+    display: flex;
+    gap: 4px;
     font-weight: bold;
-    color: #1e3a8a;
-    display: inline-block;
-    background: #eff6ff;
-    padding: 5px;
+  }
+  &.wrapper {
+    padding-bottom: 0;
+  }
+  label {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  select {
+    padding-inline: 0.64rem;
     border-radius: 6px;
-    & + {
-      h2,
-      h3,
-      h4,
-      h5 {
-        margin-top: 0px;
-      }
-    }
-  }
-
-  .special-identifier-icon {
-    height: 1em;
-    color: var(--special-color);
-    @media (min-width: 762px) {
-      position: absolute;
-      right: calc(100% + 8px);
-      top: 4px;
-    }
-    @media (max-width: 760px) {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      &::after {
-        content: attr(title);
-        font-weight: bold;
-      }
-    }
-
-    svg {
-      width: 1em;
-    }
-  }
-  .key .special-identifier-icon {
-    position: relative;
-    right: unset;
-    top: unset;
+    padding-block: 0.5rem;
+    font-size: 16px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23333333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exac;
+    appearance: none;
   }
 `;
-
 const DateGroups = styled.ul`
   --border-color: #ddd;
   > li:nth-child(even) {
@@ -367,93 +293,6 @@ const DateRangeWrapper = styled.div`
   gap: 4px;
   align-items: center;
 `;
-
-const LoaderFrame = styled.div`
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: #eff6ff;
-  height: 100vh;
-  display: grid;
-  place-items: center;
-`;
-const TopBar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  ul {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: flex-end;
-    list-style: none;
-  }
-  li {
-    display: flex;
-    gap: 4px;
-    font-weight: bold;
-  }
-  &.wrapper {
-    padding-bottom: 0;
-  }
-  label {
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  select {
-    padding-inline: 0.64rem;
-    border-radius: 6px;
-    padding-block: 0.5rem;
-    font-size: 16px;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23333333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
-    -webkit-print-color-adjust: exact;
-    color-adjust: exac;
-    appearance: none;
-  }
-`;
-
-async function getData(query) {
-	if (query && query.has("id") && query.get("id")) {
-		const projId = query.get("id");
-		return fetch(
-			`${window.location.origin}/api/get-project?project=${projId}`,
-		).then((res) => res.json());
-	} else {
-		throw new Error("No Project found");
-	}
-}
-
-export function getMonth(dateString, isLong = true) {
-	const dateArr = parseDateString(dateString);
-	const date = new Date(...dateArr); // 2009-11-10
-	const month = date.toLocaleString("default", {
-		month: isLong ? "long" : "short",
-	});
-	return month;
-}
-
-export function getDay(dateString, isLong = true) {
-	const dateArr = parseDateString(dateString);
-	const date = new Date(...dateArr);
-	const day = date.getDate();
-	const dayOfWeek = date.toLocaleString("default", {
-		weekday: isLong ? "long" : "short",
-	});
-	return { day, dayOfWeek };
-}
-
-export function parseDateString(dateString) {
-	const [year, day, month] = dateString.split("-");
-	return [Number(year), Number(day) - 1, Number(month)];
-}
-
 function isClientTask(customFields) {
 	const clientTaskField = customFields.find(
 		(field) => field.name === CLIENT_TASK.name,

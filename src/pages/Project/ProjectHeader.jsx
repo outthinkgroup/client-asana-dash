@@ -18,7 +18,9 @@ export default function ProjectHeader({ project }) {
 
         <div className="project-name">
           <h2>{project?.name}</h2>
-          <StatusBadge color={project.current_status.color} />
+          {project.current_status?.color ? (
+            <StatusBadge color={project?.current_status?.color} />
+          ) : null}
         </div>
       </div>
       <ProjectNavigation path={path} url={url} />

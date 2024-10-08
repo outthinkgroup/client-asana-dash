@@ -45,15 +45,14 @@ function Project({ className }) {
       </LoaderFrame>
     );
   }
+
+
   return (
     <div className={`App ${className}`}>
       <ProjectHeader project={project} />
 
       <main className="">
         <Switch>
-          <Route path={`${path}`} exact>
-            <Redirect to={`${url}/updates`} />
-          </Route>
 
           <Route path={`${path}/updates`}>
             <ProjectUpdates
@@ -74,6 +73,15 @@ function Project({ className }) {
               attachments={attachments}
             />
           </Route>
+
+					<Route path={`${path}/`} >
+            <Redirect to={`${url}/updates`} />
+          </Route>
+
+          <Route path={`${path}`} >
+            <Redirect to={`${url}/updates`} />
+          </Route>
+
         </Switch>
       </main>
     </div>

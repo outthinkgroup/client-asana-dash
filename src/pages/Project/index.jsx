@@ -1,98 +1,89 @@
 import { useLayoutEffect, useState } from "react";
 
 import {
-	Route,
-	Switch,
-	Redirect,
-	useRouteMatch,
-	useParams,
+  Route,
+  Switch,
+  Redirect,
+  useRouteMatch,
+  useParams,
 } from "react-router-dom";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
-import ProjectBrief from "./ProjectBrief.jsx"
+import ProjectBrief from "./ProjectBrief.jsx";
 import ProjectUpdates from "./ProjectUpdates.jsx";
 import ShowError from "../../components/ShowError.jsx";
 import ProjectHeader from "./ProjectHeader.jsx";
 import Timeline from "./TimeLine.jsx";
 
-
 function Project({ className }) {
-	const { id: projectId } = useParams();
-	let { path, url } = useRouteMatch();
+  const { id: projectId } = useParams();
+  let { path, url } = useRouteMatch();
 
-	const [projectData, setProjectData] = useState(null);
-	const [appError, setAppError] = useState(false);
+  const [projectData, setProjectData] = useState(null);
+  const [appError, setAppError] = useState(false);
 
-	console.log(projectData)
-	useLayoutEffect(() => {
-		getData(projectId)
-			.then(setProjectData)
-			.catch((e) => {
-				setAppError(e.toString());
-			});
-	}, [projectId]);
+  console.log(projectData);
+  useLayoutEffect(() => {
+    getData(projectId)
+      .then(setProjectData)
+      .catch((e) => {
+        setAppError(e.toString());
+      });
+  }, [projectId]);
 
-	const { project, tasks, updates, brief, milestones, attachments } = projectData ? projectData : {};
+  const { project, tasks, updates, brief, milestones, attachments } =
+    projectData ? projectData : {};
 
-	if (!projectData) {
-		return (
-			<LoaderFrame>
-				{appError ? (
-					<ShowError message={appError} />
-				) : (
-					<DotLoader color={"#1E3A8A"} />
-				)}
-			</LoaderFrame>
-		);
-	}
-	return (
-		<div className={`App ${className}`}>
+  if (!projectData) {
+    return (
+      <LoaderFrame>
+        {appError ? (
+          <ShowError message={appError} />
+        ) : (
+          <DotLoader color={"#1E3A8A"} />
+        )}
+      </LoaderFrame>
+    );
+  }
+  return (
+    <div className={`App ${className}`}>
+      <ProjectHeader project={project} />
 
-			<ProjectHeader project={project}/>
+      <main className="">
+        <Switch>
+          <Route path={`${path}`} exact>
+            <Redirect to={`${url}/updates`} />
+          </Route>
 
-			<div>
-				<Switch>
+          <Route path={`${path}/updates`}>
+            <ProjectUpdates
+              updates={updates}
+              attachments={attachments}
+              milestones={milestones}
+            />
+          </Route>
 
-					<Route path={`${path}`} exact>
-						<Redirect to={`${url}/updates`} />
-					</Route>
+          <Route path={`${path}/timeline`}>
+            <Timeline tasks={tasks} />
+          </Route>
 
-					<Route path={`${path}/updates`}>
-						<ProjectUpdates updates={updates}/>
-					</Route>
-
-					<Route path={`${path}/timeline`}>
-						<Timeline tasks={tasks} />
-					</Route>
-
-					<Route path={`${path}/brief`}>
-						<ProjectBrief brief={brief}	milestones={milestones} attachments={attachments}/>
-					</Route>
-				</Switch>
-			</div>
-		</div>
-	);
+          <Route path={`${path}/brief`}>
+            <ProjectBrief
+              brief={brief}
+              milestones={milestones}
+              attachments={attachments}
+            />
+          </Route>
+        </Switch>
+      </main>
+    </div>
+  );
 }
 
 export default styled(Project)`
-  header {
-    background: #eff6ff;
-		
-		border-bottom:1px solid #CEE2FB;
-
-    h1 {
-      color: #1e3a8a;
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 0.4em;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 30px;
-      font-weight: 300;
-    }
-    margin-bottom: 40px;
-  }
+	main {
+		padding:20px 20px;
+	}
   .wrapper {
     padding: 20px;
     max-width: 1000px;
@@ -158,11 +149,11 @@ const LoaderFrame = styled.div`
 `;
 
 async function getData(projectId) {
-	if (projectId) {
-		return fetch(
-			`${window.location.origin}/api/get-project?project=${projectId}`,
-		).then((res) => res.json());
-	} else {
-		throw new Error("No Project found");
-	}
+  if (projectId) {
+    return fetch(
+      `${window.location.origin}/api/get-project?project=${projectId}`,
+    ).then((res) => res.json());
+  } else {
+    throw new Error("No Project found");
+  }
 }

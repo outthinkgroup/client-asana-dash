@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import DotLoader from "react-spinners/DotLoader";
 
@@ -19,7 +19,9 @@ const filterFunctions = {
 	agency: (task) => !isClientTask(task.custom_fields),
 };
 export default function Timeline({ tasks }) {
+	console.log("TASKS", tasks)
 	const [filter, setFilter] = useState("all");
+
 	const [filteredDates, filteredTasks] = useMemo(() => {
 		if (!tasks) return [];
 		const tasksByDate = Object.keys(tasks).reduce((tasksObj, date) => {
@@ -35,6 +37,25 @@ export default function Timeline({ tasks }) {
 		return [dates, tasksByDate];
 	}, [tasks, filter]);
 
+	useEffect(()=>{
+		const params = new URLSearchParams(window.location.search)
+		if(params.has("task-filter")){
+			const filter = params.get("task-filter").toLowerCase().trim()
+			if(Object.keys(filterFunctions).some((key)=>filter !== key )){
+				setFilter(filter)
+			}
+		}
+	},[window.location.search])
+
+	function updateTaskFilterParam(filterValue){
+		let params = new URLSearchParams(window.location.search)
+		params.set("task-filter", filterValue)
+		const search = params.toString()
+		const url = window.location.origin + window.location.pathname + `?${search}`
+		history.pushState("", "", url )
+		setFilter(filterValue)
+	}
+
 
 	return (
 		<>
@@ -42,7 +63,7 @@ export default function Timeline({ tasks }) {
 				<div className="filters">
 					<label>
 						<span>Show</span>
-						<select onChange={(e) => setFilter(e.target.value)} value={filter}>
+						<select onChange={(e) => updateTaskFilterParam(e.target.value)} value={filter}>
 							{Object.keys(filterFunctions).map((filterName) => (
 								<option key={filterName} value={filterName}>
 									{filterName} tasks
@@ -66,10 +87,12 @@ export default function Timeline({ tasks }) {
 				<DateGroups>
 					{filteredDates
 						.filter((a) => {
+							console.log(a)
 							// Bugs out without
+
 							return a !== "0";
 						})
-						.sort()
+						.sort((a,b)=> new Date(String(a)) - new Date(String(b)))
 						.map((date) => {
 							return (
 								<li key={date}>

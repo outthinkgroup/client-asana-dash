@@ -169,6 +169,7 @@ function groupByDate(taskArray) {
 }
 
 function getDatesAndSort(tasksByDate) {
+	console.log(tasksByDate)
 	return Object.keys(tasksByDate)
 		.filter((key) => key !== "0")
 		.sort((a, b) => (a >= b ? 1 : -1));

@@ -21,7 +21,7 @@ export default function ProjectNavigation({ url }) {
 
 const ProjectNavigationWrapper = styled.nav`
 	display: block;
-	border-bottom:1px solid #CEE2FB;
+	border-top:1px solid #CEE2FB;
   & > ul {
 		padding-inline:20px;
     max-width: 1000px;
@@ -41,14 +41,15 @@ const ProjectNavigationWrapper = styled.nav`
     text-decoration: none;
     padding: 2rem;
     color: #1e3a8acc;
-    font-weight: bold;
+    font-weight: 700;
+    border-top: 1px solid transparent;
     &.active {
       color: #1e3a8a;
-      border-bottom: 1px solid #1e3a8a;
+      border-top: 1px solid #1e3a8a;
     }
     &:hover {
       color: #1e3a8a;
-      border-bottom: 1px solid #1e3a8a44;
+      border-top: 1px solid #1e3a8a44;
     }
   }
 `;

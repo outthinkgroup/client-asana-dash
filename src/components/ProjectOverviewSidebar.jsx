@@ -46,7 +46,6 @@ const ProjectOverviewSidebarWrapper = styled.div`
 	h3{
 		font-size:16px;
 		margin-block:.5em;
-		padding-inline:10px;
 	}
 	ul{
 		list-style:none;

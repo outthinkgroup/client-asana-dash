@@ -4,7 +4,7 @@ import { SidebarLinkWrapper } from "./SidebarLinkWrapper";
 export default function ProjectOverviewSidebar({ milestones, attachments }) {
   return (
     <ProjectOverviewSidebarWrapper>
-      <div className="sidebar-section">
+		{/* <div className="sidebar-section">
         <h3>Milestones</h3>
         <ul className="milestones">
           {milestones?.map((milestone) => (
@@ -16,7 +16,7 @@ export default function ProjectOverviewSidebar({ milestones, attachments }) {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
       <div className="sidebar-section">
         <h3>Project Resources</h3>
         <ul className={"links"}>
